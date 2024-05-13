@@ -1,4 +1,4 @@
-vim.g.dly = {}
+_G.dly = {}
 
 -- order is important
 require "bootstrap"

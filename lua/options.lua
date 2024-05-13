@@ -1,6 +1,6 @@
-vim.g.dly.options = {}
+dly.options = {}
 
-vim.g.dly.options.default = {
+dly.options.default = {
   -- TODO: See fold, complete, im, spell, thesaurus, win
 
   -- ui
@@ -15,9 +15,9 @@ vim.g.dly.options.default = {
   showbreak = "> ",
   sidescroll = 3,
   sidescrolloff = 3,
-  syntax = true,
+  syntax = "ON",
   termguicolors = true,
-  colorcolumn = 88,
+  colorcolumn = "88",
 
   -- editing
   autowrite = true,
@@ -32,27 +32,25 @@ vim.g.dly.options.default = {
   confirm = true,
   endoffile = true,
   fileignorecase = true,
-  fixendoffile = true,
   ignorecase = true,
   linebreak = true,
   smartcase = true,
   smartindent = true,
-  smoothscroll = true,
+  -- smoothscroll = true, -- unavailable in 0.9.x
   title = true,
   titlestring = "beep boop bits to drive go :wqa",
   wildignorecase = true,
 }
 
-vim.g.dly.options.windows = {
+dly.options.windows = {
   shell = "powershell.exe",
 }
 
 if vim.fn.has "win32" then
-  vim.g.dly.options.active =
-    vim.tbl_extend("force", vim.g.dly.default, vim.g.dly.windows)
+  dly.options.active = vim.tbl_extend("force", dly.options.default, dly.options.windows)
 end
 
-for key, value in pairs(vim.g.dly.options.active) do
+for key, value in pairs(dly.options.active) do
   vim.opt[key] = value
 end
 
