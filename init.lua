@@ -4,7 +4,5 @@ _G.dly = {}
 require "bootstrap"
 require "gui"
 require "options"
-require "plugins"
-require "config"
 require "keymaps"
 require "autocmds"
