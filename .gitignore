@@ -40,3 +40,6 @@ luac.out
 *.hex
 
 node_modules
+
+# submodules
+/neovim
