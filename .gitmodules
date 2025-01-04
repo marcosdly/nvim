@@ -2,3 +2,11 @@
 	path = LuaJIT
 	url = https://github.com/LuaJIT/LuaJIT.git
 	branch = v2.1.ROLLING
+[submodule "neovim"]
+	path = neovim
+	url = https://github.com/neovim/neovim.git
+	branch = v0.10.3
+[submodule "lazy.vim"]
+	path = lazy.nvim
+	url = https://github.com/folke/lazy.nvim.git
+	branch = v11.16.2
