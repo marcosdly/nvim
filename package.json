@@ -1,0 +1,8 @@
+{
+  "name": "nvim",
+  "private": true,
+  "devDependencies": {
+    "prettier": "3.4.2",
+    "prettier-plugin-toml": "2.0.1"
+  }
+}
