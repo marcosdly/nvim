@@ -1,4 +1,0 @@
-[submodule "neovim"]
-	path = neovim
-	url = https://github.com/neovim/neovim.git
-	branch = tags/v0.10.3
