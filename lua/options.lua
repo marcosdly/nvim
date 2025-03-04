@@ -22,6 +22,7 @@ local o, g, go = vim.o, vim.g, vim.go
 -- see shortmess
 
 o.number = true
+o.relativenumber = true -- set default
 o.numberwidth = 3
 -- save on focus change
 o.autowrite = true
