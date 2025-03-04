@@ -22,3 +22,8 @@ set( 'n', '<c-u>', '<c-u>zz', default_opts )
 set( 'n', 'j', [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true } )
 set( 'n', 'k', [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true } )
 
+-- Clear line without appending to any register not changing mode
+set( 'n', '<c-c>', '0"_D' )
+
+-- set virtualedit for visual mode, add autocmd
+-- set( 'n', '<c-v>', 'v ; <cmd>set virtualedit+=block<cr>'
