@@ -123,6 +123,11 @@ go.listchars = 'tab:> ,trail:.,lead:.'
 -- go.errorbells = true
 go.belloff = ''
 
+o.foldmethod = 'marker'
+go.foldmethod = 'marker'
+go.foldmarker = 'region,endregion'
+-- TODO o.foldtext
+
 -- region GUI only
 -- letter space in pixels
 -- o.linespace = 0
