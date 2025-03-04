@@ -7,11 +7,9 @@ vim.g.maplocalleader = "\\"
 
 local set = vim.keymap.set
 
-local default_opts = { nowait = true, silent = true }
-
 -- center cursor when scrolling half screen
-set( 'n', '<c-d>', '<c-d>zz', default_opts )
-set( 'n', '<c-u>', '<c-u>zz', default_opts )
+set( 'n', '<c-d>', '<c-d>zz' )
+set( 'n', '<c-u>', '<c-u>zz' )
 
 -- move up and down even between wrapped lines
 -- SEE https://stackoverflow.com/a/60907908
