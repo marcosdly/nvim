@@ -20,8 +20,8 @@ set( 'n', '<c-u>', '<c-u>zz' )
 set( 'n', 'j', [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true } )
 set( 'n', 'k', [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true } )
 
--- Clear line without appending to any register not changing mode
-set( 'n', '<c-c>', '0"_D' )
+-- Clear line without appending to any register, nor changing mode
+set( 'n', 'dD', '0"_D' )
 
 -- Remap visual block mode
 set( 'n', '<c-b>', '<c-v>' )
