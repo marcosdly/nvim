@@ -1,8 +1,8 @@
 
 local o, g, go = vim.o, vim.g, vim.go
+local M = {}
 
 -- see belloff
--- see showmatch
 -- see showtabline
 -- see statuscolumn
 -- see statusline
@@ -10,12 +10,9 @@ local o, g, go = vim.o, vim.g, vim.go
 -- see tag*
 -- see title*
 -- see undo*
--- see wildcharm
--- see wildignore
 -- see wildmode
 -- see wildoptions
 -- see winbar
--- see linespace
 -- see list
 -- see confirm
 -- see fixendofline
@@ -104,6 +101,58 @@ o.winminwidth = 16
 -- backup file before writing by creating a copy with a different name
 o.backupcopy = 'no'
 
-if jit.os == 'Windows' then
-  g.winaltkeys = 'no'
+-- When a bracket is inserted, briefly jump to the matching one.  The
+-- jump is only done if the match can be seen on the screen.
+-- go.showmatch = true
+
+-- key used to expand command-line completion
+-- go.wildchar = '<tab>'
+-- same as wildchar, but works inside macros and keymap commands
+-- usually this key is only used in macros/keymaps that invoke completion mode
+-- go.wildcharm = '<c-z>'
+
+-- region GUI only
+-- letter space in pixels
+-- o.linespace = 0
+-- endregion
+
+-- region wildcard file pattern priority
+M.filepattern_opt = { ignore = {}, low_priority = {} }
+
+function M.filepattern_opt.nvim_options_apply()
+  -- NOTE vim.iter is null safe so arguments may be nil just fine
+
+  -- set ignore
+  local ignore_list = vim.iter(
+    vim.gsplit(vim.go.wildignore or '', ','), -- current value
+    self.ignore.default,
+    self.ignore[vim.opt.filetype]
+  )
+  ignore_list:map(vim.trim):map(string.lower)
+  vim.go.wildignore = ignore_list:join(',')
+
+  -- set low priority
+  local low_priority_list = vim.iter(
+    vim.gsplit(vim.go.suffixes or '', ','), -- current value
+    self.low_priority.default,
+    self.low_priority[vim.opt.filetype]
+  )
+  low_priority_list:map(vim.trim):map(string.lower)
+  vim.go.suffixes = low_priority_list:join(',')
 end
+
+-- altright ignore
+M.filepattern_opt.ignore.default = {'**/*.bkp', '**/*.bkp.*', '**/*.db', '**/*.db.*'}
+M.filepattern_opt.ignore.python = {'**/__pycache__/', '**/*.pyc'}
+
+-- just show with lower priority
+M.filepattern_opt.low_priority.default = {}
+M.filepattern_opt.low_priority.python = {'**/.venv*/'}
+-- endregion
+
+
+if jit.os == 'Windows' then
+  go.winaltkeys = 'no'
+end
+
+return M
