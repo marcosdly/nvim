@@ -11,3 +11,6 @@ autocmd('InsertLeave', { pattern = '*', command = 'set relativenumber' })
 -- Only highlight search matches while searching
 autocmd('CmdlineEnter', { pattern = '*', command = 'set hlsearch' })
 autocmd('CmdlineLeave', { pattern = '*', command = 'set nohlsearch' })
+
+-- Force buffers to be hard linked to their window
+autocmd('WinNew', { pattern = '*', command = 'set winfixbuf' })
