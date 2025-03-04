@@ -2,21 +2,13 @@
 local o, g, go = vim.o, vim.g, vim.go
 local M = {}
 
--- see belloff
--- see showtabline
 -- see statuscolumn
 -- see statusline
 -- see tab*
 -- see tag*
 -- see title*
 -- see undo*
--- see wildmode
--- see wildoptions
 -- see winbar
--- see list
--- see confirm
--- see fixendofline
--- see shortmess
 
 o.number = true
 o.relativenumber = true -- set default
@@ -110,6 +102,26 @@ o.backupcopy = 'no'
 -- same as wildchar, but works inside macros and keymap commands
 -- usually this key is only used in macros/keymaps that invoke completion mode
 -- go.wildcharm = '<c-z>'
+
+-- display 'wildmenu' without completing, then each full match. Sort by buffer
+-- last used
+go.wildmode = 'full'
+-- 'fuzzy' option still not supported for file paths
+go.wildoptions = 'pum,tagfile'
+
+-- 0: never,  1: only if there are at least two tab pages, 2: always
+go.showtabline = 1
+
+-- SEE shortmess documentation
+go.shortmess = 'laoOstIcF'
+
+go.confirm = true
+
+o.list = true
+go.listchars = 'tab:> ,trail:.,lead:.'
+
+-- go.errorbells = true
+go.belloff = ''
 
 -- region GUI only
 -- letter space in pixels
