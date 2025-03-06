@@ -1,33 +1,16 @@
 
-local o, g, go = vim.o, vim.g, vim.go
 local M = {}
+
+local o, g, go = vim.o, vim.g, vim.go
+local win32 = jit.os == 'Windows'
+local linux = jit.os == 'Linux'
 
 -- see statuscolumn
 -- see statusline
 -- see tab*
 -- see tag*
--- see title*
 -- see undo*
 -- see winbar
-
-o.number = true
-o.relativenumber = true -- set default
-o.numberwidth = 3
--- save on focus change
-o.autowrite = true
--- save on exit, edit, new
--- o.autowriteall = true
-o.background = 'dark'
-
--- region SOFT WRAP
-o.linebreak = true
-o.breakat = vim.o.breakat .. '_'
--- preserve indent level on soft wrap
-o.breakindent = true
--- LIST: indent at column 88, show broken line indicator (text)
-o.breakindentopt = 'column:88,sbr'
-o.textwidth = 88
--- endregion
 
 -- region CWD
 --[[
@@ -41,96 +24,161 @@ o.textwidth = 88
 o.cdhome = false
 -- endregion
 
--- keep clipboard inside neovim only
-o.clipboard = ''
+-- region INTERFACE
+-- theme (color group) to prefer given colorscheme
+o.background = 'dark'
+-- show line number
+o.number = true
+-- show line numbers relative to cursor position
+o.relativenumber = true
+-- minimum character width of line number column
+o.numberwidth = 3
+-- height in lines of command line
 o.cmdheight = 2
--- highlight column, equivalent to rulers in vscode
+-- always highlight columns, equivalent to rulers in vscode
 o.colorcolumn = '88'
+-- highlight line the cursor is at
 o.cursorline = true
+-- configuration of how the cursor's line should be highlighted
 o.cursorlineopt = 'screenline,number'
--- o.cursorcolumn = true
-o.display = 'uhex,lastline'
--- window height is to be made equal in this direction
-o.eadirection = 'hor'
+-- force every window's size to be equal
 o.equalalways = true
--- insert tab width in spaces instead of \t
-o.expandtab = true
+-- direction in which to make window's size equal
+-- hor: width, ver: height, both: height and width
+o.eadirection = 'hor'
+-- hightlight visible results of search
 o.hlsearch = true
-o.ignorecase = true
-o.smartcase = true
--- Number of pixel lines inserted between characters.  Useful if the font
--- uses the full character cell height, making lines touch each other.
-o.mouse = 'a'
-o.mousemodel = 'popup'
-o.scrolloff = 5
--- o.shell = 'pwsh.exe'
-o.shiftround = true
-o.shiftwidth = 2
-o.smarttab = true
-o.softtabstop = 2
-o.tabstop = 4
-o.showbreak = '->'
-o.showcmdloc = 'statusline'
-o.sidescroll = 4
-o.smoothscroll = true
-o.swapfile = false
--- o.syntax = 'on'
--- o.termguicolors = true
-o.virtualedit = 'onemore'
-o.wildignorecase = true
-
--- NOTE set soft minimum height/width before setting hard minimum to avoid the
--- 'win* cannot be smaller then winmin*' error since both values are 1 by default
-o.winheight = 10
-o.winwidth = 24
-o.winminheight = 8
-o.winminwidth = 16
-
--- Wheter window and the buffer it is displaying are paired.
--- Forces 2 buffer windows minimum.
--- o.winfixbuf = true
-
--- backup file before writing by creating a copy with a different name
-o.backupcopy = 'no'
-
--- When a bracket is inserted, briefly jump to the matching one.  The
--- jump is only done if the match can be seen on the screen.
--- go.showmatch = true
-
--- key used to expand command-line completion
--- go.wildchar = '<tab>'
--- same as wildchar, but works inside macros and keymap commands
--- usually this key is only used in macros/keymaps that invoke completion mode
--- go.wildcharm = '<c-z>'
-
--- display 'wildmenu' without completing, then each full match. Sort by buffer
--- last used
-go.wildmode = 'full'
--- 'fuzzy' option still not supported for file paths
-go.wildoptions = 'pum,tagfile'
-
--- 0: never,  1: only if there are at least two tab pages, 2: always
-go.showtabline = 1
-
--- SEE shortmess documentation
-go.shortmess = 'laoOstIcF'
-
-go.confirm = true
-
-o.list = true
-go.listchars = 'tab:> ,trail:.,lead:.'
-
--- go.errorbells = true
-go.belloff = ''
-
-o.foldmethod = 'marker'
+-- NOTE win*(width|height) must set soft limit before hard limit to avoid error
+o.winheight = 10    -- soft
+o.winwidth = 24     -- soft
+o.winminheight = 8  -- hard
+o.winminwidth = 16  -- hard
+-- method to use when defining visual folds
+ o.foldmethod = 'marker'
 go.foldmethod = 'marker'
+-- keywords used to identify beginning and ending of fold region
+ o.foldmarker = 'region,endregion'
 go.foldmarker = 'region,endregion'
 -- TODO o.foldtext
-
--- region GUI only
+-- whether to show tab page labels
+-- 0: never,  1: only if there are at least two tab pages, 2: always
+o.showtabline = 1
+-- string to prepend to a screenline representing a line soft wrapped
+o.showbreak = '->'
+-- location to show typed commands (character combinations)
+o.showcmdloc = 'statusline'
+-- minimal number of columns to scroll horizontally
+o.sidescroll = 4
+-- change way some text is displayed
+o.display = 'uhex,lastline'
+-- minimal number of screen lines to keep above and below the cursor
+o.scrolloff = 5
+-- visually replace some blank-character sequences
+o.list = true
+-- strings to replace whose blank characters with
+o.listchars = 'tab:> ,trail:.,lead:.'
+-- single character flags indicating UI messages/errors to ignore or shorten
+go.shortmess = 'laoOstIcF'
+-- scrolling works with screen lines, not implemented for gj/gk as of nvim v0.10.4
+o.smoothscroll = true
 -- letter space in pixels
--- o.linespace = 0
+o.linespace = 0
+-- allow nvim to set window title
+go.title = true
+-- title string (statusline syntax)
+go.titlestring = 'nvim'
+-- break lines at specific characters instead of whatever is the last character
+o.linebreak = true
+-- break lines at these characters
+o.breakat = o.breakat .. '_'
+-- preserve indent level at soft wrapped lines
+o.breakindent = true
+-- brakeindent settings: indent at column 88, show broken line indicator (text)
+-- FIX remove column option, which is a hard column value
+o.breakindentopt = 'column:88,sbr'
+-- maximum width of text being inserted; line will be broken at white space to match this width
+o.textwidth = 88
+-- endregion
+
+-- region EDITOR FUNCTIONALITY
+-- mouse button behavior
+o.mousemodel = 'popup'
+-- modes/situations (single character flags) in which mouse support is enabled
+o.mouse = 'a'
+-- swapfile for the buffer
+-- TODO study about swap files and how it works more specifically
+o.swapfile = false
+-- allows for sound/visual bells to be rang on errors
+-- NOTE only affects error *with* messages, many errors *without* messages ignore this
+o.errorbells = false
+-- events at which bell will *not* be rang
+o.belloff = 'all'
+-- backup file before writing buffer to disk
+-- yes: make a copy of the file and overwrite the original one
+-- no: rename the file and write a new one
+-- auto: one of the previous, what works best
+o.backupcopy = 'no'
+-- completion behavior when pressing character specified by wildchar
+o.wildmode = 'full'
+-- how command line completion is done
+o.wildoptions = 'pum,tagfile'
+-- how the cursor can be positioned where there is no actual character
+o.virtualedit = 'onemore'
+-- whether case is ignored when completing file names and directories
+o.wildignorecase = true
+-- ignore case in search patterns, cmdline-completion, tag search, and expr-==
+o.ignorecase = true
+-- override ignorecase search pattern contains upper case characters
+-- only used when the search pattern is typed and ignorecase is true
+o.smartcase = true
+-- round indent to multiple of shiftwidth
+o.shiftround = true
+-- number of spaces to use for each step of (auto)indent
+o.shiftwidth = 2
+-- a <Tab> in front of a line inserts blanks according to shiftwidth
+o.smarttab = true
+-- number of spaces a <Tab> counts for during editing operations (\t, <BS>, etc)
+-- it "feels" like \t are being inserted, while in fact they're mixed with spaces
+o.softtabstop = 2
+-- number of spaces that a \t in the file counts for
+-- NOTE sounds innofensive, SEE tabstop documentation
+o.tabstop = 4
+-- insert tab width in spaces instead of \t
+o.expandtab = true
+-- keep clipboard inside neovim only
+o.clipboard = ''
+-- wheter window and the buffer it is displaying are paired
+-- NOTE if set when only 1 window exists, another window is created
+o.winfixbuf = false
+-- operations that would fail because of unsaved changes (:q and :e, etc),
+-- instead raise a dialog asking if you wish to save the current file(s)
+-- using a ! to unconditionally abandon a buffer will is still be allowed
+o.confirm = true
+-- key used to expand command-line completion
+o.wildchar = vim.keycode('<tab>')
+-- same as wildchar, but works inside macros and keymap commands
+-- usually this key is only used in macros/keymaps that invoke completion mode
+o.wildcharm = vim.keycode('<c-z>')
+-- When a bracket is inserted, briefly jump to the matching one
+-- jump is only done if the match can be seen on the screen.
+o.showmatch = false
+-- save on focus change
+o.autowrite = true
+-- save on exit, edit, new
+o.autowriteall = false
+
+-- region WINDOWS SPECIFIC
+if win32 then
+  go.winaltkeys = 'no'
+-- o.shell = 'pwsh.exe'
+end
+-- endregion
+
+-- region LINUX SPECIFIC
+if linux then
+
+end
+-- endregion
 -- endregion
 
 -- region wildcard file pattern priority
@@ -166,10 +214,5 @@ M.filepattern_opt.ignore.python = {'**/__pycache__/', '**/*.pyc'}
 M.filepattern_opt.low_priority.default = {}
 M.filepattern_opt.low_priority.python = {'**/.venv*/'}
 -- endregion
-
-
-if jit.os == 'Windows' then
-  go.winaltkeys = 'no'
-end
 
 return M
