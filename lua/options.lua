@@ -56,7 +56,7 @@ o.winminwidth = 16  -- hard
 -- method to use when defining visual folds
  o.foldmethod = 'marker'
 go.foldmethod = 'marker'
--- keywords used to identify beginning and ending of fold region
+-- keywords used to identify beginning and ending of visual fold
  o.foldmarker = 'region,endregion'
 go.foldmarker = 'region,endregion'
 -- TODO o.foldtext
@@ -155,10 +155,12 @@ o.winfixbuf = false
 -- using a ! to unconditionally abandon a buffer will is still be allowed
 o.confirm = true
 -- key used to expand command-line completion
-o.wildchar = vim.keycode('<tab>')
+-- NOTE lua value is number, use literal vim command to allow keycode value
+-- SEE documentation
+vim.cmd('set wildchar=<tab>')
 -- same as wildchar, but works inside macros and keymap commands
 -- usually this key is only used in macros/keymaps that invoke completion mode
-o.wildcharm = vim.keycode('<c-z>')
+vim.cmd('set wildchar=<c-z>')
 -- When a bracket is inserted, briefly jump to the matching one
 -- jump is only done if the match can be seen on the screen.
 o.showmatch = false
