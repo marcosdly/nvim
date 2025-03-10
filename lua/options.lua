@@ -12,6 +12,21 @@ local linux = jit.os == 'Linux'
 -- see undo*
 -- see winbar
 
+-- TODO quickfix menu
+-- TODO native completion menu
+-- TODO implement fold text and fold behavior
+-- TODO choose search pattern syntax between regex and glob
+
+-- FIX wildchar is shift+tab but should be just tab
+
+-- custom things
+-- TODO documentation menu
+-- TODO definition cursor
+-- global editorconfig
+-- vscode-like ignore files and dirs per project
+-- inspect editorconfig hierarchy
+-- run shell command and show output as buffer (like tsoding's emacs thing)
+
 -- region CWD
 --[[
   When on, :cd, :tcd and :lcd without an argument changes the
@@ -181,40 +196,6 @@ if linux then
 
 end
 -- endregion
--- endregion
-
--- region wildcard file pattern priority
-M.filepattern_opt = { ignore = {}, low_priority = {} }
-
-function M.filepattern_opt.nvim_options_apply()
-  -- NOTE vim.iter is null safe so arguments may be nil just fine
-
-  -- set ignore
-  local ignore_list = vim.iter(
-    vim.gsplit(vim.go.wildignore or '', ','), -- current value
-    self.ignore.default,
-    self.ignore[vim.opt.filetype]
-  )
-  ignore_list:map(vim.trim):map(string.lower)
-  vim.go.wildignore = ignore_list:join(',')
-
-  -- set low priority
-  local low_priority_list = vim.iter(
-    vim.gsplit(vim.go.suffixes or '', ','), -- current value
-    self.low_priority.default,
-    self.low_priority[vim.opt.filetype]
-  )
-  low_priority_list:map(vim.trim):map(string.lower)
-  vim.go.suffixes = low_priority_list:join(',')
-end
-
--- altright ignore
-M.filepattern_opt.ignore.default = {'**/*.bkp', '**/*.bkp.*', '**/*.db', '**/*.db.*'}
-M.filepattern_opt.ignore.python = {'**/__pycache__/', '**/*.pyc'}
-
--- just show with lower priority
-M.filepattern_opt.low_priority.default = {}
-M.filepattern_opt.low_priority.python = {'**/.venv*/'}
 -- endregion
 
 return M

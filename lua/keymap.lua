@@ -7,6 +7,13 @@ vim.g.maplocalleader = "\\"
 
 local set = vim.keymap.set
 
+-- TODO nohl
+-- TODO toggle boolean value under cursor (code action? treeshitter?)
+-- TODO change window, change tab, change buffer
+-- TODO merge, split lines both in normal and insert modes
+-- TODO jump to syntax token
+-- TODO jump to enclosing tokens (quotes, parentheses)
+
 -- center cursor when scrolling half screen
 set( 'n', '<c-d>', '<c-d>zz' )
 set( 'n', '<c-u>', '<c-u>zz' )
