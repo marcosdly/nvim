@@ -5,7 +5,7 @@
 
 " All characters are given literally, conversion to another encoding (e.g.,
 " UTF-8) should work.
-scriptencoding utf-8
+scriptencoding latin1
 
 " Use this short name in the status line.
 let b:keymap_name = "portuguese"
