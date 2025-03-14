@@ -7,7 +7,6 @@ local lib = require('lib')
 
 -- TODO auto save timer
 -- TODO per buffer title string
--- TODO set cmdheight per command line prefix
 -- TODO show numbers at LOC, not blank nor clear comments, etc
 -- TODO different data in statusline per mode
 -- TODO color screenline with mode color (maybe color ruler as well)
