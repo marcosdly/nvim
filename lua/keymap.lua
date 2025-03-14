@@ -34,3 +34,12 @@ set( 'n', 'dD', '0"_D' )
 
 -- Remap visual block mode
 set( 'n', '<c-b>', '<c-v>' )
+
+-- Switch keyboard layout
+set( {'n', 'i'}, '<c-k>', function()
+  if vim.o.keymap == '' then
+    vim.o.keymap = 'portuguese-accents-abnt2'
+  else
+    vim.o.keymap = ''
+  end
+end)
