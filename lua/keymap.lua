@@ -8,7 +8,6 @@ vim.g.maplocalleader = "\\"
 local set = vim.keymap.set
 
 -- TODO toggle boolean value under cursor (code action? treeshitter?)
--- TODO change window, change tab, change buffer
 -- TODO merge, split lines both in normal and insert modes
 -- TODO jump to syntax token
 -- TODO jump to enclosing tokens (quotes, parentheses)
@@ -45,3 +44,11 @@ function _G.toggle_keymap()
 end
 set( 'n', '<c-k>', toggle_keymap )
 set( 'i', '<c-k>', '<esc><cmd>lua toggle_keymap()<cr>i' )
+
+-- Switch tab
+set( { 'n', 'i', 'c' }, '<c-j>', '<cmd>tabprevious<cr>' )
+set( { 'n', 'i', 'c' }, '<c-k>', '<cmd>tabnext<cr>' )
+
+-- Switch window
+-- previous: uppercase W, next: lowercase W
+set( { 'n', 'i', 'c' }, '<c-l>', '<cmd>wincmd w<cr>' ) -- next (wrap around)
