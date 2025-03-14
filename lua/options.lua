@@ -17,8 +17,6 @@ local linux = jit.os == 'Linux'
 -- TODO implement fold text and fold behavior
 -- TODO choose search pattern syntax between regex and glob
 
--- FIX wildchar is shift+tab but should be just tab
-
 -- custom things
 -- TODO documentation menu
 -- TODO definition cursor
@@ -49,7 +47,7 @@ o.relativenumber = true
 -- minimum character width of line number column
 o.numberwidth = 3
 -- height in lines of command line
-o.cmdheight = 2
+o.cmdheight = 1
 -- always highlight columns, equivalent to rulers in vscode
 o.colorcolumn = '88'
 -- highlight line the cursor is at
@@ -175,7 +173,7 @@ o.confirm = true
 vim.cmd('set wildchar=<tab>')
 -- same as wildchar, but works inside macros and keymap commands
 -- usually this key is only used in macros/keymaps that invoke completion mode
-vim.cmd('set wildchar=<c-z>')
+vim.cmd('set wildcharm=<c-z>')
 -- When a bracket is inserted, briefly jump to the matching one
 -- jump is only done if the match can be seen on the screen.
 o.showmatch = false

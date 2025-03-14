@@ -20,8 +20,26 @@ autocmd('InsertLeave', { pattern = '*', command = 'set relativenumber' })
 autocmd('CmdlineEnter', { pattern = '*', command = 'set hlsearch' })
 autocmd('CmdlineLeave', { pattern = '*', command = 'set nohlsearch' })
 
--- Force buffers to be hard linked to their window
-autocmd('WinNew', { pattern = '*', command = 'set winfixbuf' })
+-- Set cmdheight
+autocmd('CmdlineEnter', {
+  pattern = '*',
+  callback = function(event)
+    if vim.v.event.cmdlevel ~= 1 or vim.v.event.cmdtype ~= ':' then
+      return
+    end
+    vim.schedule(function()
+      vim.o.cmdheight = 2
+      vim.api.nvim__redraw({
+        buf = 0,
+        valid = true,
+        cursor = true,
+        statuscolumn = true,
+        statusline = true
+      })
+    end)
+  end
+})
+autocmd('CmdlineLeave', { pattern = '*', command = 'set cmdheight=1' })
 
 -- Set fold marker
 autocmd({ 'BufEnter', 'FileType' }, {
