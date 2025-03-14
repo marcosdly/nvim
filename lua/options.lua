@@ -72,8 +72,8 @@ o.winminwidth = 16  -- hard
  o.foldmethod = 'marker'
 go.foldmethod = 'marker'
 -- keywords used to identify beginning and ending of visual fold
- o.foldmarker = 'region,endregion'
-go.foldmarker = 'region,endregion'
+ o.foldmarker = '#region,#endregion'
+go.foldmarker = '#region,#endregion'
 -- TODO o.foldtext
 -- whether to show tab page labels
 -- 0: never,  1: only if there are at least two tab pages, 2: always

@@ -24,8 +24,8 @@ autocmd('CmdlineLeave', { pattern = '*', command = 'set nohlsearch' })
 autocmd('WinNew', { pattern = '*', command = 'set winfixbuf' })
 
 -- Set fold marker
-autocmd('BufEnter', {
+autocmd({ 'BufEnter', 'FileType' }, {
   pattern = '*',
-  callback = lib.autocmd.set_foldmarker_by_filetype_per_buf
+  callback = lib.autocmd.set_foldmarker_per_buf
 })
 
