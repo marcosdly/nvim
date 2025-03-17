@@ -50,7 +50,48 @@ local telescope = {
   }
 }
 
+--[[
+Relevant modes and variants:
+SEE :h mode()
+  n       Normal
+  nt      Normal,Terminal
+  v       Visual
+  V       Visual,Line
+  CTRL-V  Visual,Block
+  s       Select
+  S       Select,Line
+  CTRL-S  Select,Block
+  i       Insert
+  R       Replace
+  Rv      Replace,Virtual
+  c       Command
+  cv      Ex
+  r       Prompt
+  !       Shell/external command running
+  t       Terminal
+]]
+
+local lualine = {
+  'nvim-lualine/lualine.nvim',
+  event = 'VeryLazy',
+  lazy = false,
+  opts = {
+    options = {
+      icons_enabled = false,
+    },
+    sections = {
+      lualine_a = {
+        -- mode
+        function()
+          return vim.fn.printf('%-2s', vim.fn.mode():sub(1, 2):upper())
+        end
+      },
+    }
+  }
+}
+
 return {
-  telescope
+  telescope,
+  lualine
 }
 

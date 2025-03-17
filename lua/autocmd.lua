@@ -33,7 +33,11 @@ autocmd('CmdlineEnter', {
         valid = true,
         cursor = true,
         statuscolumn = true,
-        statusline = true
+        -- statusline = true
+      })
+      require('lualine').refresh({
+        scope = 'window',
+        place = { 'statusline' }
       })
     end)
   end
