@@ -23,12 +23,15 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  defaults = {
+    lazy = true
+  },
   spec = {
     { import = 'plugins' },
   },
   install = {
     -- colorscheme that will be used when installing plugins.
-    colorscheme = { 'default', 'habamax', 'lunaperche' }
+    colorscheme = { 'habamax' }
   },
   checker = {
     -- automatically check for plugin updates
@@ -40,6 +43,3 @@ require('lazy').setup({
   ui = { border = 'rounded', title = 'Plugins', title_pos = 'center' },
 })
 
--- Nice built in colorschemes:
---   dark and light: lunaperche, wildcharm
---   dark: zaibatsu,sorbet
