@@ -22,13 +22,13 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+require('lazy').setup({
   spec = {
     { import = 'plugins' },
   },
   install = {
     -- colorscheme that will be used when installing plugins.
-    colorscheme = { "habamax" }
+    colorscheme = { 'default', 'habamax', 'lunaperche' }
   },
   checker = {
     -- automatically check for plugin updates
@@ -37,5 +37,9 @@ require("lazy").setup({
     check_pinned = true,
     frequency = 3600 * 24 -- 1 day (seconds)
   },
-  ui = { border = 'rounded', title = 'Plugin Manager', title_pos = 'center' },
+  ui = { border = 'rounded', title = 'Plugins', title_pos = 'center' },
 })
+
+-- Nice built in colorschemes:
+--   dark and light: lunaperche, wildcharm
+--   dark: zaibatsu,sorbet

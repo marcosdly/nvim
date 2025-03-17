@@ -40,6 +40,8 @@ o.cdhome = false
 -- region INTERFACE
 -- theme (color group) to prefer given colorscheme
 o.background = 'dark'
+-- editor theme
+vim.cmd.colorscheme('lunaperche')
 -- show line number
 o.number = true
 -- show line numbers relative to cursor position
