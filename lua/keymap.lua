@@ -52,3 +52,7 @@ set( { 'n', 'i', 'c' }, '<c-k>', '<cmd>tabnext<cr>' )
 -- Switch window
 -- previous: uppercase W, next: lowercase W
 set( { 'n', 'i', 'c' }, '<c-l>', '<cmd>wincmd w<cr>' ) -- next (wrap around)
+
+-- region TERMINAL
+set( 't', '<esc>', '<c-\\><c-n>' )
+-- endregion

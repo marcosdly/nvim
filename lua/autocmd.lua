@@ -12,8 +12,8 @@ local lib = require('lib')
 -- TODO color screenline with mode color (maybe color ruler as well)
 
 -- Toggle relative numbers on insert mode enter/leave
-autocmd('InsertEnter', { pattern = '*', command = 'set norelativenumber' })
-autocmd('InsertLeave', { pattern = '*', command = 'set relativenumber' })
+autocmd({ 'InsertEnter', 'TermEnter', }, { pattern = '*', command = 'set norelativenumber' })
+autocmd({ 'InsertLeave', 'TermLeave', }, { pattern = '*', command = 'set relativenumber' })
 
 -- Only highlight search matches while searching
 autocmd('CmdlineEnter', { pattern = '*', command = 'set hlsearch' })
@@ -46,3 +46,10 @@ autocmd({ 'BufEnter', 'FileType' }, {
   callback = lib.autocmd.set_foldmarker_per_buf
 })
 
+-- Set cursorcolumn if buffer is terminal
+autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
+  pattern = '*',
+  callback = function()
+    vim.o.cursorcolumn = vim.o.buftype == 'terminal'
+  end
+})
