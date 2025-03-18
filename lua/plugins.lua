@@ -8,7 +8,10 @@ local telescope = {
       'nvim-telescope/telescope-fzf-native.nvim',
       -- cmake is the starndard way of building; may be broken on windows
       -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
-      build = 'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll'
+      build = vim.fn.join({
+        'mkdir build', '&&',
+        'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll'
+      })
     }
   },
   opts = {
