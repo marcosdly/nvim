@@ -57,3 +57,9 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
     vim.o.cursorcolumn = vim.o.buftype == 'terminal'
   end
 })
+
+-- Format buffer
+autocmd('BufWritePost', {
+  pattern = '*',
+  command = 'FormatLock' -- safe
+})

@@ -143,11 +143,44 @@ local surround = {
   }
 }
 
+local formatter = {
+  'mhartington/formatter.nvim',
+  event = 'VeryLazy',
+  cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
+  opts = {
+    logging = false,
+    log_level = vim.log.levels.WARN
+  },
+  config = function(opts)
+    local formatter = require('formatter')
+    local filetypes = require('formatter.filetypes')
+
+    local opts_override = {
+      filetype = {
+        -- ['*'] = {
+        --   filetypes.any.substitute_trailing_whitespace
+        -- },
+        lua = {
+          filetypes.lua.stylua
+        }
+      }
+    }
+
+    formatter.setup(vim.tbl_deep_extend('force', opts, opts_override))
+  end,
+  keys = {
+    { '<leader>f', '<cmd>FormatLock<cr>' },
+    { '<leader>F', '<cmd>FormatWriteLock<cr>' },
+  }
+}
+
+
 return {
   telescope,
   lualine,
   oil,
   wakatime,
-  surround
+  surround,
+  formatter
 }
 
