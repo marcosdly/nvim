@@ -131,9 +131,15 @@ local oil = {
   }
 }
 
+local wakatime = {
+  'wakatime/vim-wakatime',
+  event = 'VeryLazy'
+}
+
 return {
   telescope,
   lualine
   oil,
+  wakatime
 }
 
