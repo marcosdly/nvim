@@ -194,7 +194,7 @@ local treeshitter = {
       'yaml',
       'xml',
       'markdown',
-      'markdown_inline'
+      'markdown_inline',
       'powershell',
       'bash',
       -- trully useful, be-sure-to-haves
@@ -264,7 +264,6 @@ local masonlspconfig = {
     mason_lspconfig.setup_handlers({ default_handler })
   end
 }
-
 
 return {
   telescope,
