@@ -174,6 +174,60 @@ local formatter = {
   }
 }
 
+local treeshitter = {
+  'nvim-treesitter/nvim-treesitter',
+  event = { 'VeryLazy', 'BufEnter' },
+  build = ':TSUpdate',
+  opts = {
+    sync_install = false,
+    auto_install = true,
+    ensure_installed = {
+      -- good to have, daily basis stuff
+      'c',
+      'lua',
+      'luadoc',
+      'lua_patterns',
+      'vim',
+      'vimdoc',
+      'json',
+      'toml',
+      'yaml',
+      'xml',
+      'markdown',
+      'markdown_inline'
+      'powershell',
+      'bash',
+      -- trully useful, be-sure-to-haves
+      'printf',
+      'regex',
+      'editorconfig',
+      'dockerfile',
+      'ssh_config',
+      -- vanity
+      'gitignore',
+      'gitcommit',
+      'gitattributtes',
+      'git_rebase',
+      'git_config',
+    },
+    highlight = {
+      enable = true,
+      disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+      end,
+      additional_vim_regex_highlighting = false
+    },
+    indent = { enable = true }
+    -- TODO treesitter folding
+    -- TODO treesitter incremental selection
+    -- TODO treesitter install options
+  }
+}
+
 local lspconfig = 'neovim/nvim-lspconfig'
 
 local masonlspconfig = {
@@ -220,6 +274,7 @@ return {
   surround,
   formatter,
   lspconfig,
-  masonlspconfig
+  masonlspconfig,
+  treeshitter
 }
 
