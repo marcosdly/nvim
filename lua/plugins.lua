@@ -76,7 +76,6 @@ SEE :h mode()
 
 local lualine = {
   'nvim-lualine/lualine.nvim',
-  event = 'VeryLazy',
   lazy = false,
   opts = {
     options = {
@@ -138,7 +137,7 @@ local wakatime = {
 
 return {
   telescope,
-  lualine
+  lualine,
   oil,
   wakatime
 }
