@@ -170,8 +170,45 @@ local formatter = {
   end,
   keys = {
     { '<leader>f', '<cmd>FormatLock<cr>' },
-    { '<leader>F', '<cmd>FormatWriteLock<cr>' },
+    { '<leader>F', '<cmd>FormatWriteLock<cr>' }
   }
+}
+
+local lspconfig = 'neovim/nvim-lspconfig'
+
+local masonlspconfig = {
+  'williamboman/mason-lspconfig.nvim',
+  event = { 'VeryLazy', 'BufEnter' },
+  dependencies = {
+    {
+      'williamboman/mason.nvim',
+      priority = 10,
+      opts = {
+        pip = {
+          upgrade_pip = true
+        },
+        ui = {
+          border = 'round',
+          backdrop = 0
+        }
+      }
+    }
+  },
+  opts = {
+    automatic_installation = false,
+    ensure_installed = { 'lua_ls', 'jsonls' }
+  },
+  config = function(opts)
+    local mason_lspconfig = require('mason-lspconfig')
+
+    local function default_handler(server_name)
+      local lspconfig = require('lspconfig')
+      lspconfig[server_name].setup({})
+    end
+
+    mason_lspconfig.setup(opts)
+    mason_lspconfig.setup_handlers({ default_handler })
+  end
 }
 
 
@@ -181,6 +218,8 @@ return {
   oil,
   wakatime,
   surround,
-  formatter
+  formatter,
+  lspconfig,
+  masonlspconfig
 }
 
