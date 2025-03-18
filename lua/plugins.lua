@@ -135,10 +135,19 @@ local wakatime = {
   event = 'VeryLazy'
 }
 
+local surround = {
+  'echasnovski/mini.surround',
+  event = 'VeryLazy',
+  opts = {
+    respect_selection_type = true
+  }
+}
+
 return {
   telescope,
   lualine,
   oil,
-  wakatime
+  wakatime,
+  surround
 }
 
