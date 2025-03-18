@@ -97,11 +97,6 @@ local oil = {
   lazy = false,
   opts = {
     default_file_explorer = true,
-    columns = {
-      'type',
-      'size',
-      'permissions'
-    },
     buf_options = {
       autowrite = false,
       autowriteall = false
@@ -123,10 +118,34 @@ local oil = {
       preview_split = 'right'
     }
   },
+  config = function(opts)
+    _G.oil_state = { view_detail = false }
+
+    local function oil_toggle_details()
+      local oil = require('oil')
+      oil_state.view_detail = not oil_state.view_detail
+      if oil_state.view_detail then
+        oil.set_columns({ 'mtime', 'size', 'permissions' })
+      else
+        oil.set_columns({})
+      end
+    end
+
+    local opts_override = {
+      keymaps = {
+        ['gd'] = {
+          desc = 'Toggle file detail view',
+          callback = oil_toggle_details
+        }
+      }
+    }
+
+    require('oil').setup(vim.tbl_deep_extend('force', opts, opts_override))
+  end,
   keys = {
-    -- TODO open trash (all)
-    -- TODO open trash (cwd)
-    -- TODO open float
+    { '-', '<cmd>Oil --float<cr>' }, -- open parent
+    { '<leader>-', '<cmd>Oil --float --trash<cr>' }, -- parent's trash
+    { '<localleader>-', '<cmd>Oil --float --trash /<cr>' } -- all trash
   }
 }
 
