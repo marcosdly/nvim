@@ -284,6 +284,26 @@ local masonlspconfig = {
   end
 }
 
+local lazygit = {
+  'kdheepak/lazygit.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
+  cmd = {
+    'LazyGit',
+    'LazyGitConfig',
+    'LazyGitCurrentFile',
+    'LazyGitFilter',
+    'LazyGitFilterCurrentFile',
+  },
+  keys = {
+    -- status
+    { '<leader>lgs', '<cmd>LazyGit<cr>' },
+    -- current
+    { '<leader>lgc', '<cmd>LazyGitCurrentFile<cr>' },
+  }
+}
+
 return {
   telescope,
   lualine,
@@ -293,6 +313,7 @@ return {
   formatter,
   lspconfig,
   masonlspconfig,
-  treeshitter
+  treeshitter,
+  lazygit
 }
 
