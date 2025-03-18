@@ -93,8 +93,47 @@ local lualine = {
   }
 }
 
+local oil = {
+  'stevearc/oil.nvim',
+  lazy = false,
+  opts = {
+    default_file_explorer = true,
+    columns = {
+      'type',
+      'size',
+      'permissions'
+    },
+    buf_options = {
+      autowrite = false,
+      autowriteall = false
+    },
+    win_options = {
+      cursorline = true,
+    },
+    delete_to_trash = true,
+    skip_confirm_for_simple_edits = true,
+    prompt_save_on_select_new_entry = true,
+    constrain_cursor = false,
+    watch_for_changed = true,
+    view_options = {
+      show_hidden = true
+    },
+    float = {
+      max_height = 0.8,
+      max_width = 88,
+      preview_split = 'right'
+    }
+  },
+  keys = {
+    -- TODO open trash (all)
+    -- TODO open trash (cwd)
+    -- TODO open float
+  }
+}
+
 return {
   telescope,
   lualine
+  oil,
 }
 
