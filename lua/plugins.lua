@@ -133,15 +133,24 @@ local lualine = {
           'filename',
           path = 1 -- relative path
         },
-        {
-          'filesize',
-          fmt = function(str)
-            -- size is divided by 1024, so they're *bibytes
-            if str == '' then return '0B' end
-            if str:sub(-1) == 'b' then return str:upper() end
-            return str:upper() .. 'iB'
+        -- file size
+        function()
+          local file = vim.fn.expand('%:p')
+          if file == nil or #file == 0 then return '' end
+          local size = vim.fn.getfsize(file)
+          local min_size = 10 * 1024 -- 10kb
+          if size <= 0 or size < min_size then return '' end
+
+          local suffixes = { 'B', 'KiB', 'MiB', 'GiB' }
+          local i = 1
+          while size > 1024 and i < #suffixes do
+            size = size / 1024
+            i = i + 1
           end
-        }
+
+          local format = i == 1 and '%d%s' or '%.2f%s'
+          return string.format(format, size, suffixes[i])
+        end
       },
       lualine_x = {
         { 'diagnostics', colored = false, update_in_insert = true }
