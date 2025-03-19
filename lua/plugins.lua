@@ -117,7 +117,38 @@ local lualine = {
       lualine_x = {
         { 'diagnostics', colored = false, update_in_insert = true }
       },
-      lualine_y = { 'selectioncount' },
+      lualine_y = {
+        -- selection count
+        -- SEE https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/selectioncount.lua
+        function()
+          local mode = vim.fn.mode(true)
+          local line_start, line_end = vim.fn.line('v'), vim.fn.line('.')
+          local col_start, col_end = vim.fn.col('v'), vim.fn.col('.')
+          if not (mode == '' or mode:match('[vV]')) then
+            return ''
+          end
+          if line_start == line_end and col_start ~= col_end then -- character selection
+            return vim.fn.printf(
+              '%d:%d-%d (%dc)',
+              line_start, col_start, col_end, math.abs(col_end - col_start) + 1
+            )
+          end
+          if line_start ~= line_end and col_start == col_end then -- line selection
+            return vim.fn.printf(
+              '%d-%d (%dL)', line_start, line_end, math.abs(line_end - line_start) + 1
+            )
+          end
+          if line_start ~= line_end and col_start ~= col_end then -- block selection
+            return vim.fn.printf(
+              '%d:%dx%d:%d, (%dL%dc)',
+              line_start, col_start, line_end, col_end,
+              math.abs(col_end - col_start) + 1,
+              math.abs(line_end - line_start) + 1
+            )
+          end
+          return ''
+        end
+      },
       lualine_z = {
         -- location
         function()
