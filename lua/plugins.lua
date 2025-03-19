@@ -189,21 +189,28 @@ local lualine = {
           local percentage = 0
           if row > 0 and count > 0 then percentage = row / count * 100 end
 
-          local position, percentage_str
+          local position
           if row == 1 then
             position = 'Top'
-            percentage_str = ' Top '
           elseif row == count then
             position = 'Bot'
-            percentage_str = ' Bot '
           else
             position = tostring(row)
-            percentage_str = vim.fn.printf('%.1f', percentage)
           end
 
-          return vim.fn.printf(
-            '%*s/%d:%2d%%%%%5s', row_padding, position, count, column, percentage_str
-          )
+          local percentage_str = vim.fn.printf(' %5.1f%%%%', percentage)
+          local line_str = vim.fn.printf('%*s/%d', row_padding, position, count)
+          local col_str = vim.fn.printf(':%2d', column)
+          if position == 'Top' or position == 'Bot' then
+            -- fill with whitespace if it's all zeroes
+            -- lualine requires double the % characters to print them literally,
+            -- so subtract `count('%')/2` from length
+            percentage_str = string.rep(' ', percentage_str:len() - 1)
+            if column == 0 then
+              col_str = string.rep(' ', col_str:len())
+            end
+          end
+          return line_str .. col_str .. percentage_str
         end
       }
     }
