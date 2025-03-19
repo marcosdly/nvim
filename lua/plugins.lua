@@ -100,8 +100,14 @@ local lualine = {
           local current = vim.api.nvim_buf_get_number(0)
           local count = 0
           local bufs = vim.api.nvim_list_bufs()
-          for i = 1, #bufs do
-            if vim.api.nvim_buf_is_loaded(i) then
+          for i, bufnr in ipairs(bufs) do
+            if bufnr == current or not vim.api.nvim_buf_is_loaded(bufnr) then
+              do break end
+            end
+            local is_normal = vim.api.nvim_buf_call(bufnr, function()
+              return vim.bo.buftype == ''
+            end)
+            if is_normal then
               count = count + 1
             end
           end
@@ -117,7 +123,37 @@ local lualine = {
         { 'diagnostics', colored = false, update_in_insert = true }
       },
       lualine_y = { 'selectioncount' },
-      lualine_z = { 'location', 'progress' }
+      lualine_z = {
+        -- location
+        function()
+          local cursor_tup = vim.api.nvim_win_get_cursor(0)
+          local row, column = cursor_tup[1] or 0, cursor_tup[2] or 0
+          local count = vim.api.nvim_buf_line_count(0) or 0
+          -- pure math string length of count as string, which seems faster
+          -- source: voices in my head
+          -- SEE https://stackoverflow.com/a/10952773
+          local row_padding = math.ceil(math.log10(count + 1))
+
+          local percentage = 0
+          if row > 0 and count > 0 then percentage = row / count * 100 end
+
+          local position, percentage_str
+          if row == 1 then
+            position = 'Top'
+            percentage_str = ' Top '
+          elseif row == count then
+            position = 'Bot'
+            percentage_str = ' Bot '
+          else
+            position = tostring(row)
+            percentage_str = vim.fn.printf('%.1f', percentage)
+          end
+
+          return vim.fn.printf(
+            '%*s/%d:%2d%%%%%5s', row_padding, position, count, column, percentage_str
+          )
+        end
+      }
     }
   }
 }
