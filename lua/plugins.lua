@@ -1,4 +1,11 @@
 
+function _G.pure_math_int_string_length(n)
+  -- pure math string length of integer, which seems faster
+  -- source: voices in my head
+  -- SEE https://stackoverflow.com/a/10952773
+  return math.ceil(math.log10(n + 1))
+end
+
 local telescope = {
   'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
@@ -106,7 +113,6 @@ local lualine = {
       lualine_c = {
         -- buffer count
         function()
-          local current = vim.api.nvim_buf_get_number(0)
           local count = vim.tbl_count(
             vim.iter(vim.api.nvim_list_bufs())
             :filter(vim.api.nvim_buf_is_loaded)
@@ -115,7 +121,13 @@ local lualine = {
             end)
             :totable()
           )
-          return vim.fn.printf('%d/%d', current, count)
+          if count == 1 then
+            return ''
+          end
+          local current = vim.api.nvim_buf_get_number(0)
+          return vim.fn.printf(
+            '%*d/%d', pure_math_int_string_length(count), current, count
+          )
         end,
         {
           'filename',
@@ -172,10 +184,7 @@ local lualine = {
           local cursor_tup = vim.api.nvim_win_get_cursor(0)
           local row, column = cursor_tup[1] or 0, cursor_tup[2] or 0
           local count = vim.api.nvim_buf_line_count(0) or 0
-          -- pure math string length of count as string, which seems faster
-          -- source: voices in my head
-          -- SEE https://stackoverflow.com/a/10952773
-          local row_padding = math.ceil(math.log10(count + 1))
+          local row_padding = pure_math_int_string_length(count)
 
           local percentage = 0
           if row > 0 and count > 0 then percentage = row / count * 100 end
