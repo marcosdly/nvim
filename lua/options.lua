@@ -42,6 +42,8 @@ o.cdhome = false
 o.background = 'dark'
 -- editor theme
 vim.cmd.colorscheme('lunaperche')
+-- show current mode
+o.showmode = false
 -- show line number
 o.number = true
 -- show line numbers relative to cursor position

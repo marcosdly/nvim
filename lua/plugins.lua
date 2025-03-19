@@ -79,15 +79,45 @@ local lualine = {
   lazy = false,
   opts = {
     options = {
+      theme = 'auto',
       icons_enabled = false,
+      globalstatus = true,
+      always_divide_middle = true
     },
     sections = {
       lualine_a = {
-        -- mode
-        function()
-          return vim.fn.printf('%-2s', vim.fn.mode():sub(1, 2):upper())
-        end
+        {
+          'mode',
+          fmt = function(str)
+            return str:sub(1,3)
+          end
+        }
       },
+      lualine_b = { 'branch', { 'diff', colored = false }, },
+      lualine_c = {
+        -- buffer count
+        function()
+          local current = vim.api.nvim_buf_get_number(0)
+          local count = 0
+          local bufs = vim.api.nvim_list_bufs()
+          for i = 1, #bufs do
+            if vim.api.nvim_buf_is_loaded(i) then
+              count = count + 1
+            end
+          end
+          return vim.fn.printf('%d/%d', current, count)
+        end,
+        {
+          'filename',
+          path = 1 -- relative path
+        },
+        'filesize'
+      },
+      lualine_x = {
+        { 'diagnostics', colored = false, update_in_insert = true }
+      },
+      lualine_y = { 'selectioncount' },
+      lualine_z = { 'location', 'progress' }
     }
   }
 }
