@@ -93,7 +93,16 @@ local lualine = {
           end
         }
       },
-      lualine_b = { 'branch', { 'diff', colored = false }, },
+      lualine_b = {
+        'branch',
+        {
+          'diff',
+          colored = false,
+          fmt = function(str)
+            return str:gsub('%s+', '')
+          end
+        }
+      },
       lualine_c = {
         -- buffer count
         function()
@@ -112,7 +121,15 @@ local lualine = {
           'filename',
           path = 1 -- relative path
         },
-        'filesize'
+        {
+          'filesize',
+          fmt = function(str)
+            -- size is divided by 1024, so they're *bibytes
+            if str == '' then return '0B' end
+            if str:sub(-1) == 'b' then return str:upper() end
+            return str:upper() .. 'iB'
+          end
+        }
       },
       lualine_x = {
         { 'diagnostics', colored = false, update_in_insert = true }
