@@ -240,14 +240,54 @@ local treeshitter = {
       end,
       additional_vim_regex_highlighting = false
     },
-    indent = { enable = true }
-    -- TODO treesitter folding
-    -- TODO treesitter incremental selection
-    -- TODO treesitter install options
-  }
+    indent = { enable = true },
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "gnn", -- set to `false` to disable one of the mappings
+        node_incremental = "grn",
+        scope_incremental = "grc",
+        node_decremental = "grm",
+      }
+    }
+  },
+  config = function(opts)
+    local treesitter_configs = require('nvim-treesitter.configs')
+    local treesitter_install = require('nvim-treesitter.install')
+
+    treesitter_install.prefer_git = true
+
+    treesitter_configs.setup(opts)
+  end
 }
 
-local lspconfig = 'neovim/nvim-lspconfig'
+local lspconfig = {
+  'neovim/nvim-lspconfig',
+  init = function()
+    local set = vim.keymap.set
+    set('n', '<leader>la', vim.lsp.buf.code_action)
+    set('n', '<leader>ld', vim.lsp.buf.definition)
+    set('n', '<leader>fd', '<cmd>Telescope lsp_definitions<cr>')
+    set('n', '<leader>fs', '<cmd>Telescope lsp_document_symbols<cr>')
+    set('n', '<leader>fw', '<cmd>Telescope lsp_workspace_symbols<cr>')
+    set('n', '<leader>li', vim.lsp.buf.implementation)
+    set('n', '<leader>fi', '<cmd>Telesope lsp_implementations<cr>')
+    -- f as in 'find'; j (down) as in here, myself, where I stand
+    set('n', '<leader>fj', '<cmd>Telescope lsp_incoming_calls<cr>')
+    -- f as in 'find'; k (up) as in there, somewhere, out
+    set('n', '<leader>fj', '<cmd>Telescope lsp_outgoing_calls<cr>')
+    -- f as in 'find'; m as in 'more'
+    set('n', '<leader>fm', '<cmd>Telescope lsp_references<cr>')
+    set('n', '<leader>lr', vim.lsp.buf.rename)
+    -- NOTE renaming accross workspace is dependent on LSP (implementation), some
+    -- may support it, some may do it by default
+    set('n', '<leader>ls', vim.lsp.buf.signature_help)
+    set('n', '<leader>lt', vim.lsp.buf.type_definition)
+    -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
+    set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
+    -- TODO Telescope typehierarchy
+  end
+}
 
 local masonlspconfig = {
   'williamboman/mason-lspconfig.nvim',
