@@ -195,6 +195,9 @@ local formatter = {
 
 local treeshitter = {
   'nvim-treesitter/nvim-treesitter',
+  dependencies = {
+    'nvim-treesitter/nvim-treesitter-textobjects'
+  },
   event = { 'VeryLazy', 'BufEnter' },
   build = ':TSUpdate',
   opts = {
@@ -249,17 +252,43 @@ local treeshitter = {
         scope_incremental = "<tab>",
         node_decremental = "<s-tab>",
       }
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          -- SEE textobjects.scm, locals.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["ac"] = "@class.outer",
+          ["ic"] = "@class.inner",
+        }
+      }
+      -- TODO move operation
     }
   },
   config = function(opts)
     local treesitter_configs = require('nvim-treesitter.configs')
     local treesitter_install = require('nvim-treesitter.install')
+    local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
 
     treesitter_install.prefer_git = true
 
     treesitter_configs.setup(opts)
-  end
-}
+
+    -- Repeat movement with ; and ,
+    -- vim way: ; goes to the direction you were moving.
+    vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
+    vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
+
+    -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
+    -- vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+    -- vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+    -- vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+    -- vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+    end
+  }
 
 local lspconfig = {
   'neovim/nvim-lspconfig',
@@ -345,6 +374,7 @@ local lazygit = {
 }
 
 return {
+  -- TODO mini.move
   telescope,
   lualine,
   oil,
