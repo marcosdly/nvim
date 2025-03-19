@@ -98,19 +98,14 @@ local lualine = {
         -- buffer count
         function()
           local current = vim.api.nvim_buf_get_number(0)
-          local count = 0
-          local bufs = vim.api.nvim_list_bufs()
-          for i, bufnr in ipairs(bufs) do
-            if bufnr == current or not vim.api.nvim_buf_is_loaded(bufnr) then
-              do break end
-            end
-            local is_normal = vim.api.nvim_buf_call(bufnr, function()
-              return vim.bo.buftype == ''
+          local count = vim.tbl_count(
+            vim.iter(vim.api.nvim_list_bufs())
+            :filter(vim.api.nvim_buf_is_loaded)
+            :filter(function(bufnr) -- is normal text buffer
+              return vim.api.nvim_buf_get_option(bufnr, 'buftype') == ''
             end)
-            if is_normal then
-              count = count + 1
-            end
-          end
+            :totable()
+          )
           return vim.fn.printf('%d/%d', current, count)
         end,
         {
