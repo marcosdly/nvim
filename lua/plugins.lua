@@ -169,7 +169,7 @@ local lualine = {
           end
           if line_start ~= line_end and col_start ~= col_end then -- block selection
             return vim.fn.printf(
-              '%d:%dx%d:%d, (%dL%dc)',
+              '%d:%dx%d:%d (%dL%dc)',
               line_start, col_start, line_end, col_end,
               math.abs(col_end - col_start) + 1,
               math.abs(line_end - line_start) + 1
