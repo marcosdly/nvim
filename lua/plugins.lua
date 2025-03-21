@@ -37,7 +37,7 @@ local telescope = {
     require('telescope').load_extension 'fzf'
   end,
   cmd = 'Telescope',
-  event = 'VeryLazy',
+  lazy = false,
   keys = {
     { '<leader>ff', '<cmd>Telescope find_files<cr>' },
     { '<leader>fg', '<cmd>Telescope live_grep<cr>' },
@@ -290,12 +290,12 @@ local oil = {
 
 local wakatime = {
   'wakatime/vim-wakatime',
-  event = 'VeryLazy',
+  lazy = false,
 }
 
 local surround = {
   'echasnovski/mini.surround',
-  event = 'VeryLazy',
+  event = 'BufEnter',
   opts = {
     respect_selection_type = true,
   },
@@ -303,7 +303,7 @@ local surround = {
 
 local formatter = {
   'mhartington/formatter.nvim',
-  event = 'VeryLazy',
+  event = 'LspAttach',
   cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
   opts = {
     logging = false,
@@ -457,7 +457,7 @@ local lspconfig = {
 
 local masonlspconfig = {
   'williamboman/mason-lspconfig.nvim',
-  event = { 'VeryLazy', 'BufEnter' },
+  lazy = false,
   dependencies = {
     {
       'williamboman/mason.nvim',
