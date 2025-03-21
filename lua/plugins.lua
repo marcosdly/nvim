@@ -370,6 +370,15 @@ local treeshitter = {
       'gitattributtes',
       'git_rebase',
       'git_config',
+      -- webdev
+      'html',
+      'javascript',
+      'typescript',
+      'tsx',
+      'css',
+      'scss',
+      'templ', -- hugo
+      'robots',
     },
     highlight = {
       enable = true,
