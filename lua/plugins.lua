@@ -476,21 +476,18 @@ local masonlspconfig = {
   opts = {
     automatic_installation = false,
     ensure_installed = { 'lua_ls', 'jsonls' },
+    handlers = {
+      -- default
+      function(server_name)
+        local lspconfig = require 'lspconfig'
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities.textDocument.completion.completionItem.snippetSupport = true
+        lspconfig[server_name].setup {
+          capabilities = capabilities,
+        }
+      end,
+    },
   },
-  config = function(opts)
-    local mason_lspconfig = require 'mason-lspconfig'
-
-    local function default_handler(server_name)
-      local lspconfig = require 'lspconfig'
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      lspconfig[server_name].setup {
-        capabilities = capabilities,
-      }
-    end
-
-    mason_lspconfig.setup(opts)
-    mason_lspconfig.setup_handlers { default_handler }
-  end,
 }
 
 local lazygit = {
