@@ -337,7 +337,7 @@ local treeshitter = {
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
   },
-  event = { 'VeryLazy', 'BufEnter' },
+  lazy = false,
   build = ':TSUpdate',
   opts = {
     sync_install = false,
@@ -415,13 +415,14 @@ local treeshitter = {
     },
   },
   config = function(opts)
-    local treesitter_configs = require 'nvim-treesitter.configs'
+    local treesitter = require 'nvim-treesitter'
     local treesitter_install = require 'nvim-treesitter.install'
-    local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
     treesitter_install.prefer_git = true
 
-    treesitter_configs.setup(opts)
+    treesitter.setup(opts)
+
+    local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
     -- Repeat movement with ; and ,
     -- vim way: ; goes to the direction you were moving.
