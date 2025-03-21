@@ -61,5 +61,5 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
 -- Format buffer
 autocmd('BufWritePost', {
   pattern = '*',
-  command = 'FormatLock' -- safe
+  command = 'FormatWriteLock' -- safe
 })
