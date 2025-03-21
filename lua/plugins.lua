@@ -1,4 +1,3 @@
-
 function _G.pure_math_int_string_length(n)
   -- pure math string length of integer, which seems faster
   -- source: voices in my head
@@ -15,11 +14,12 @@ local telescope = {
       'nvim-telescope/telescope-fzf-native.nvim',
       -- cmake is the starndard way of building; may be broken on windows
       -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
-      build = vim.fn.join({
-        'mkdir build', '&&',
-        'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll'
-      })
-    }
+      build = vim.fn.join {
+        'mkdir build',
+        '&&',
+        'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll',
+      },
+    },
   },
   opts = {
     extensions = {
@@ -30,11 +30,11 @@ local telescope = {
         override_generic_sorted = true,
         override_file_sorted = true,
         case_mode = 'smart_case',
-      }
-    }
+      },
+    },
   },
   config = function(opts)
-    require('telescope').load_extension('fzf')
+    require('telescope').load_extension 'fzf'
   end,
   cmd = 'Telescope',
   event = 'VeryLazy',
@@ -56,8 +56,8 @@ local telescope = {
     { '<leader>fvr', '<cmd>Telescope registers<cr>' },
     { '<leader>fvk', '<cmd>Telescope keymaps<cr>' },
     { '<leader>fvc', '<cmd>Telescope command_history<cr>' },
-    { '<leader>fvl', '<cmd>Telescope spell_suggest<cr>' }
-  }
+    { '<leader>fvl', '<cmd>Telescope spell_suggest<cr>' },
+  },
 }
 
 --[[
@@ -89,16 +89,16 @@ local lualine = {
       theme = 'auto',
       icons_enabled = false,
       globalstatus = true,
-      always_divide_middle = true
+      always_divide_middle = true,
     },
     sections = {
       lualine_a = {
         {
           'mode',
           fmt = function(str)
-            return str:sub(1,3)
-          end
-        }
+            return str:sub(1, 3)
+          end,
+        },
       },
       lualine_b = {
         'branch',
@@ -107,35 +107,35 @@ local lualine = {
           colored = false,
           fmt = function(str)
             return str:gsub('%s+', '')
-          end
-        }
+          end,
+        },
       },
       lualine_c = {
         -- buffer count
         function()
-          local count = vim.tbl_count(
-            vim.iter(vim.api.nvim_list_bufs())
+          local count = vim.tbl_count(vim
+            .iter(vim.api.nvim_list_bufs())
             :filter(vim.api.nvim_buf_is_loaded)
             :filter(function(bufnr) -- is normal text buffer
               return vim.api.nvim_buf_get_option(bufnr, 'buftype') == ''
             end)
-            :totable()
-          )
-          if count == 1 then
-            return ''
-          end
+            :totable())
+          if count == 1 then return '' end
           local current = vim.api.nvim_buf_get_number(0)
           return vim.fn.printf(
-            '%*d/%d', pure_math_int_string_length(count), current, count
+            '%*d/%d',
+            pure_math_int_string_length(count),
+            current,
+            count
           )
         end,
         {
           'filename',
-          path = 1 -- relative path
+          path = 1, -- relative path
         },
         -- file size
         function()
-          local file = vim.fn.expand('%:p')
+          local file = vim.fn.expand '%:p'
           if file == nil or #file == 0 then return '' end
           local size = vim.fn.getfsize(file)
           local min_size = 10 * 1024 -- 10kb
@@ -150,42 +150,49 @@ local lualine = {
 
           local format = i == 1 and '%d%s' or '%.2f%s'
           return string.format(format, size, suffixes[i])
-        end
+        end,
       },
       lualine_x = {
-        { 'diagnostics', colored = false, update_in_insert = true }
+        { 'diagnostics', colored = false, update_in_insert = true },
       },
       lualine_y = {
         -- selection count
         -- SEE https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/selectioncount.lua
         function()
           local mode = vim.fn.mode(true)
-          local line_start, line_end = vim.fn.line('v'), vim.fn.line('.')
-          local col_start, col_end = vim.fn.col('v'), vim.fn.col('.')
-          if not (mode == '' or mode:match('[vV]')) then
-            return ''
-          end
+          local line_start, line_end = vim.fn.line 'v', vim.fn.line '.'
+          local col_start, col_end = vim.fn.col 'v', vim.fn.col '.'
+          if not (mode == '' or mode:match '[vV]') then return '' end
           if line_start == line_end and col_start ~= col_end then -- character selection
             return vim.fn.printf(
               '%d:%d-%d (%dc)',
-              line_start, col_start, col_end, math.abs(col_end - col_start) + 1
+              line_start,
+              col_start,
+              col_end,
+              math.abs(col_end - col_start) + 1
             )
           end
           if line_start ~= line_end and col_start == col_end then -- line selection
             return vim.fn.printf(
-              '%d-%d (%dL)', line_start, line_end, math.abs(line_end - line_start) + 1
+              '%d-%d (%dL)',
+              line_start,
+              line_end,
+              math.abs(line_end - line_start) + 1
             )
           end
           if line_start ~= line_end and col_start ~= col_end then -- block selection
             return vim.fn.printf(
               '%d:%dx%d:%d (%dL%dc)',
-              line_start, col_start, line_end, col_end,
+              line_start,
+              col_start,
+              line_end,
+              col_end,
               math.abs(col_end - col_start) + 1,
               math.abs(line_end - line_start) + 1
             )
           end
           return ''
-        end
+        end,
       },
       lualine_z = {
         -- location
@@ -215,15 +222,13 @@ local lualine = {
             -- lualine requires double the % characters to print them literally,
             -- so subtract `count('%')/2` from length
             percentage_str = string.rep(' ', percentage_str:len() - 1)
-            if column == 0 then
-              col_str = string.rep(' ', col_str:len())
-            end
+            if column == 0 then col_str = string.rep(' ', col_str:len()) end
           end
           return line_str .. col_str .. percentage_str
-        end
-      }
-    }
-  }
+        end,
+      },
+    },
+  },
 }
 
 local oil = {
@@ -233,7 +238,7 @@ local oil = {
     default_file_explorer = true,
     buf_options = {
       autowrite = false,
-      autowriteall = false
+      autowriteall = false,
     },
     win_options = {
       cursorline = true,
@@ -244,24 +249,24 @@ local oil = {
     constrain_cursor = false,
     watch_for_changed = true,
     view_options = {
-      show_hidden = true
+      show_hidden = true,
     },
     float = {
       max_height = 0.8,
       max_width = 88,
-      preview_split = 'right'
-    }
+      preview_split = 'right',
+    },
   },
   config = function(opts)
     _G.oil_state = { view_detail = false }
 
     local function oil_toggle_details()
-      local oil = require('oil')
+      local oil = require 'oil'
       oil_state.view_detail = not oil_state.view_detail
       if oil_state.view_detail then
-        oil.set_columns({ 'mtime', 'size', 'permissions' })
+        oil.set_columns { 'mtime', 'size', 'permissions' }
       else
-        oil.set_columns({})
+        oil.set_columns {}
       end
     end
 
@@ -269,9 +274,9 @@ local oil = {
       keymaps = {
         ['gd'] = {
           desc = 'Toggle file detail view',
-          callback = oil_toggle_details
-        }
-      }
+          callback = oil_toggle_details,
+        },
+      },
     }
 
     require('oil').setup(vim.tbl_deep_extend('force', opts, opts_override))
@@ -279,21 +284,21 @@ local oil = {
   keys = {
     { '-', '<cmd>Oil --float<cr>' }, -- open parent
     { '<leader>-', '<cmd>Oil --float --trash<cr>' }, -- parent's trash
-    { '<localleader>-', '<cmd>Oil --float --trash /<cr>' } -- all trash
-  }
+    { '<localleader>-', '<cmd>Oil --float --trash /<cr>' }, -- all trash
+  },
 }
 
 local wakatime = {
   'wakatime/vim-wakatime',
-  event = 'VeryLazy'
+  event = 'VeryLazy',
 }
 
 local surround = {
   'echasnovski/mini.surround',
   event = 'VeryLazy',
   opts = {
-    respect_selection_type = true
-  }
+    respect_selection_type = true,
+  },
 }
 
 local formatter = {
@@ -302,11 +307,11 @@ local formatter = {
   cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
   opts = {
     logging = false,
-    log_level = vim.log.levels.WARN
+    log_level = vim.log.levels.WARN,
   },
   config = function(opts)
-    local formatter = require('formatter')
-    local filetypes = require('formatter.filetypes')
+    local formatter = require 'formatter'
+    local filetypes = require 'formatter.filetypes'
 
     local opts_override = {
       filetype = {
@@ -314,23 +319,23 @@ local formatter = {
         --   filetypes.any.substitute_trailing_whitespace
         -- },
         lua = {
-          filetypes.lua.stylua
-        }
-      }
+          filetypes.lua.stylua,
+        },
+      },
     }
 
     formatter.setup(vim.tbl_deep_extend('force', opts, opts_override))
   end,
   keys = {
     { '<leader>f', '<cmd>FormatLock<cr>' },
-    { '<leader>F', '<cmd>FormatWriteLock<cr>' }
-  }
+    { '<leader>F', '<cmd>FormatWriteLock<cr>' },
+  },
 }
 
 local treeshitter = {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects'
+    'nvim-treesitter/nvim-treesitter-textobjects',
   },
   event = { 'VeryLazy', 'BufEnter' },
   build = ':TSUpdate',
@@ -371,21 +376,19 @@ local treeshitter = {
       disable = function(lang, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
+        if ok and stats and stats.size > max_filesize then return true end
       end,
-      additional_vim_regex_highlighting = false
+      additional_vim_regex_highlighting = false,
     },
     indent = { enable = true },
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = "<leader>gs",
-        node_incremental = "<cr>",
-        scope_incremental = "<tab>",
-        node_decremental = "<s-tab>",
-      }
+        init_selection = '<leader>gs',
+        node_incremental = '<cr>',
+        scope_incremental = '<tab>',
+        node_decremental = '<s-tab>',
+      },
     },
     textobjects = {
       select = {
@@ -393,19 +396,19 @@ local treeshitter = {
         lookahead = true,
         keymaps = {
           -- SEE textobjects.scm, locals.scm
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
-        }
-      }
+          ['af'] = '@function.outer',
+          ['if'] = '@function.inner',
+          ['ac'] = '@class.outer',
+          ['ic'] = '@class.inner',
+        },
+      },
       -- TODO move operation
-    }
+    },
   },
   config = function(opts)
-    local treesitter_configs = require('nvim-treesitter.configs')
-    local treesitter_install = require('nvim-treesitter.install')
-    local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+    local treesitter_configs = require 'nvim-treesitter.configs'
+    local treesitter_install = require 'nvim-treesitter.install'
+    local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
     treesitter_install.prefer_git = true
 
@@ -421,8 +424,8 @@ local treeshitter = {
     -- vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
     -- vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
     -- vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
-    end
-  }
+  end,
+}
 
 local lspconfig = {
   'neovim/nvim-lspconfig',
@@ -449,7 +452,7 @@ local lspconfig = {
     -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
     set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
     -- TODO Telescope typehierarchy
-  end
+  end,
 }
 
 local masonlspconfig = {
@@ -461,30 +464,33 @@ local masonlspconfig = {
       priority = 10,
       opts = {
         pip = {
-          upgrade_pip = true
+          upgrade_pip = true,
         },
         ui = {
           border = 'rounded',
-          backdrop = 0
-        }
-      }
-    }
+          backdrop = 0,
+        },
+      },
+    },
   },
   opts = {
     automatic_installation = false,
-    ensure_installed = { 'lua_ls', 'jsonls' }
+    ensure_installed = { 'lua_ls', 'jsonls' },
   },
   config = function(opts)
-    local mason_lspconfig = require('mason-lspconfig')
+    local mason_lspconfig = require 'mason-lspconfig'
 
     local function default_handler(server_name)
-      local lspconfig = require('lspconfig')
-      lspconfig[server_name].setup({})
+      local lspconfig = require 'lspconfig'
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      lspconfig[server_name].setup {
+        capabilities = capabilities,
+      }
     end
 
     mason_lspconfig.setup(opts)
-    mason_lspconfig.setup_handlers({ default_handler })
-  end
+    mason_lspconfig.setup_handlers { default_handler }
+  end,
 }
 
 local lazygit = {
@@ -504,7 +510,7 @@ local lazygit = {
     { '<leader>lgs', '<cmd>LazyGit<cr>' },
     -- current
     { '<leader>lgc', '<cmd>LazyGitCurrentFile<cr>' },
-  }
+  },
 }
 
 return {
@@ -518,6 +524,5 @@ return {
   lspconfig,
   masonlspconfig,
   treeshitter,
-  lazygit
+  lazygit,
 }
-
