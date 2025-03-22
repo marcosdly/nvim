@@ -311,17 +311,30 @@ local formatter = {
     local formatter = require 'formatter'
     local filetypes = require 'formatter.filetypes'
 
-    local opts_override = {
-      filetype = {
-        -- ['*'] = {
-        --   filetypes.any.substitute_trailing_whitespace
-        -- },
-        lua = {
-          filetypes.lua.stylua,
-        },
-      },
-    }
+    local function merge_filetypes_per_formatter(formatter_name)
+      local plugin_filetypes =
+        require('mason-registry').get_package(formatter_name).spec.languages
+      -- table[string] = function
+      local per_filetype = vim.iter(plugin_filetypes):fold({}, function(acc, ft)
+        ft = ft:lower()
+        if filetypes[ft] == nil then return acc end
+        local func = filetypes[ft][formatter_name]
+        if func == nil then return acc end
+        if acc[ft] == nil then acc[ft] = {} end
+        table.insert(acc[ft], func)
+        return acc
+      end)
+      return per_filetype
+    end
 
+    local opts_override = {
+      filetype = vim.tbl_deep_extend(
+        'error',
+        lazyspec.opts.filetype or {},
+        merge_filetypes_per_formatter 'prettierd',
+        merge_filetypes_per_formatter 'stylua'
+      ),
+    }
     formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
   end,
   keys = {
