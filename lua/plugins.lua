@@ -479,7 +479,7 @@ local masonlspconfig = {
           upgrade_pip = true,
         },
         ui = {
-          border = 'rounded',
+          border = 'none',
           backdrop = 0,
         },
       },
