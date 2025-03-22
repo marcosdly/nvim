@@ -334,6 +334,28 @@ local treeshitter = {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    {
+      'windwp/nvim-ts-autotag',
+      opts = {
+        opts = {
+          enable_close_on_slash = true, -- Auto close on trailing </
+        },
+      },
+      -- if LSP breaks because was formatted in insert mode, uncomment this
+      -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
+      -- config = function(opts)
+      -- require('nvim-ts-autotag').setup(opts)
+      -- vim.lsp.handlers['textDocument/publishDiagnostics'] =
+      --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+      --     underline = true,
+      --     virtual_text = {
+      --       spacing = 5,
+      --       severity_limit = 'Warning',
+      --     },
+      --     update_in_insert = true,
+      --   })
+      -- end,
+    },
   },
   lazy = false,
   build = ':TSUpdate',
