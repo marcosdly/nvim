@@ -238,10 +238,6 @@ local oil = {
   lazy = false,
   opts = {
     default_file_explorer = true,
-    buf_options = {
-      autowrite = false,
-      autowriteall = false,
-    },
     win_options = {
       cursorline = true,
     },
