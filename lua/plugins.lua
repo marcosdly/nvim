@@ -33,8 +33,10 @@ local telescope = {
       },
     },
   },
-  config = function(opts)
-    require('telescope').load_extension 'fzf'
+  config = function(lazyspec)
+    local telescope = require 'telescope'
+    telescope.setup(lazyspec.opts)
+    telescope.load_extension 'fzf'
   end,
   cmd = 'Telescope',
   lazy = false,
@@ -257,7 +259,7 @@ local oil = {
       preview_split = 'right',
     },
   },
-  config = function(opts)
+  config = function(lazyspec)
     _G.oil_state = { view_detail = false }
 
     local function oil_toggle_details()
@@ -279,7 +281,7 @@ local oil = {
       },
     }
 
-    require('oil').setup(vim.tbl_deep_extend('force', opts, opts_override))
+    require('oil').setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
   end,
   keys = {
     { '-', '<cmd>Oil --float<cr>' }, -- open parent
@@ -309,7 +311,7 @@ local formatter = {
     logging = false,
     log_level = vim.log.levels.WARN,
   },
-  config = function(opts)
+  config = function(lazyspec)
     local formatter = require 'formatter'
     local filetypes = require 'formatter.filetypes'
 
@@ -324,7 +326,7 @@ local formatter = {
       },
     }
 
-    formatter.setup(vim.tbl_deep_extend('force', opts, opts_override))
+    formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
   end,
   keys = {
     { '<leader>f', '<cmd>FormatLock<cr>' },
