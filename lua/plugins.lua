@@ -347,7 +347,7 @@ local treeshitter = {
       'c',
       'lua',
       'luadoc',
-      'lua_patterns',
+      'luap',
       'vim',
       'vimdoc',
       'json',
@@ -367,7 +367,7 @@ local treeshitter = {
       -- vanity
       'gitignore',
       'gitcommit',
-      'gitattributtes',
+      'gitattributes',
       'git_rebase',
       'git_config',
       -- webdev
@@ -386,6 +386,7 @@ local treeshitter = {
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then return true end
+        return false
       end,
       additional_vim_regex_highlighting = false,
     },
@@ -414,13 +415,16 @@ local treeshitter = {
       -- TODO move operation
     },
   },
-  config = function(opts)
-    local treesitter = require 'nvim-treesitter'
+  config = function(lazyspec)
+    local treesitter = require 'nvim-treesitter.configs'
     local treesitter_install = require 'nvim-treesitter.install'
 
     treesitter_install.prefer_git = true
+    -- C compiler priority order
+    treesitter_install.compilers =
+      { 'zig', 'clang', 'gcc', 'cc', 'cl', vim.fn.getenv 'CC' }
 
-    treesitter.setup(opts)
+    treesitter.setup(lazyspec.opts)
 
     local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
