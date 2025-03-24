@@ -1,0 +1,6 @@
+{
+  "Lua.diagnostics.globals": ["vim"],
+  "Lua.format.enable": false,
+  "Lua.telemetry.enable": false,
+  "Lua.runtime.version": "LuaJIT"
+}
