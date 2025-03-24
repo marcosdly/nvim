@@ -1,4 +1,3 @@
-
 local M = {}
 
 local o, g, go = vim.o, vim.g, vim.go
@@ -40,8 +39,6 @@ o.cdhome = false
 -- region INTERFACE
 -- theme (color group) to prefer given colorscheme
 o.background = 'dark'
--- editor theme
-vim.cmd.colorscheme('lunaperche')
 -- show current mode
 o.showmode = false
 -- show line number
@@ -66,15 +63,15 @@ o.eadirection = 'hor'
 -- hightlight visible results of search
 o.hlsearch = true
 -- NOTE win*(width|height) must set soft limit before hard limit to avoid error
-o.winheight = 10    -- soft
-o.winwidth = 24     -- soft
-o.winminheight = 8  -- hard
-o.winminwidth = 16  -- hard
+o.winheight = 10 -- soft
+o.winwidth = 24 -- soft
+o.winminheight = 8 -- hard
+o.winminwidth = 16 -- hard
 -- method to use when defining visual folds
- o.foldmethod = 'marker'
+o.foldmethod = 'marker'
 go.foldmethod = 'marker'
 -- keywords used to identify beginning and ending of visual fold
- o.foldmarker = '#region,#endregion'
+o.foldmarker = '#region,#endregion'
 go.foldmarker = '#region,#endregion'
 -- TODO o.foldtext
 -- whether to show tab page labels
@@ -174,10 +171,10 @@ o.confirm = true
 -- key used to expand command-line completion
 -- NOTE lua value is number, use literal vim command to allow keycode value
 -- SEE documentation
-vim.cmd('set wildchar=<tab>')
+vim.cmd 'set wildchar=<tab>'
 -- same as wildchar, but works inside macros and keymap commands
 -- usually this key is only used in macros/keymaps that invoke completion mode
-vim.cmd('set wildcharm=<c-z>')
+vim.cmd 'set wildcharm=<c-z>'
 -- When a bracket is inserted, briefly jump to the matching one
 -- jump is only done if the match can be seen on the screen.
 o.showmatch = false
@@ -187,15 +184,12 @@ o.autowrite = true
 o.autowriteall = false
 
 -- region WINDOWS SPECIFIC
-if win32 then
-  go.winaltkeys = 'no'
--- o.shell = 'pwsh.exe'
+if win32 then go.winaltkeys = 'no'   -- o.shell = 'pwsh.exe'
 end
 -- endregion
 
 -- region LINUX SPECIFIC
 if linux then
-
 end
 -- endregion
 -- endregion
