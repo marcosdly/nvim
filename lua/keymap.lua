@@ -52,16 +52,50 @@ function _G.toggle_keymap()
     vim.o.keymap = ''
   end
 end
--- Switch tab
-set( { 'n', 'i', 'c' }, '<c-j>', '<cmd>tabprevious<cr>' )
-set( { 'n', 'i', 'c' }, '<c-k>', '<cmd>tabnext<cr>' )
-
--- Switch window
--- previous: uppercase W, next: lowercase W
-set( { 'n', 'i', 'c' }, '<c-l>', '<cmd>wincmd w<cr>' ) -- next (wrap around)
 set('n', '<c-k>', toggle_keymap)
 set('i', '<c-k>', '<esc><cmd>lua toggle_keymap()<cr>i')
 
 -- region TERMINAL
 set('t', '<esc>', '<c-\\><c-n>')
 -- endregion
+
+-- Switch window/buffer/tab
+set('n', '<leader>bn', '<cmd>bnext<cr>')
+set('n', '<leader>bp', '<cmd>bprevious<cr>')
+set('n', '<leader>bd', '<cmd>bdelete<cr>')
+set('n', '<leader>b[', '<cmd>bfirst<cr>') -- goto first buffer
+set('n', '<leader>b]', '<cmd>blast<cr>') -- goto last buffer
+
+-- Window
+set('n', '<leader>wn', '<cmd>wincmd w<cr>') -- next (wrap around)
+set('n', '<leader>wp', '<cmd>wincmd W<cr>') -- previous (wrap around)
+set('n', '<leader>wj', '<cmd>wincmd j<cr>')
+set('n', '<leader>wk', '<cmd>wincmd k<cr>')
+set('n', '<leader>wh', '<cmd>wincmd h<cr>')
+set('n', '<leader>wl', '<cmd>wincmd l<cr>')
+set('n', '<leader>we', '<cmd>wincmd p<cr>') -- goto last accessed window
+set('n', '<leader>wP', function() -- todo to preview window or error
+  local ok, _ = pcall(vim.cmd '<cmd>wincmd P<cr>')
+  if not ok then vim.print 'No preview window available.' end
+end)
+set('n', '<leader>wt', '<cmd>wincmd T<cr>') -- move current window to new tab
+set('n', '<leader>w=', '<cmd>wincmd =<cr>') -- even height and width of all windows
+set('n', '<leader>w[', '<cmd>wincmd +1<cr>') -- increase height
+set('n', '<leader>w]', '<cmd>wincmd -1<cr>') -- decrease height
+set('n', "<leader>w'", '<cmd>wincmd >1<cr>') -- increase width
+set('n', '<leader>w;', '<cmd>wincmd <1<cr>') -- decrease width
+set('n', '<leader>w\\', '<cmd>wincmd _<cr>') -- window height as high as possible
+set('n', '<leader>w|', '<cmd>wincmd |<cr>') -- window width as wide as possible
+set('n', '<leader>wf', '<cmd>wincmd _<cr><cmd>wincmd |<cr>') -- force full window
+
+-- Tab
+-- Open a new tab and edit the file under the cursor
+set('n', '<leader>tf', '<ctrl-w>gf')
+-- Open a new tab and edit the file under the cursor, include line number identiifers
+set('n', '<leader>tF', '<ctrl-w>gF')
+set('n', '<leader>tn', '<cmd>tabnext<cr>')
+set('n', '<leader>tp', '<cmd>tabprevious<cr>')
+set('n', '<leader>td', '<cmd>tabclose<cr>')
+set('n', '<leader>t[', '<cmd>tabfirst<cr>') -- goto first tab
+set('n', '<leader>t]', '<cmd>tablast<cr>') -- goto last tab
+set('n', '<leader>te', '<ctrl-w>g<tab>') -- goto last accessed tab
