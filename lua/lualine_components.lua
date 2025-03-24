@@ -1,5 +1,15 @@
 local M = {}
 
+function M.mode()
+  -- return raw vim mode
+  -- 1 character modes are standalone
+  -- 2 character modes are modes with modifiers
+  -- standalone modes may be denoted by <CTRL-*> mappings, which are a single hex codepoint
+  local mode = vim.fn.mode()
+  if mode:len() == 1 then return vim.fn.keytrans(mode) end
+  return mode:gsub(1, 2)
+end
+
 function M.buffer_count()
   local current_bufnr = vim.api.nvim_buf_get_number(0)
   local current_buf_i = current_bufnr

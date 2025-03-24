@@ -101,12 +101,7 @@ local lualine = {
     local opts_override = {
       sections = {
         lualine_a = {
-          {
-            'mode',
-            fmt = function(str)
-              return str:sub(1, 3)
-            end,
-          },
+          component.mode,
         },
         lualine_b = {
           'branch',
