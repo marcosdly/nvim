@@ -332,7 +332,13 @@ local formatter = {
         'error',
         lazyspec.opts.filetype or {},
         merge_filetypes_per_formatter 'prettierd',
-        merge_filetypes_per_formatter 'stylua'
+        merge_filetypes_per_formatter 'stylua',
+        {
+          python = {
+            filetypes.python.ruff,
+            filetypes.python.iruff, -- fix imports
+          },
+        }
       ),
     }
     formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
