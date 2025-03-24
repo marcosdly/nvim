@@ -1,16 +1,25 @@
 local M = {}
 
 function M.buffer_count()
-  local count = vim.tbl_count(vim
-    .iter(vim.api.nvim_list_bufs())
-    :filter(vim.api.nvim_buf_is_loaded)
-    :filter(function(bufnr) -- is normal text buffer
-      return vim.api.nvim_buf_get_option(bufnr, 'buftype') == ''
-    end)
-    :totable())
+  local current_bufnr = vim.api.nvim_buf_get_number(0)
+  local current_buf_i = current_bufnr
+  local count = 0
+  for i, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if
+      vim.api.nvim_buf_is_loaded(bufnr)
+      and vim.api.nvim_buf_get_option(bufnr, 'buftype') == '' -- normal buffer
+    then
+      count = count + 1
+      if bufnr == current_bufnr then current_buf_i = i end
+    end
+  end
   if count == 1 then return '' end
-  local current = vim.api.nvim_buf_get_number(0)
-  return vim.fn.printf('%*d/%d', pure_math_int_string_length(count), current, count)
+  return vim.fn.printf(
+    '%*d/%d',
+    pure_math_int_string_length(count),
+    current_buf_i,
+    count
+  )
 end
 
 function M.filesize()
