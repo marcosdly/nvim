@@ -3,12 +3,21 @@ local M = {}
 -- TODO telescope select set exception breakpoint
 -- TODO telescope list breakpoints
 
+M.util = {}
+
+function M.util.refresh_config()
+  require('dap.ext.vscode').load_launchjs()
+  -- TODO load configs from neodev's config file
+  -- TODO watch files for changes
+end
+
 M.lazyspec_keys = {
   -- region Session
   {
     'n',
     '<leader>dc',
     function()
+      M.util.refresh_config()
       require('dap').continue()
     end,
   },
@@ -51,6 +60,7 @@ M.lazyspec_keys = {
     'n',
     '<leader>di',
     function()
+      M.util.refresh_config()
       require('dap').status()
     end,
   },
@@ -58,6 +68,7 @@ M.lazyspec_keys = {
     'n',
     '<leader>dI',
     function()
+      M.util.refresh_config()
       require('dap').sessions()
     end,
   },
@@ -82,6 +93,7 @@ M.lazyspec_keys = {
     'n',
     '<leader>dB',
     function()
+      M.util.refresh_config()
       require('dap').list_breakpoints()
     end,
   },
@@ -181,7 +193,6 @@ M.lazyspec_keys = {
   -- TODO goto line dap.goto_()
   -- TODO other dap functions
   -- TODO dap widgets
-  -- TODO dap launch config
 }
 
 M.lazyspec_cmd = {
