@@ -50,8 +50,7 @@ autocmd('CmdlineLeave', {
   buffer = 0,
   desc = 'DISABLE hlsearch according to command line mode',
   callback = function()
-    if not is_user_cmdline '/' then return end
-    vim.go.hlsearch = false
+    if vim.go.hlsearch then vim.go.hlsearch = false end
   end,
 })
 
