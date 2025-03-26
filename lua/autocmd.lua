@@ -12,8 +12,18 @@ local lib = require 'lib'
 -- TODO color screenline with mode color (maybe color ruler as well)
 
 -- Toggle relative numbers on insert mode enter/leave
-autocmd({ 'InsertEnter', 'TermEnter', }, { pattern = '*', command = 'set norelativenumber' })
-autocmd({ 'InsertLeave', 'TermLeave', }, { pattern = '*', command = 'set relativenumber' })
+autocmd('InsertEnter', {
+  pattern = '*',
+  callback = function()
+    if vim.bo.buftype == '' then vim.wo.relativenumber = false end
+  end,
+})
+autocmd('InsertLeave', {
+  pattern = '*',
+  callback = function()
+    if vim.bo.buftype == '' then vim.wo.relativenumber = true end
+  end,
+})
 
 -- Only highlight search matches while searching
 autocmd('CmdlineEnter', { pattern = '*', command = 'set hlsearch' })
