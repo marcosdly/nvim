@@ -184,4 +184,31 @@ M.lazyspec_keys = {
   -- TODO dap launch config
 }
 
+M.lazyspec_cmd = {
+  -- Session management
+  'DapContinue',
+  'DapDisconnect',
+  'DapNew',
+  'DapTerminate',
+
+  -- Stepping
+  'DapRestartFrame',
+  'DapStepInto',
+  'DapStepOut',
+  'DapStepOver',
+  'DapPause',
+
+  -- REPL
+  'DapEval',
+  'DapToggleRepl',
+
+  -- Breakpoints
+  'DapClearBreakpoints',
+  'DapToggleBreakpoint',
+
+  -- Diagnostics
+  'DapSetLogLevel',
+  'DapShowLog',
+}
+
 return M
