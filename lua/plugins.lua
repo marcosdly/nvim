@@ -465,6 +465,19 @@ local colorscheme = {
   end,
 }
 
+local dap_config = require 'config.dap'
+local dap = {
+  'mfussenegger/nvim-dap',
+  dependencies = {
+    'rcarriga/nvim-dap-ui',
+    'nvim-neotest/nvim-nio',
+  },
+  cond = function()
+    return vim.bo.buftype == ''
+  end,
+  keys = dap_config.lazyspec_keys,
+}
+
 return {
   -- TODO mini.move
   telescope,
@@ -478,4 +491,5 @@ return {
   treeshitter,
   lazygit,
   colorscheme,
+  dap,
 }
