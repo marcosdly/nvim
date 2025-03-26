@@ -7,16 +7,30 @@ M.lazyspec_keys = {
   -- region Session
   {
     'n',
-    '<leader>dr',
+    '<leader>dc',
     function()
       require('dap').continue()
     end,
   },
   {
     'n',
-    '<leader>dR',
+    '<leader>dC',
+    function()
+      require('dap').reverse_continue()
+    end,
+  },
+  {
+    'n',
+    '<leader>dr',
     function()
       require('dap').restart()
+    end,
+  },
+  {
+    'n',
+    '<leader>dR',
+    function()
+      require('dap').restart_frame()
     end,
   },
   {
@@ -31,6 +45,27 @@ M.lazyspec_keys = {
     '<leader>dt',
     function()
       require('dap').terminate()
+    end,
+  },
+  {
+    'n',
+    '<leader>di',
+    function()
+      require('dap').status()
+    end,
+  },
+  {
+    'n',
+    '<leader>dI',
+    function()
+      require('dap').sessions()
+    end,
+  },
+  {
+    'n',
+    '<leader>dD',
+    function()
+      require('dap').disconnect()
     end,
   },
   -- endregion
@@ -102,12 +137,48 @@ M.lazyspec_keys = {
       require('dap').down()
     end,
   },
+  {
+    'n',
+    '<leader>df',
+    function()
+      require('dap').focus_frame()
+    end,
+  },
+  {
+    'n',
+    '<leader>du',
+    function()
+      require('dap').run_until_cursor()
+    end,
+  },
+  -- endregion
+
+  -- region REPL (Debug Console)
+  {
+    'n',
+    '<leader>dco',
+    function()
+      require('dap').repl.open()
+    end,
+  },
+  {
+    'n',
+    '<leader>dcc',
+    function()
+      require('dap').repl.close()
+    end,
+  },
+  {
+    'v',
+    '<leader>dce',
+    function()
+      -- TODO exec text from selection
+      require('dap').repl.execute()
+    end,
+  },
   -- endregion
 
   -- TODO goto line dap.goto_()
-  -- TODO focus frame dap.focus_frame()
-  -- TODO run until cusor dap.run_to_cursor()
-  -- TODO dap.repl
   -- TODO other dap functions
   -- TODO dap widgets
   -- TODO dap launch config
