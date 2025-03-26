@@ -9,6 +9,13 @@ M.lazyspec_keys = {
     'n',
     '<leader>dr',
     function()
+      require('dap').continue()
+    end,
+  },
+  {
+    'n',
+    '<leader>dR',
+    function()
       require('dap').restart()
     end,
   },
@@ -38,7 +45,7 @@ M.lazyspec_keys = {
   },
   {
     'n',
-    '<leader>dl',
+    '<leader>dB',
     function()
       require('dap').list_breakpoints()
     end,
@@ -55,35 +62,42 @@ M.lazyspec_keys = {
   -- region Navigation
   {
     'n',
-    '<leader>ds',
+    '<leader>dl',
     function()
       require('dap').step_over()
     end,
   },
   {
     'n',
-    '<leader>dS',
+    '<leader>dh',
     function()
-      require('dap').step_out()
-    end,
-  },
-  {
-    'n',
-    '<leader>di',
-    function()
-      require('dap').step_into()
+      require('dap').step_back()
     end,
   },
   {
     'n',
     '<leader>dk',
     function()
-      require('dap').up()
+      require('dap').step_out()
     end,
   },
   {
     'n',
     '<leader>dj',
+    function()
+      require('dap').step_into()
+    end,
+  },
+  {
+    'n',
+    '<leader>dp',
+    function()
+      require('dap').up()
+    end,
+  },
+  {
+    'n',
+    '<leader>dn',
     function()
       require('dap').down()
     end,
