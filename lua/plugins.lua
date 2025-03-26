@@ -476,6 +476,9 @@ local dap = {
     return vim.bo.buftype == ''
   end,
   keys = dap_config.lazyspec_keys,
+  cmd = dap_config.lazyspec_cmd,
+  config = dap_config.lazyspec_config,
+}
 
 local lib = {
   json5 = {
