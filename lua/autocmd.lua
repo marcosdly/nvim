@@ -3,7 +3,7 @@
 --]]
 
 local autocmd = vim.api.nvim_create_autocmd
-local lib = require('lib')
+local lib = require 'lib'
 
 -- TODO auto save timer
 -- TODO per buffer title string
@@ -23,31 +23,29 @@ autocmd('CmdlineLeave', { pattern = '*', command = 'set nohlsearch' })
 autocmd('CmdlineEnter', {
   pattern = '*',
   callback = function(event)
-    if vim.v.event.cmdlevel ~= 1 or vim.v.event.cmdtype ~= ':' then
-      return
-    end
+    if vim.v.event.cmdlevel ~= 1 or vim.v.event.cmdtype ~= ':' then return end
     vim.schedule(function()
       vim.o.cmdheight = 2
-      vim.api.nvim__redraw({
+      vim.api.nvim__redraw {
         buf = 0,
         valid = true,
         cursor = true,
         statuscolumn = true,
         -- statusline = true
-      })
-      require('lualine').refresh({
+      }
+      require('lualine').refresh {
         scope = 'window',
-        place = { 'statusline' }
-      })
+        place = { 'statusline' },
+      }
     end)
-  end
+  end,
 })
 autocmd('CmdlineLeave', { pattern = '*', command = 'set cmdheight=1' })
 
 -- Set fold marker
 autocmd({ 'BufEnter', 'FileType' }, {
   pattern = '*',
-  callback = lib.autocmd.set_foldmarker_per_buf
+  callback = lib.autocmd.set_foldmarker_per_buf,
 })
 
 -- Set cursorcolumn if buffer is terminal
@@ -55,11 +53,11 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
   pattern = '*',
   callback = function()
     vim.o.cursorcolumn = vim.o.buftype == 'terminal'
-  end
+  end,
 })
 
 -- Format buffer
 autocmd('BufWritePost', {
   pattern = '*',
-  command = 'FormatWriteLock' -- safe
+  command = 'FormatWriteLock', -- safe
 })
