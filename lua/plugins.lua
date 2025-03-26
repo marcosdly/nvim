@@ -476,6 +476,12 @@ local dap = {
     return vim.bo.buftype == ''
   end,
   keys = dap_config.lazyspec_keys,
+
+local lib = {
+  json5 = {
+    'Joakker/lua-json5',
+    build = jit.os == 'Windows' and 'powershell ./install.ps1' or './install.sh',
+  },
 }
 
 return {
@@ -492,4 +498,5 @@ return {
   lazygit,
   colorscheme,
   dap,
+  lib.json5,
 }
