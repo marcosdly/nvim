@@ -13,25 +13,35 @@ local lib = require 'lib'
 
 -- Toggle relative numbers on insert mode enter/leave
 autocmd('InsertEnter', {
-  pattern = '*',
+  buffer = 0,
+  desc = 'ENABLE relativenumber',
   callback = function()
     if vim.bo.buftype == '' then vim.wo.relativenumber = false end
   end,
 })
 autocmd('InsertLeave', {
-  pattern = '*',
+  buffer = 0,
+  desc = 'DISABLE relativenumber',
   callback = function()
     if vim.bo.buftype == '' then vim.wo.relativenumber = true end
   end,
 })
 
 -- Only highlight search matches while searching
-autocmd('CmdlineEnter', { pattern = '*', command = 'set hlsearch' })
-autocmd('CmdlineLeave', { pattern = '*', command = 'set nohlsearch' })
+autocmd('CmdlineEnter', {
+  buffer = 0,
+  desc = 'ENABLE hlsearch according to commadn line mode',
+  command = 'set hlsearch',
+})
+autocmd('CmdlineLeave', {
+  buffer = 0,
+  desc = 'DISABLE hlsearch according to commadn line mode',
+  command = 'set nohlsearch',
+})
 
 -- Set cmdheight
 autocmd('CmdlineEnter', {
-  pattern = '*',
+  desc = 'Check type of command line, then set cmdheight',
   callback = function(event)
     if vim.v.event.cmdlevel ~= 1 or vim.v.event.cmdtype ~= ':' then return end
     vim.schedule(function()
@@ -50,17 +60,22 @@ autocmd('CmdlineEnter', {
     end)
   end,
 })
-autocmd('CmdlineLeave', { pattern = '*', command = 'set cmdheight=1' })
+autocmd('CmdlineLeave', {
+  desc = 'Set default cmdheight',
+  command = 'set cmdheight=1',
+})
 
 -- Set fold marker
 autocmd({ 'BufEnter', 'FileType' }, {
-  pattern = '*',
+  buffer = 0,
+  desc = 'Set custom foldmarker per buffer',
   callback = lib.autocmd.set_foldmarker_per_buf,
 })
 
 -- Set cursorcolumn if buffer is terminal
 autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
-  pattern = '*',
+  buffer = 0,
+  desc = 'Set cursorcolumn according to buftype',
   callback = function()
     vim.o.cursorcolumn = vim.o.buftype == 'terminal'
   end,
@@ -68,6 +83,7 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
 
 -- Format buffer
 autocmd('BufWritePost', {
-  pattern = '*',
+  buffer = 0,
+  desc = 'Format and write buffer (blocking)',
   command = 'FormatWriteLock', -- safe
 })
