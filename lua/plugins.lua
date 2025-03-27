@@ -139,6 +139,7 @@ local lualine = {
         },
         lualine_y = {
           component.selection_count,
+          'lsp_status',
         },
         lualine_z = {
           component.location,
@@ -545,6 +546,39 @@ local lib = {
   },
 }
 
+local lazydev = {
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    event = 'BufEnter',
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        'formatter.nvim',
+        'lazy.nvim',
+        'lua-json5',
+        'lualine.nvim',
+        'mason-lspconfig.nvim',
+        'mason.nvim',
+        'mini.surround',
+        'nvim-dap',
+        'nvim-dap-ui',
+        'nvim-lspconfig',
+        'nvim-nio',
+        'nvim-treesitter',
+        'nvim-treesitter-textobjects',
+        'nvim-ts-autotag',
+        'nvim-web-devicons',
+        'oil.nvim',
+        'plenary.nvim',
+        'telescope.nvim',
+      },
+    },
+  },
+}
+
 return {
   -- TODO mini.move
   telescope,
@@ -557,6 +591,7 @@ return {
   masonlspconfig,
   treeshitter,
   lazygit,
+  lazydev,
   colorscheme,
   dap,
   lib.json5,
