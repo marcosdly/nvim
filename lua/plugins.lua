@@ -491,13 +491,16 @@ local lazygit = {
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
-  cmd = {
-    'LazyGit',
-    'LazyGitConfig',
-    'LazyGitCurrentFile',
-    'LazyGitFilter',
-    'LazyGitFilterCurrentFile',
-  },
+  lazy = false,
+  init = function()
+    vim.g.lazygit_floating_window_winblend = 0 -- transparency of floating window
+    vim.g.lazygit_floating_window_scaling_factor = 0.8
+    vim.g.lazygit_floating_window_border_chars =
+      { '╭', '─', '╮', '│', '╯', '─', '╰', '│' }
+    vim.g.lazygit_floating_window_use_plenary = shared.const.FALSE
+    vim.g.lazygit_use_neovim_remote = shared.const.TRUE
+    vim.g.lazygit_use_custom_config_file_path = shared.const.FALSE
+  end,
   keys = {
     -- status
     { '<leader>lgs', '<cmd>LazyGit<cr>' },
