@@ -385,6 +385,17 @@ local treeshitter = {
   end,
 }
 
+local toggle_bool = {
+  'gerazov/toggle-bool.nvim',
+  event = 'LspAttach',
+  opts = {
+    mapping = '<leader>ab',
+    additional_toggles = {
+      ['0'] = '1',
+    },
+  },
+}
+
 local lspconfig = {
   'neovim/nvim-lspconfig',
   init = function()
@@ -588,6 +599,7 @@ return {
   surround,
   formatter,
   lspconfig,
+  toggle_bool,
   masonlspconfig,
   treeshitter,
   lazygit,
