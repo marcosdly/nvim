@@ -409,6 +409,48 @@ local lspconfig = {
     -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
     set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
     -- TODO Telescope typehierarchy
+
+    local lualine_diagnostic_config = require 'lualine.components.diagnostics.config'
+    local icons = lualine_diagnostic_config.symbols.icons
+
+    -- Diagnostics
+    vim.diagnostic.config {
+      underline = {
+        severity = {
+          vim.diagnostic.severity.ERROR,
+          vim.diagnostic.severity.WARN,
+        },
+      },
+      update_in_insert = true,
+      float = {
+        severity_sort = true,
+        source = 'if_many',
+        border = 'rounded',
+      },
+      virtual_text = {
+        source = false,
+        spacing = 2,
+        severity = {
+          vim.diagnostic.severity.ERROR,
+          vim.diagnostic.severity.WARN,
+        },
+      },
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = vim.trim(icons.error),
+          [vim.diagnostic.severity.WARN] = vim.trim(icons.warn),
+          [vim.diagnostic.severity.INFO] = vim.trim(icons.info),
+          [vim.diagnostic.severity.HINT] = vim.trim(icons.hint),
+        },
+        numhl = {
+          [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
+          [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
+          [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
+          [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
+        },
+        -- TODO numhl
+      },
+    }
   end,
 }
 
