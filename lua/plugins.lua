@@ -19,6 +19,7 @@ local telescope = {
   tag = '0.1.8',
   dependencies = {
     'nvim-lua/plenary.nvim',
+    'kdheepak/lazygit.nvim',
     vanity.web_devicons,
     {
       'nvim-telescope/telescope-fzf-native.nvim',
@@ -47,6 +48,7 @@ local telescope = {
     local telescope = require 'telescope'
     telescope.setup(lazyspec.opts)
     telescope.load_extension 'fzf'
+    telescope.load_extension 'lazygit'
   end,
   cmd = 'Telescope',
   lazy = false,
@@ -61,6 +63,7 @@ local telescope = {
     { '<leader>fgc', '<cmd>Telescope git_commits<cr>' },
     { '<leader>fgt', '<cmd>Telescope git_stash<cr>' },
     { '<leader>fgb', '<cmd>Telescope git_branches<cr>' },
+    { '<leader>fgl', '<cmd>Telescope lazygit<cr>' },
     -- vim
     { '<leader>fvh', '<cmd>Telescope help_tags<cr>' },
     { '<leader>fvo', '<cmd>Telescope vim_options<cr>' },
