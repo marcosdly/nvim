@@ -41,6 +41,6 @@ require('lazy').setup {
     check_pinned = true,
     frequency = 3600 * 24, -- 1 day (seconds)
   },
-  ui = { border = 'none', title = 'Plugins', title_pos = 'center' },
+  ui = { border = 'rounded', title = 'Plugins', title_pos = 'center' },
   change_detection = { notify = false },
 }
