@@ -522,7 +522,8 @@ local lazygit = {
 }
 
 local colorscheme = {
-  'yazeed1s/minimal.nvim',
+  -- 'yazeed1s/minimal.nvim',
+  'marcosdly/minimal.nvim',
   lazy = false,
   config = function()
     vim.g.minimal_italic_comments = true
@@ -558,34 +559,32 @@ local lib = {
 }
 
 local lazydev = {
-  {
-    'folke/lazydev.nvim',
-    ft = 'lua', -- only load on lua files
-    event = 'BufEnter',
-    opts = {
-      library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-        'formatter.nvim',
-        'lazy.nvim',
-        'lua-json5',
-        'lualine.nvim',
-        'mason-lspconfig.nvim',
-        'mason.nvim',
-        'mini.surround',
-        'nvim-dap',
-        'nvim-dap-ui',
-        'nvim-lspconfig',
-        'nvim-nio',
-        'nvim-treesitter',
-        'nvim-treesitter-textobjects',
-        'nvim-ts-autotag',
-        'nvim-web-devicons',
-        'oil.nvim',
-        'plenary.nvim',
-        'telescope.nvim',
-      },
+  'folke/lazydev.nvim',
+  ft = 'lua', -- only load on lua files
+  event = 'BufEnter',
+  opts = {
+    library = {
+      -- See the configuration section for more details
+      -- Load luvit types when the `vim.uv` word is found
+      { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      'formatter.nvim',
+      'lazy.nvim',
+      'lua-json5',
+      'lualine.nvim',
+      'mason-lspconfig.nvim',
+      'mason.nvim',
+      'mini.surround',
+      'nvim-dap',
+      'nvim-dap-ui',
+      'nvim-lspconfig',
+      'nvim-nio',
+      'nvim-treesitter',
+      'nvim-treesitter-textobjects',
+      'nvim-ts-autotag',
+      'nvim-web-devicons',
+      'oil.nvim',
+      'plenary.nvim',
+      'telescope.nvim',
     },
   },
 }
