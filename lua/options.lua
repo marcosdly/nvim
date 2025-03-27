@@ -78,7 +78,7 @@ go.foldmarker = '#region,#endregion'
 -- 0: never,  1: only if there are at least two tab pages, 2: always
 o.showtabline = 1
 -- string to prepend to a screenline representing a line soft wrapped
-o.showbreak = '->'
+o.showbreak = '->  '
 -- location to show typed commands (character combinations)
 o.showcmdloc = 'statusline'
 -- minimal number of columns to scroll horizontally
@@ -106,12 +106,13 @@ o.linebreak = true
 -- break lines at these characters
 o.breakat = o.breakat .. '_'
 -- preserve indent level at soft wrapped lines
-o.breakindent = true
+o.breakindent = false
 -- brakeindent settings: indent at column 88, show broken line indicator (text)
 -- FIX remove column option, which is a hard column value
-o.breakindentopt = 'column:88,sbr'
+-- o.breakindentopt = 'column:88,sbr'
+o.breakindentopt = ''
 -- maximum width of text being inserted; line will be broken at white space to match this width
-o.textwidth = 88
+o.textwidth = 0
 -- endregion
 
 -- region EDITOR FUNCTIONALITY
@@ -184,7 +185,8 @@ o.autowrite = true
 o.autowriteall = false
 
 -- region WINDOWS SPECIFIC
-if win32 then go.winaltkeys = 'no'   -- o.shell = 'pwsh.exe'
+if win32 then
+  go.winaltkeys = 'no' -- o.shell = 'pwsh.exe'
 end
 -- endregion
 
