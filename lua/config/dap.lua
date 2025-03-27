@@ -218,6 +218,7 @@ function M.lazyspec_config(lazyspec)
   -- Config
   dap_vscode.json_decode = require('json5').parse
   dap.setup(lazyspec.opts or {})
+  dapui.setup {}
 end
 
 return M
