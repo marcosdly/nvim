@@ -135,7 +135,7 @@ local lualine = {
           component.filesize,
         },
         lualine_x = {
-          { 'diagnostics', colored = false, update_in_insert = true },
+          component.diagnostics,
         },
         lualine_y = {
           component.selection_count,
@@ -410,9 +410,6 @@ local lspconfig = {
     set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
     -- TODO Telescope typehierarchy
 
-    local lualine_diagnostic_config = require 'lualine.components.diagnostics.config'
-    local icons = lualine_diagnostic_config.symbols.icons
-
     -- Diagnostics
     vim.diagnostic.config {
       underline = {
@@ -437,10 +434,10 @@ local lspconfig = {
       },
       signs = {
         text = {
-          [vim.diagnostic.severity.ERROR] = vim.trim(icons.error),
-          [vim.diagnostic.severity.WARN] = vim.trim(icons.warn),
-          [vim.diagnostic.severity.INFO] = vim.trim(icons.info),
-          [vim.diagnostic.severity.HINT] = vim.trim(icons.hint),
+          [vim.diagnostic.severity.ERROR] = shared.const.icons.diagnostic.error,
+          [vim.diagnostic.severity.WARN] = shared.const.icons.diagnostic.warn,
+          [vim.diagnostic.severity.INFO] = shared.const.icons.diagnostic.info,
+          [vim.diagnostic.severity.HINT] = shared.const.icons.diagnostic.hint,
         },
         numhl = {
           [vim.diagnostic.severity.ERROR] = 'DiagnosticError',

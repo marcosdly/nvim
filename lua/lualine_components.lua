@@ -118,4 +118,16 @@ function M.location()
   return line_str .. col_str .. percentage_str
 end
 
+M.diagnostics = {
+  'diagnostics',
+  colored = false,
+  update_in_insert = true,
+  symbols = {
+    error = shared.const.icons.diagnostic.error .. ' ',
+    warn = shared.const.icons.diagnostic.warn .. ' ',
+    info = shared.const.icons.diagnostic.info .. ' ',
+    hint = shared.const.icons.diagnostic.hint .. ' ',
+  },
+}
+
 return M
