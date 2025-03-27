@@ -592,6 +592,14 @@ local lazydev = {
   },
 }
 
+local neoconf = {
+  'folke/neoconf.nvim',
+  cmd = 'Neoconf',
+  lazy = false,
+  priority = 1000,
+  config = true,
+}
+
 return {
   -- TODO mini.move
   telescope,
@@ -610,4 +618,5 @@ return {
   dap,
   lib.json5,
   vanity.web_devicons,
+  neoconf,
 }
