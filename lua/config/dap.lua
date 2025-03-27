@@ -70,6 +70,12 @@ M.lazyspec_keys = {
       require('dap').disconnect()
     end,
   },
+  {
+    '<leader>dg',
+    function()
+      require('dapui').toggle()
+    end,
+  },
   -- endregion
 
   -- region Breakpoints
@@ -169,7 +175,6 @@ M.lazyspec_keys = {
   -- endregion
 
   -- TODO goto line dap.goto_()
-  -- TODO other dap functions
   -- TODO dap widgets
 }
 
