@@ -5,11 +5,21 @@ function _G.pure_math_int_string_length(n)
   return math.ceil(math.log10(n + 1))
 end
 
+local vanity = {
+  web_devicons = {
+    'nvim-tree/nvim-web-devicons',
+    cmd = { 'NvimWebDeviconsHiTest' },
+    event = 'VeryLazy',
+    config = true,
+  },
+}
+
 local telescope = {
   'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
   dependencies = {
     'nvim-lua/plenary.nvim',
+    vanity.web_devicons,
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       -- cmake is the starndard way of building; may be broken on windows
@@ -86,6 +96,9 @@ SEE :h mode()
 local lualine = {
   'nvim-lualine/lualine.nvim',
   lazy = false,
+  dependencies = {
+    vanity.web_devicons,
+  },
   opts = {
     options = {
       theme = 'auto',
@@ -140,6 +153,9 @@ local lualine = {
 local oil = {
   'stevearc/oil.nvim',
   lazy = false,
+  dependencies = {
+    vanity.web_devicons,
+  },
   opts = {
     default_file_explorer = true,
     win_options = {
@@ -502,4 +518,5 @@ return {
   colorscheme,
   dap,
   lib.json5,
+  vanity.web_devicons,
 }
