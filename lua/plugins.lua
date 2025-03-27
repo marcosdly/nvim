@@ -102,7 +102,7 @@ local lualine = {
   opts = {
     options = {
       theme = 'auto',
-      icons_enabled = false,
+      icons_enabled = true,
       globalstatus = true,
       always_divide_middle = true,
     },
