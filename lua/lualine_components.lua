@@ -26,7 +26,7 @@ function M.buffer_count()
   if count == 1 then return '' end
   return vim.fn.printf(
     '%*d/%d',
-    pure_math_int_string_length(count),
+    shared.util.pure_math_int_string_length(count),
     current_buf_i,
     count
   )
@@ -91,7 +91,7 @@ function M.location()
   local cursor_tup = vim.api.nvim_win_get_cursor(0)
   local row, column = cursor_tup[1] or 0, cursor_tup[2] or 0
   local count = vim.api.nvim_buf_line_count(0) or 0
-  local row_padding = pure_math_int_string_length(count)
+  local row_padding = shared.util.pure_math_int_string_length(count)
 
   local percentage = 0
   if row > 0 and count > 0 then percentage = row / count * 100 end

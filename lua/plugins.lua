@@ -1,10 +1,3 @@
-function _G.pure_math_int_string_length(n)
-  -- pure math string length of integer, which seems faster
-  -- source: voices in my head
-  -- SEE https://stackoverflow.com/a/10952773
-  return math.ceil(math.log10(n + 1))
-end
-
 local vanity = {
   web_devicons = {
     'nvim-tree/nvim-web-devicons',
