@@ -1,6 +1,33 @@
+local plugin_id = {
+  plenary = 'nvim-lua/plenary.nvim',
+  telescope = 'nvim-telescope/telescope.nvim',
+  telescope_fzf = 'nvim-telescope/telescope-fzf-native.nvim',
+  web_devicons = 'nvim-tree/nvim-web-devicons',
+  lazygit = 'kdheepak/lazygit.nvim',
+  lualine = 'nvim-lualine/lualine.nvim',
+  oil = 'stevearc/oil.nvim',
+  wakatime = 'wakatime/vim-wakatime',
+  surround = 'echasnovski/mini.surround',
+  formatter = 'mhartington/formatter.nvim',
+  treesitter = 'nvim-treesitter/nvim-treesitter',
+  treesitter_textobjects = 'nvim-treesitter/nvim-treesitter-textobjects',
+  treesitter_autotag = 'windwp/nvim-ts-autotag',
+  toggle_bool = 'gerazov/toggle-bool.nvim',
+  lspconfig = 'neovim/nvim-lspconfig',
+  mason_lspconfig = 'williamboman/mason-lspconfig.nvim',
+  mason = 'williamboman/mason.nvim',
+  minimal = 'marcosdly/minimal.nvim',
+  dap = 'mfussenegger/nvim-dap',
+  dapui = 'rcarriga/nvim-dap-ui',
+  nvim_nio = 'nvim-neotest/nvim-nio',
+  json5 = 'Joakker/lua-json5',
+  lazydev = 'folke/lazydev.nvim',
+  neoconf = 'folke/neoconf.nvim',
+}
+
 local vanity = {
   web_devicons = {
-    'nvim-tree/nvim-web-devicons',
+    plugin_id.web_devicons,
     cmd = { 'NvimWebDeviconsHiTest' },
     event = 'VeryLazy',
     config = true,
@@ -8,14 +35,14 @@ local vanity = {
 }
 
 local telescope = {
-  'nvim-telescope/telescope.nvim',
+  plugin_id.telescope,
   tag = '0.1.8',
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    'kdheepak/lazygit.nvim',
+    plugin_id.plenary,
+    plugin_id.lazygit,
     vanity.web_devicons,
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
+      plugin_id.telescope_fzf,
       -- cmake is the starndard way of building; may be broken on windows
       -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
       build = vim.fn.join {
@@ -90,7 +117,7 @@ SEE :h mode()
 ]]
 
 local lualine = {
-  'nvim-lualine/lualine.nvim',
+  plugin_id.lualine,
   lazy = false,
   dependencies = {
     vanity.web_devicons,
@@ -148,7 +175,7 @@ local lualine = {
 }
 
 local oil = {
-  'stevearc/oil.nvim',
+  plugin_id.oil,
   lazy = false,
   dependencies = {
     vanity.web_devicons,
@@ -204,12 +231,12 @@ local oil = {
 }
 
 local wakatime = {
-  'wakatime/vim-wakatime',
+  plugin_id.wakatime,
   lazy = false,
 }
 
 local surround = {
-  'echasnovski/mini.surround',
+  plugin_id.surround,
   event = 'BufEnter',
   opts = {
     respect_selection_type = true,
@@ -217,7 +244,7 @@ local surround = {
 }
 
 local formatter = {
-  'mhartington/formatter.nvim',
+  plugin_id.formatter,
   event = 'LspAttach',
   cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
   opts = {
@@ -251,11 +278,11 @@ local formatter = {
 }
 
 local treeshitter = {
-  'nvim-treesitter/nvim-treesitter',
+  plugin_id.treesitter,
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    plugin_id.treesitter_textobjects,
     {
-      'windwp/nvim-ts-autotag',
+      plugin_id.treesitter_autotag,
       opts = {
         opts = {
           enable_close_on_slash = true, -- Auto close on trailing </
@@ -382,7 +409,7 @@ local treeshitter = {
 }
 
 local toggle_bool = {
-  'gerazov/toggle-bool.nvim',
+  plugin_id.toggle_bool,
   event = 'LspAttach',
   opts = {
     mapping = '<leader>ab',
@@ -393,7 +420,7 @@ local toggle_bool = {
 }
 
 local lspconfig = {
-  'neovim/nvim-lspconfig',
+  plugin_id.lspconfig,
   init = function()
     local set = vim.keymap.set
     set('n', '<leader>la', vim.lsp.buf.code_action)
@@ -460,11 +487,11 @@ local lspconfig = {
 }
 
 local masonlspconfig = {
-  'williamboman/mason-lspconfig.nvim',
+  plugin_id.mason_lspconfig,
   lazy = false,
   dependencies = {
     {
-      'williamboman/mason.nvim',
+      plugin_id.mason,
       priority = 10,
       opts = {
         pip = {
@@ -495,9 +522,9 @@ local masonlspconfig = {
 }
 
 local lazygit = {
-  'kdheepak/lazygit.nvim',
+  plugin_id.lazygit,
   dependencies = {
-    'nvim-lua/plenary.nvim',
+    plugin_id.plenary,
   },
   lazy = false,
   init = function()
@@ -519,7 +546,7 @@ local lazygit = {
 
 local colorscheme = {
   -- 'yazeed1s/minimal.nvim',
-  'marcosdly/minimal.nvim',
+  plugin_id.minimal,
   lazy = false,
   config = function()
     vim.g.minimal_italic_comments = true
@@ -534,10 +561,10 @@ local colorscheme = {
 
 local dap_config = require 'config.dap'
 local dap = {
-  'mfussenegger/nvim-dap',
+  plugin_id.dap,
   dependencies = {
-    'rcarriga/nvim-dap-ui',
-    'nvim-neotest/nvim-nio',
+    plugin_id.dapui,
+    plugin_id.nvim_nio,
   },
   cond = function()
     return vim.bo.buftype == ''
@@ -549,13 +576,13 @@ local dap = {
 
 local lib = {
   json5 = {
-    'Joakker/lua-json5',
+    plugin_id.json5,
     build = jit.os == 'Windows' and 'powershell ./install.ps1' or './install.sh',
   },
 }
 
 local lazydev = {
-  'folke/lazydev.nvim',
+  plugin_id.lazydev,
   ft = 'lua', -- only load on lua files
   event = 'BufEnter',
   opts = {
@@ -586,7 +613,7 @@ local lazydev = {
 }
 
 local neoconf = {
-  'folke/neoconf.nvim',
+  plugin_id.neoconf,
   cmd = 'Neoconf',
   lazy = false,
   priority = 1000,
