@@ -265,13 +265,9 @@ P.formatter = {
   config = function(lazyspec)
     local formatter = require 'formatter'
 
-    formatter.setup(
-      vim.tbl_deep_extend(
-        'force',
-        lazyspec.opts,
-        formatter_config.get_defined_formatters()
-      )
-    )
+    formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, {
+      filetype = formatter_config.get_defined_formatters(),
+    }))
   end,
 }
 
