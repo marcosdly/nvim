@@ -626,8 +626,9 @@ P.auto_session = {
   },
     keys = {
     -- Will use Telescope if installed or a vim.ui.select picker otherwise
-    { '<leader>ss', ':SessionSearch', desc = 'Session search' },
-    { '<leader>sv', ':SessionSave ', desc = 'Save session' },
+    { '<leader>ss', '<cmd>SessionSearch<cr>', desc = 'Session search' },
+    { '<leader>sv', '<cmd>SessionSave<cr>', desc = 'Session quick save' },
+    { '<leader>sn', ':SessionSave ', desc = 'Save session as...' },
     { '<leader>sa', ':SessionToggleAutoSave', desc = 'Toggle autosave' },
   },
   opts = {
