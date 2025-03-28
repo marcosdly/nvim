@@ -43,4 +43,13 @@ require('lazy').setup {
   },
   ui = { border = 'rounded', title = 'Plugins', title_pos = 'center' },
   change_detection = { notify = false },
+  sources = {
+    'lazy',
+    'rockspec',
+  },
+  rocks = {
+    enabled = true,
+    root = vim.fn.stdpath 'data' .. '/lazy-rocks',
+    server = 'https://nvim-neorocks.github.io/rocks-binaries/',
+  },
 }
