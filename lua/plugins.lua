@@ -560,6 +560,7 @@ P.dap = {
   dependencies = {
     plugin_id.dapui,
     plugin_id.nvim_nio,
+    plugin_id.json5,
   },
   cond = function()
     return shared.util.buf_is_normal()
