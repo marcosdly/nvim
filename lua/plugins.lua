@@ -25,32 +25,48 @@ local plugin_id = {
   neoconf = 'folke/neoconf.nvim',
 }
 
-local vanity = {
-  web_devicons = {
-    plugin_id.web_devicons,
-    cmd = { 'NvimWebDeviconsHiTest' },
-    event = 'VeryLazy',
-    config = true,
+local tool = {}
+
+function tool.not_lazy(list)
+  for _, lazyspec in ipairs(list) do
+    lazyspec.lazy = false
+  end
+end
+
+function tool.set_priority(priority_table)
+  for lazyspec, priority_int in pairs(priority_table) do
+    lazyspec.priority = priority_int
+  end
+end
+
+local P = {}
+
+P.web_devicons = {
+  plugin_id.web_devicons,
+  cmd = { 'NvimWebDeviconsHiTest' },
+  event = 'VeryLazy',
+  config = true,
+}
+
+P.telescope_fzf = {
+  plugin_id.telescope_fzf,
+  -- cmake is the starndard way of building; may be broken on windows
+  -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
+  build = vim.fn.join {
+    'mkdir build',
+    '&&',
+    'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll',
   },
 }
 
-local telescope = {
+P.telescope = {
   plugin_id.telescope,
   tag = '0.1.8',
   dependencies = {
     plugin_id.plenary,
     plugin_id.lazygit,
-    vanity.web_devicons,
-    {
-      plugin_id.telescope_fzf,
-      -- cmake is the starndard way of building; may be broken on windows
-      -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
-      build = vim.fn.join {
-        'mkdir build',
-        '&&',
-        'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll',
-      },
-    },
+    plugin_id.web_devicons,
+    plugin_id.telescope_fzf,
   },
   opts = {
     extensions = {
@@ -71,7 +87,6 @@ local telescope = {
     telescope.load_extension 'lazygit'
   end,
   cmd = 'Telescope',
-  lazy = false,
   keys = {
     { '<leader>ff', '<cmd>Telescope find_files<cr>' },
     { '<leader>fg', '<cmd>Telescope live_grep<cr>' },
@@ -116,11 +131,10 @@ SEE :h mode()
   t       Terminal
 ]]
 
-local lualine = {
+P.lualine = {
   plugin_id.lualine,
-  lazy = false,
   dependencies = {
-    vanity.web_devicons,
+    P.web_devicons,
   },
   opts = {
     options = {
@@ -174,11 +188,10 @@ local lualine = {
   end,
 }
 
-local oil = {
+P.oil = {
   plugin_id.oil,
-  lazy = false,
   dependencies = {
-    vanity.web_devicons,
+    P.web_devicons,
   },
   opts = {
     default_file_explorer = true,
@@ -230,12 +243,11 @@ local oil = {
   },
 }
 
-local wakatime = {
+P.wakatime = {
   plugin_id.wakatime,
-  lazy = false,
 }
 
-local surround = {
+P.surround = {
   plugin_id.surround,
   event = 'BufEnter',
   opts = {
@@ -243,7 +255,7 @@ local surround = {
   },
 }
 
-local formatter = {
+P.formatter = {
   plugin_id.formatter,
   event = 'LspAttach',
   cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
@@ -277,34 +289,35 @@ local formatter = {
   },
 }
 
-local treeshitter = {
+P.treesitter_autotag = {
+  plugin_id.treesitter_autotag,
+  opts = {
+    opts = {
+      enable_close_on_slash = true, -- Auto close on trailing </
+    },
+  },
+  -- if LSP breaks because was formatted in insert mode, uncomment this
+  -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
+  -- config = function(opts)
+  -- require('nvim-ts-autotag').setup(opts)
+  -- vim.lsp.handlers['textDocument/publishDiagnostics'] =
+  --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  --     underline = true,
+  --     virtual_text = {
+  --       spacing = 5,
+  --       severity_limit = 'Warning',
+  --     },
+  --     update_in_insert = true,
+  --   })
+  -- end,
+}
+
+P.treeshitter = {
   plugin_id.treesitter,
   dependencies = {
     plugin_id.treesitter_textobjects,
-    {
-      plugin_id.treesitter_autotag,
-      opts = {
-        opts = {
-          enable_close_on_slash = true, -- Auto close on trailing </
-        },
-      },
-      -- if LSP breaks because was formatted in insert mode, uncomment this
-      -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
-      -- config = function(opts)
-      -- require('nvim-ts-autotag').setup(opts)
-      -- vim.lsp.handlers['textDocument/publishDiagnostics'] =
-      --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-      --     underline = true,
-      --     virtual_text = {
-      --       spacing = 5,
-      --       severity_limit = 'Warning',
-      --     },
-      --     update_in_insert = true,
-      --   })
-      -- end,
-    },
+    plugin_id.treesitter_autotag,
   },
-  lazy = false,
   build = ':TSUpdate',
   opts = {
     sync_install = false,
@@ -408,7 +421,7 @@ local treeshitter = {
   end,
 }
 
-local toggle_bool = {
+P.toggle_bool = {
   plugin_id.toggle_bool,
   event = 'LspAttach',
   opts = {
@@ -419,7 +432,7 @@ local toggle_bool = {
   },
 }
 
-local lspconfig = {
+P.lspconfig = {
   plugin_id.lspconfig,
   init = function()
     local set = vim.keymap.set
@@ -486,23 +499,23 @@ local lspconfig = {
   end,
 }
 
-local masonlspconfig = {
-  plugin_id.mason_lspconfig,
-  lazy = false,
-  dependencies = {
-    {
-      plugin_id.mason,
-      priority = 10,
-      opts = {
-        pip = {
-          upgrade_pip = true,
-        },
-        ui = {
-          border = 'rounded',
-          backdrop = 0,
-        },
-      },
+P.mason = {
+  plugin_id.mason,
+  opts = {
+    pip = {
+      upgrade_pip = true,
     },
+    ui = {
+      border = 'rounded',
+      backdrop = 0,
+    },
+  },
+}
+
+P.masonlspconfig = {
+  plugin_id.mason_lspconfig,
+  dependencies = {
+    plugin_id.mason,
   },
   opts = {
     automatic_installation = false,
@@ -521,12 +534,11 @@ local masonlspconfig = {
   },
 }
 
-local lazygit = {
+P.lazygit = {
   plugin_id.lazygit,
   dependencies = {
     plugin_id.plenary,
   },
-  lazy = false,
   init = function()
     vim.g.lazygit_floating_window_winblend = 0 -- transparency of floating window
     vim.g.lazygit_floating_window_scaling_factor = 0.8
@@ -544,10 +556,9 @@ local lazygit = {
   },
 }
 
-local colorscheme = {
+P.colorscheme = {
   -- 'yazeed1s/minimal.nvim',
   plugin_id.minimal,
-  lazy = false,
   config = function()
     vim.g.minimal_italic_comments = true
     vim.g.minimal_italic_keywords = true
@@ -560,7 +571,7 @@ local colorscheme = {
 }
 
 local dap_config = require 'config.dap'
-local dap = {
+P.dap = {
   plugin_id.dap,
   dependencies = {
     plugin_id.dapui,
@@ -574,14 +585,12 @@ local dap = {
   config = dap_config.lazyspec_config,
 }
 
-local lib = {
-  json5 = {
-    plugin_id.json5,
-    build = jit.os == 'Windows' and 'powershell ./install.ps1' or './install.sh',
-  },
+P.json5 = {
+  plugin_id.json5,
+  build = jit.os == 'Windows' and 'powershell ./install.ps1' or './install.sh',
 }
 
-local lazydev = {
+P.lazydev = {
   plugin_id.lazydev,
   ft = 'lua', -- only load on lua files
   event = 'BufEnter',
@@ -612,31 +621,41 @@ local lazydev = {
   },
 }
 
-local neoconf = {
+P.neoconf = {
   plugin_id.neoconf,
   cmd = 'Neoconf',
-  lazy = false,
-  priority = 1000,
   config = true,
 }
 
-return {
-  -- TODO mini.move
-  telescope,
-  lualine,
-  oil,
-  wakatime,
-  surround,
-  formatter,
-  lspconfig,
-  toggle_bool,
-  masonlspconfig,
-  treeshitter,
-  lazygit,
-  lazydev,
-  colorscheme,
-  dap,
-  lib.json5,
-  vanity.web_devicons,
-  neoconf,
+tool.not_lazy {
+  P.telescope,
+  P.lualine,
+  P.oil,
+  P.wakatime,
+  P.treeshitter,
+  P.masonlspconfig,
+  P.lazygit,
+  P.colorscheme,
+  P.neoconf,
 }
+
+tool.set_priority {
+  [P.neoconf] = 1000,
+  [P.lspconfig] = 999,
+  [P.mason] = 990,
+  [P.masonlspconfig] = 980,
+  [P.colorscheme] = 970,
+  [P.lualine] = 960,
+}
+
+local plugins = {
+  id = plugin_id,
+  as_dictionary = P,
+  as_list = vim.tbl_values(P),
+}
+
+shared.plugins = plugins
+
+-- TODO mini.move
+
+return plugins.as_list
