@@ -23,6 +23,7 @@ local plugin_id = {
   json5 = 'Joakker/lua-json5',
   lazydev = 'folke/lazydev.nvim',
   neoconf = 'folke/neoconf.nvim',
+  auto_session = 'rmagatti/auto-session',
 }
 
 local tool = {}
@@ -173,6 +174,7 @@ P.lualine = {
         },
         lualine_x = {
           component.diagnostics,
+          component.session_status,
         },
         lualine_y = {
           component.selection_count,
@@ -607,6 +609,50 @@ P.neoconf = {
   config = true,
 }
 
+P.auto_session = {
+  plugin_id.auto_session,
+  dependencies = {
+    plugin_id.telescope,
+  },
+  cmd = {
+    'SessionSave',
+    'SessionRestore',
+    'SessionDelete',
+    'SessionDisableAutoSave',
+    'SessionToggleAutoSave',
+    'SessionPurgeOrphaned',
+    'SessionSearch',
+    'Autosession',
+  },
+    keys = {
+    -- Will use Telescope if installed or a vim.ui.select picker otherwise
+    { '<leader>ss', ':SessionSearch', desc = 'Session search' },
+    { '<leader>sv', ':SessionSave ', desc = 'Save session' },
+    { '<leader>sa', ':SessionToggleAutoSave', desc = 'Toggle autosave' },
+  },
+  opts = {
+    use_git_branch = true,
+    continue_restore_on_error = false,
+    cwd_change_handling = true,
+    lsp_stop_on_restore = true,
+    args_allow_single_directory = true,
+    args_allow_files_auto_save = false,
+    session_lens = {
+      load_on_setup = true,
+      previewer = true,
+    },
+    auto_create = function()
+      local cmd = 'git rev-parse --is-inside-work-tree'
+      return vim.fn.system(cmd) == 'true\n'
+    end,
+  },
+  config = function(lazyspec)
+    require('auto-session').setup(lazyspec.opts)
+    vim.o.sessionoptions =
+      'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+  end,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -617,9 +663,11 @@ tool.not_lazy {
   P.lazygit,
   P.colorscheme,
   P.neoconf,
+  P.auto_session,
 }
 
 tool.set_priority {
+  [P.auto_session] = 2000,
   [P.neoconf] = 1000,
   [P.lspconfig] = 999,
   [P.mason] = 990,

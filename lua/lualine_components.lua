@@ -130,4 +130,8 @@ M.diagnostics = {
   },
 }
 
+M.session_status = function()
+  return require('auto-session.lib').current_session_name(true)
+end
+
 return M
