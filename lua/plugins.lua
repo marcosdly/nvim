@@ -563,9 +563,7 @@ P.dap = {
     plugin_id.dapui,
     plugin_id.nvim_nio,
   },
-  cond = function()
-    return vim.bo.buftype == ''
-  end,
+  cond = function() return shared.util.buf_is_normal() end,
   keys = dap_config.lazyspec.keys,
   cmd = dap_config.lazyspec.cmd,
   config = dap_config.lazyspec.config,
@@ -573,7 +571,7 @@ P.dap = {
 
 P.json5 = {
   plugin_id.json5,
-  build = jit.os == 'Windows' and 'powershell ./install.ps1' or './install.sh',
+  build = shared.const.is_windows and 'powershell ./install.ps1' or './install.sh',
 }
 
 P.lazydev = {
