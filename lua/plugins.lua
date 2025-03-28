@@ -255,38 +255,24 @@ P.surround = {
   },
 }
 
+local formatter_config = require 'config.formatter'
 P.formatter = {
   plugin_id.formatter,
   event = 'LspAttach',
-  cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
-  opts = {
-    logging = false,
-    log_level = vim.log.levels.WARN,
-  },
+  cmd = formatter_config.lazyspec.cmd,
+  opts = formatter_config.lazyspec.opts,
+  keys = formatter_config.lazyspec.keys,
   config = function(lazyspec)
     local formatter = require 'formatter'
-    local filetypes = require 'formatter.filetypes'
 
-    local opts_override = {
-      filetype = {
-        python = {
-          filetypes.python.ruff,
-          filetypes.python.iruff, -- fix imports
-        },
-        lua = { filetypes.lua.stylua },
-        javascript = { filetypes.javascript.prettierd },
-        typescript = { filetypes.typescript.prettierd },
-        javascriptreact = { filetypes.javascriptreact.prettierd },
-        typescriptreact = { filetypes.typescriptreact.prettierd },
-      },
-    }
-
-    formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
+    formatter.setup(
+      vim.tbl_deep_extend(
+        'force',
+        lazyspec.opts,
+        formatter_config.get_defined_formatters()
+      )
+    )
   end,
-  keys = {
-    { '<leader>f', '<cmd>FormatLock<cr>' },
-    { '<leader>F', '<cmd>FormatWriteLock<cr>' },
-  },
 }
 
 P.treesitter_autotag = {
