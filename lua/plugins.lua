@@ -580,9 +580,9 @@ P.dap = {
   cond = function()
     return vim.bo.buftype == ''
   end,
-  keys = dap_config.lazyspec_keys,
-  cmd = dap_config.lazyspec_cmd,
-  config = dap_config.lazyspec_config,
+  keys = dap_config.lazyspec.keys,
+  cmd = dap_config.lazyspec.cmd,
+  config = dap_config.lazyspec.config,
 }
 
 P.json5 = {

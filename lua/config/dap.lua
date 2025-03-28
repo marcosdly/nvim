@@ -11,7 +11,9 @@ function M.util.refresh_config()
   -- TODO watch files for changes
 end
 
-M.lazyspec_keys = {
+M.lazyspec = {}
+
+M.lazyspec.keys = {
   -- region Session
   {
     '<leader>dc',
@@ -178,7 +180,7 @@ M.lazyspec_keys = {
   -- TODO dap widgets
 }
 
-M.lazyspec_cmd = {
+M.lazyspec.cmd = {
   -- Session management
   'DapContinue',
   'DapDisconnect',
@@ -205,7 +207,7 @@ M.lazyspec_cmd = {
   'DapShowLog',
 }
 
-function M.lazyspec_config(lazyspec)
+function M.lazyspec.config(lazyspec)
   local dap, dapui = require 'dap', require 'dapui'
   local dap_vscode = require 'dap.ext.vscode'
 
