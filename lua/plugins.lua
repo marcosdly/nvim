@@ -25,6 +25,7 @@ local plugin_id = {
   neoconf = 'folke/neoconf.nvim',
   auto_session = 'rmagatti/auto-session',
   mason_dap = 'jay-babu/mason-nvim-dap.nvim',
+  colorizer = 'catgoose/nvim-colorizer.lua',
 }
 
 local tool = {}
@@ -684,6 +685,22 @@ P.auto_session = {
   end,
 }
 
+P.colorizer = {
+  plugin_id.colorizer,
+  ft = { 'css', 'scss', 'sass', 'less', 'html' },
+  cmd = {
+    'ColorizerAttachToBuffer',
+    'ColorizerDetachFromBuffer',
+    'ColorizerReloadAllBuffers',
+    'ColorizerToggle',
+  },
+  opts = {
+    filetypes = { 'css', 'scss', 'sass', 'less', 'html' },
+    buftypes = { '' },
+    lazy_load = true,
+  },
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -755,7 +772,6 @@ shared.plugins = plugins
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#utility (different utility functions)
 -- TODO checkout and consider https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#media (media viewer in the terminal)
 -- TODO checkout and consider https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#bars-and-lines (bars and lines customization)
--- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#color (color preview)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#project (project management)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#search (search improvements)
 -- TODO add conditional completion
