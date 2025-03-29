@@ -27,6 +27,7 @@ local plugin_id = {
   mason_dap = 'jay-babu/mason-nvim-dap.nvim',
   colorizer = 'catgoose/nvim-colorizer.lua',
   autoclose = 'm4xshen/autoclose.nvim',
+  git_diff = 'echasnovski/mini.diff',
 }
 
 local tool = {}
@@ -161,7 +162,7 @@ P.lualine = {
           'branch',
           {
             'diff',
-            colored = false,
+            colored = true,
             fmt = function(str)
               return str:gsub('%s+', '')
             end,
@@ -485,12 +486,12 @@ P.lspconfig = {
           [vim.diagnostic.severity.INFO] = shared.const.icons.diagnostic.info,
           [vim.diagnostic.severity.HINT] = shared.const.icons.diagnostic.hint,
         },
-        numhl = {
-          [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
-          [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
-          [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
-          [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
-        },
+        -- numhl = {
+        --   [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
+        --   [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
+        --   [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
+        --   [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
+        -- },
         -- TODO numhl
       },
     }
@@ -726,6 +727,52 @@ P.autoclose = {
   },
 }
 
+P.git_diff = {
+  plugin_id.git_diff,
+  event = 'VeryLazy',
+  opts = {
+    view = {
+      style = 'number',
+    },
+    -- Module mappings. Use `''` (empty string) to disable one.
+    mappings = {
+      -- Apply hunks inside a visual/operator region
+      apply = '',
+
+      -- Reset hunks inside a visual/operator region
+      reset = '',
+
+      -- Hunk range textobject to be used inside operator
+      -- Works also in Visual mode if mapping differs from apply and reset
+      textobject = '',
+
+      -- Go to hunk range in corresponding direction
+      goto_first = '',
+      goto_prev = '',
+      goto_next = '',
+      goto_last = '',
+    },
+  },
+  config = function(lazyspec)
+    require('mini.diff').setup(lazyspec.opts)
+    local hl_add = vim.api.nvim_get_hl(0, { name = 'GitSignsAdd' })
+    local hl_delete = vim.api.nvim_get_hl(0, { name = 'GitSignsDelete' })
+    local hl_change = vim.api.nvim_get_hl(0, { name = 'GitSignsChange' })
+    vim.api.nvim_set_hl(0, 'MiniDiffOverAdd', {
+      fg = hl_add.fg,
+      bg = hl_add.bg,
+    })
+    vim.api.nvim_set_hl(0, 'MiniDiffOverDelete', {
+      fg = hl_delete.fg,
+      bg = hl_delete.bg,
+    })
+    vim.api.nvim_set_hl(0, 'MiniDiffOverAdd', {
+      fg = hl_change.fg,
+      bg = hl_change.bg,
+    })
+  end,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -764,7 +811,6 @@ shared.plugins = plugins
 -- TODO multi cursor
 -- TODO use folke/snacks
 -- TODO add treesitter fold code block
--- TODO add git diff visual indicator (also, set lualine diff=true, use same hlgroup)
 -- TODO patch 'marcosdly/minimal' colorscheme
 -- TODO see file info in telescope (enter will copy to yank register)
 -- TODO show file size on lualine only for sometime after writing
