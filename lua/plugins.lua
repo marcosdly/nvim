@@ -26,6 +26,7 @@ local plugin_id = {
   auto_session = 'rmagatti/auto-session',
   mason_dap = 'jay-babu/mason-nvim-dap.nvim',
   colorizer = 'catgoose/nvim-colorizer.lua',
+  autoclose = 'm4xshen/autoclose.nvim',
 }
 
 local tool = {}
@@ -701,6 +702,19 @@ P.colorizer = {
   },
 }
 
+P.autoclose = {
+  plugin_id.autoclose,
+  event = 'InsertEnter',
+  cond = function()
+    return shared.util.buf_is_normal()
+  end,
+  opts = {
+    options = {
+      disabled_filetypes = { 'text', 'markdown' },
+    },
+  },
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -752,7 +766,6 @@ shared.plugins = plugins
 -- TODO consider https://github.com/tmillr/sos.nvim (auto saving buffer)
 -- TODO consider https://github.com/Jxstxs/conceal.nvim (minimize visual clutter)
 -- TODO add snippets
--- TODO consider auto pairing
 -- TODO consider split/join of code structures (similar to command capital J)
 -- TODO add treesitter context display (context of breadcrumbs)
 -- TODO add https://github.com/zongben/capsoff.nvim (turn off capslock)
