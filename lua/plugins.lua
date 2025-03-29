@@ -711,12 +711,16 @@ local plugins = {
   as_list = vim.tbl_values(P),
 }
 
+plugins.by_id = vim.iter(plugins.as_list):fold({}, function(acc, lazyspec)
+  acc[lazyspec[1]] = lazyspec
+  return acc
+end)
+
 shared.plugins = plugins
 
 -- TODO mini.move
 -- TODO multi cursor
 -- TODO use folke/snacks
--- TODO add plugins.by_id
 -- TODO add treesitter fold code block
 -- TODO add git diff visual indicator (also, set lualine diff=true, use same hlgroup)
 -- TODO patch 'marcosdly/minimal' colorscheme
