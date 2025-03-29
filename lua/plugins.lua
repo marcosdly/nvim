@@ -24,6 +24,7 @@ local plugin_id = {
   lazydev = 'folke/lazydev.nvim',
   neoconf = 'folke/neoconf.nvim',
   auto_session = 'rmagatti/auto-session',
+  mason_dap = 'jay-babu/mason-nvim-dap.nvim',
 }
 
 local tool = {}
@@ -485,37 +486,53 @@ P.lspconfig = {
 
 P.mason = {
   plugin_id.mason,
-  opts = {
-    pip = {
-      upgrade_pip = true,
-    },
-    ui = {
-      border = 'rounded',
-      backdrop = 0,
-    },
+  event = 'VeryLazy',
+  dependencies = {
+    plugin_id.mason_lspconfig,
+    plugin_id.mason_dap,
+    plugin_id.lspconfig,
   },
+  config = function(lazyspec)
+    local mason_opts = {
+      pip = {
+        upgrade_pip = true,
+      },
+      ui = {
+        border = 'rounded',
+        backdrop = 0,
+      },
+    }
+
+    local mason_lspconfig_opts = {
+      automatic_installation = false,
+      ensure_installed = { 'lua_ls', 'jsonls' },
+      handlers = {
+        -- default
+        function(server_name)
+          local lspconfig = require 'lspconfig'
+          local capabilities = vim.lsp.protocol.make_client_capabilities()
+          capabilities.textDocument.completion.completionItem.snippetSupport = true
+          lspconfig[server_name].setup {
+            capabilities = capabilities,
+          }
+        end,
+      },
+    }
+
+    local mason_dap_opts = {
+      ensure_installed = { 'python' },
+      automatic_installation = true,
+      handlers = {}, -- sets up dap in the predefined manner
+    }
+
+    require('mason').setup(mason_opts)
+    require('mason-lspconfig').setup(mason_lspconfig_opts)
+    require('mason-nvim-dap').setup(mason_dap_opts)
+  end,
 }
 
 P.masonlspconfig = {
   plugin_id.mason_lspconfig,
-  dependencies = {
-    plugin_id.mason,
-  },
-  opts = {
-    automatic_installation = false,
-    ensure_installed = { 'lua_ls', 'jsonls' },
-    handlers = {
-      -- default
-      function(server_name)
-        local lspconfig = require 'lspconfig'
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities.textDocument.completion.completionItem.snippetSupport = true
-        lspconfig[server_name].setup {
-          capabilities = capabilities,
-        }
-      end,
-    },
-  },
 }
 
 P.lazygit = {
@@ -606,10 +623,20 @@ P.lazydev = {
   },
 }
 
+P.mason_dap = {
+  plugin_id.mason_dap,
+}
+
 P.neoconf = {
   plugin_id.neoconf,
   cmd = 'Neoconf',
-  config = true,
+  opts = {
+    plugins = {
+      dap = {
+        enabled = true,
+      },
+    },
+  },
 }
 
 P.auto_session = {
@@ -627,7 +654,7 @@ P.auto_session = {
     'SessionSearch',
     'Autosession',
   },
-    keys = {
+  keys = {
     -- Will use Telescope if installed or a vim.ui.select picker otherwise
     { '<leader>ss', '<cmd>SessionSearch<cr>', desc = 'Session search' },
     { '<leader>sv', '<cmd>SessionSave<cr>', desc = 'Session quick save' },
@@ -663,7 +690,6 @@ tool.not_lazy {
   P.oil,
   P.wakatime,
   P.treeshitter,
-  P.masonlspconfig,
   P.lazygit,
   P.colorscheme,
   P.neoconf,
@@ -673,9 +699,8 @@ tool.not_lazy {
 tool.set_priority {
   [P.auto_session] = 2000,
   [P.neoconf] = 1000,
-  [P.lspconfig] = 999,
+  -- [P.lspconfig] = 999,
   [P.mason] = 990,
-  [P.masonlspconfig] = 980,
   [P.colorscheme] = 970,
   [P.lualine] = 960,
 }
