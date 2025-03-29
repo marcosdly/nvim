@@ -3,6 +3,16 @@ local M = {}
 
 function M.is_user_cmdline(mode)
   return vim.v.event.cmdlevel == 1 or vim.v.event.cmdtype == mode
+
+function M.is_user_sub_cmdline(mode, prefix)
+  if not M.is_user_cmdline(mode) then return false end
+  vim.print('here')
+  local reg_content = vim.fn.getreg(mode)
+  if reg_content == '' then return false end
+  prefix = vim.trim(prefix)
+  if reg_content:len() < prefix:len() then return false end
+  if reg_content:len() == prefix:len() and reg_content == prefix then return true end
+  return vim.startswith(reg_content, prefix .. ' ')
 end
 
 function M.buf_is_normal(bufnr)
