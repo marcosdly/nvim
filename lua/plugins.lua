@@ -181,7 +181,18 @@ P.lualine = {
         },
         lualine_y = {
           component.selection_count,
-          'lsp_status',
+          {
+            'lsp_status',
+            fmt = function(str)
+              -- local symbol_done = '✓'
+              -- if str:match(symbol_done) then
+              if str:match '✓' then
+                return ''
+              else
+                return str
+              end
+            end,
+          },
         },
         lualine_z = {
           component.location,
@@ -757,7 +768,6 @@ shared.plugins = plugins
 -- TODO patch 'marcosdly/minimal' colorscheme
 -- TODO see file info in telescope (enter will copy to yank register)
 -- TODO show file size on lualine only for sometime after writing
--- TODO only show lsp status if loading, move it to lauline_c
 -- TODO add plugin https://github.com/m4xshen/hardtime.nvim to enforce good practices
 -- TODO add plugin for aligning
 -- TODO add remote development
