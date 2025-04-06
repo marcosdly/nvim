@@ -501,7 +501,6 @@ P.lspconfig = {
 
 P.mason = {
   plugin_id.mason,
-  event = 'VeryLazy',
   dependencies = {
     plugin_id.mason_lspconfig,
     plugin_id.mason_dap,
@@ -778,6 +777,7 @@ tool.not_lazy {
   P.colorscheme,
   P.neoconf,
   P.auto_session,
+  P.mason,
 }
 
 tool.set_priority {
