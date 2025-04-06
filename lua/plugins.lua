@@ -28,6 +28,7 @@ local plugin_id = {
   colorizer = 'catgoose/nvim-colorizer.lua',
   autoclose = 'm4xshen/autoclose.nvim',
   git_diff = 'echasnovski/mini.diff',
+  rose_pine = 'rose-pine/neovim',
 }
 
 local tool = {}
@@ -572,16 +573,10 @@ P.lazygit = {
 }
 
 P.colorscheme = {
-  -- 'yazeed1s/minimal.nvim',
-  plugin_id.minimal,
+  plugin_id.rose_pine,
+  name = 'rose-pine',
   config = function()
-    vim.g.minimal_italic_comments = true
-    vim.g.minimal_italic_keywords = true
-    vim.g.minimal_italic_booleans = false
-    vim.g.minimal_italic_functions = false
-    vim.g.minimal_italic_variables = false
-    vim.g.minimal_transparent_background = false
-    vim.cmd.colorscheme 'minimal'
+    vim.cmd.colorscheme 'rose-pine'
   end,
 }
 
