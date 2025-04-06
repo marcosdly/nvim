@@ -705,6 +705,12 @@ P.colorizer = {
     filetypes = { 'css', 'scss', 'sass', 'less', 'html' },
     buftypes = { '' },
     lazy_load = true,
+    user_default_options = {
+      names = false,
+      RGBA = false,
+      rgb_fn = true,
+      virtualtext_inline = true,
+    },
   },
 }
 
