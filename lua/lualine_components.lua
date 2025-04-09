@@ -134,4 +134,8 @@ M.session_status = function()
   return require('auto-session.lib').current_session_name(true)
 end
 
+function M.keymap()
+  return vim.b.keymap_name ~= nil and string.format('<%s>', vim.b.keymap_name) or ''
+end
+
 return M

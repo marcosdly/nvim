@@ -180,6 +180,7 @@ P.lualine = {
         lualine_x = {
           component.diagnostics,
           component.session_status,
+          component.keymap,
         },
         lualine_y = {
           component.selection_count,
