@@ -45,6 +45,12 @@ function tool.set_priority(priority_table)
   end
 end
 
+function tool.disable(disable_list)
+  for _, lazyspec in ipairs(disable_list) do
+    lazyspec.enabled = false
+  end
+end
+
 local P = {}
 
 P.web_devicons = {
@@ -573,6 +579,21 @@ P.lazygit = {
 }
 
 P.colorscheme = {
+P.minimal = {
+  -- 'yazeed1s/minimal.nvim',
+  plugin_id.minimal,
+  init = function()
+    vim.g.minimal_colorscheme = {
+      italic = {
+        keywords = true,
+      },
+    }
+  end,
+  config = function()
+    vim.cmd.colorscheme 'minimal'
+  end,
+}
+
   plugin_id.rose_pine,
   name = 'rose-pine',
   config = function()
@@ -794,6 +815,14 @@ tool.set_priority {
   [P.mason] = 990,
   [P.colorscheme] = 970,
   [P.lualine] = 960,
+}
+
+tool.disable {
+  P.minimal,
+  P.auto_session,
+  P.toggle_bool,
+  P.colorizer,
+  P.neoconf,
 }
 
 local plugins = {
