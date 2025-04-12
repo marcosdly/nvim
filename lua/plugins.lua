@@ -57,6 +57,7 @@ P.web_devicons = {
   plugin_id.web_devicons,
   cmd = { 'NvimWebDeviconsHiTest' },
   event = 'VeryLazy',
+  pin = true,
   config = true,
 }
 
@@ -430,6 +431,7 @@ P.treeshitter = {
 
 P.toggle_bool = {
   plugin_id.toggle_bool,
+  pin = true,
   event = 'LspAttach',
   opts = {
     mapping = '<leader>ab',
@@ -578,7 +580,6 @@ P.lazygit = {
   },
 }
 
-P.colorscheme = {
 P.minimal = {
   -- 'yazeed1s/minimal.nvim',
   plugin_id.minimal,
@@ -594,6 +595,7 @@ P.minimal = {
   end,
 }
 
+P.rose_pine = {
   plugin_id.rose_pine,
   name = 'rose-pine',
   config = function()
@@ -619,6 +621,8 @@ P.dap = {
 
 P.json5 = {
   plugin_id.json5,
+  optional = true,
+  pin = true,
   build = shared.const.is_windows and 'powershell ./install.ps1' or './install.sh',
 }
 
@@ -716,6 +720,7 @@ P.auto_session = {
 
 P.colorizer = {
   plugin_id.colorizer,
+  pin = true,
   ft = { 'css', 'scss', 'sass', 'less', 'html' },
   cmd = {
     'ColorizerAttachToBuffer',
@@ -751,6 +756,7 @@ P.autoclose = {
 
 P.git_diff = {
   plugin_id.git_diff,
+  pin = true,
   event = 'VeryLazy',
   opts = {
     view = {
@@ -802,7 +808,8 @@ tool.not_lazy {
   P.wakatime,
   P.treeshitter,
   P.lazygit,
-  P.colorscheme,
+  P.rose_pine,
+  P.minimal,
   P.neoconf,
   P.auto_session,
   P.mason,
@@ -813,7 +820,8 @@ tool.set_priority {
   [P.neoconf] = 1000,
   -- [P.lspconfig] = 999,
   [P.mason] = 990,
-  [P.colorscheme] = 970,
+  [P.rose_pine] = 970,
+  [P.minimal] = 970,
   [P.lualine] = 960,
 }
 
