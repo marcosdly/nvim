@@ -16,6 +16,10 @@ function M.is_user_sub_cmdline(mode, prefix)
   return vim.startswith(reg_content, prefix .. ' ')
 end
 
+function M.is_mode_cmdline()
+  return vim.fn.getcmdpos() == 0
+end
+
 function M.buf_is_normal(bufnr)
   return vim.api.nvim_buf_get_option(bufnr or 0, 'buftype') == ''
 end
