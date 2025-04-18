@@ -20,7 +20,7 @@ function M.buffer_count()
       and vim.api.nvim_buf_get_option(bufnr, 'buftype') == '' -- normal buffer
     then
       count = count + 1
-      if bufnr == current_bufnr then current_buf_i = i end
+      if bufnr == current_bufnr then current_buf_i = count end
     end
   end
   if count == 1 then return '' end
