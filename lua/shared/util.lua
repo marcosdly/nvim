@@ -2,7 +2,8 @@
 local M = {}
 
 function M.is_user_cmdline(mode)
-  return vim.v.event.cmdlevel == 1 or vim.v.event.cmdtype == mode
+  return vim.v.event.cmdlevel == 1 and vim.v.event.cmdtype == mode
+end
 
 function M.is_user_sub_cmdline(mode, prefix)
   if not M.is_user_cmdline(mode) then return false end
