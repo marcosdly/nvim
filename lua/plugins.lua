@@ -27,6 +27,7 @@ local plugin_id = {
   colorizer = 'catgoose/nvim-colorizer.lua',
   autoclose = 'm4xshen/autoclose.nvim',
   git_diff = 'echasnovski/mini.diff',
+  capsoff = 'zongben/capsoff.nvim',
 }
 
 local tool = {}
@@ -727,7 +728,7 @@ P.colorizer = {
       names = false,
       RGBA = false,
       rgb_fn = true,
-      virtualtext_inline = true,
+      virtualtext_inline = false,
     },
   },
 }
@@ -792,6 +793,19 @@ P.git_diff = {
   end,
 }
 
+P.capsoff = {
+  plugin_id.capsoff,
+  build = ':CapsLockOffBuild',
+  config = function()
+    require('capsoff').setup { auto = false }
+    vim.api.nvim_create_autocmd('InsertLeave', {
+      desc = 'Disable CAPSLOCK when leaving insert mode (Windows, linux/X11)',
+      command = 'CapsLockOff',
+      nested = true,
+    })
+  end,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -802,6 +816,7 @@ tool.not_lazy {
   P.neoconf,
   P.auto_session,
   P.mason,
+  P.capsoff,
 }
 
 tool.set_priority {
@@ -817,6 +832,7 @@ tool.disable {
   P.toggle_bool,
   P.colorizer,
   P.neoconf,
+  P.capsoff,
 }
 
 local plugins = {
@@ -849,7 +865,6 @@ shared.plugins = plugins
 -- TODO add snippets
 -- TODO consider split/join of code structures (similar to command capital J)
 -- TODO add treesitter context display (context of breadcrumbs)
--- TODO add https://github.com/zongben/capsoff.nvim (turn off capslock)
 -- TODO add https://github.com/kiyoon/telescope-insert-path.nvim (insert filepath using telescope)
 -- TODO add https://github.com/zhisme/copy_with_context.nvim (copy line number with metadata)
 -- TODO add https://github.com/shortcuts/no-neck-pain.nvim (center single buffer on screen)
