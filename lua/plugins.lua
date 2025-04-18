@@ -98,7 +98,7 @@ P.telescope = {
     local actions = require 'telescope.actions'
 
     local opts_override = {
-      default = {
+      defaults = {
         mappings = {
           i = {
             ['<c-c>'] = actions.close,
