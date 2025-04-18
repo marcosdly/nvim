@@ -28,6 +28,7 @@ local plugin_id = {
   autoclose = 'm4xshen/autoclose.nvim',
   git_diff = 'echasnovski/mini.diff',
   capsoff = 'zongben/capsoff.nvim',
+  snacks = 'folke/snacks.nvim',
 }
 
 local tool = {}
@@ -205,18 +206,6 @@ P.lualine = {
         },
         lualine_y = {
           component.selection_count,
-          {
-            'lsp_status',
-            fmt = function(str)
-              -- local symbol_done = '✓'
-              -- if str:match(symbol_done) then
-              if str:match '✓' then
-                return ''
-              else
-                return str
-              end
-            end,
-          },
         },
         lualine_z = {
           component.location,
@@ -806,6 +795,13 @@ P.capsoff = {
   end,
 }
 
+P.snacks = {
+  plugin_id.snacks,
+  init = require('config.snacks').init,
+  opts = require('config.snacks').opts,
+  keys = require('config.snacks').keys,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -817,9 +813,11 @@ tool.not_lazy {
   P.auto_session,
   P.mason,
   P.capsoff,
+  P.snacks,
 }
 
 tool.set_priority {
+  [P.snacks] = 2000,
   [P.auto_session] = 2000,
   [P.neoconf] = 1000,
   -- [P.lspconfig] = 999,
@@ -850,7 +848,6 @@ shared.plugins = plugins
 
 -- TODO mini.move
 -- TODO multi cursor
--- TODO use folke/snacks
 -- TODO add treesitter fold code block
 -- TODO patch 'marcosdly/minimal' colorscheme
 -- TODO see file info in telescope (enter will copy to yank register)
