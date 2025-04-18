@@ -178,49 +178,40 @@ P.lualine = {
       always_divide_middle = true,
     },
   },
-  config = function(lazyspec)
-    local lualine = require 'lualine'
-    local component = require 'lualine_components'
-
-    local opts_override = {
-      sections = {
-        lualine_a = {
-          component.mode,
-        },
-        lualine_b = {
-          'branch',
-          {
-            'diff',
-            colored = true,
-            fmt = function(str)
-              return str:gsub('%s+', '')
-            end,
-          },
-        },
-        lualine_c = {
-          component.buffer_count,
-          {
-            'filename',
-            path = 1, -- relative path
-          },
-          component.filesize,
-        },
-        lualine_x = {
-          component.diagnostics,
-          component.session_status,
-          component.keymap,
-        },
-        lualine_y = {
-          component.selection_count,
-        },
-        lualine_z = {
-          component.location,
-        },
+  sections = {
+    lualine_a = {
+      config.lualine.mode,
+    },
+    lualine_b = {
+      'branch',
+      {
+        'diff',
+        colored = true,
+        fmt = function(str)
+          return str:gsub('%s+', '')
+        end,
       },
-    }
-
-    lualine.setup(vim.tbl_extend('force', lazyspec.opts, opts_override))
-  end,
+    },
+    lualine_c = {
+      config.lualine.buffer_count,
+      {
+        'filename',
+        path = 1, -- relative path
+      },
+      config.lualine.filesize,
+    },
+    lualine_x = {
+      config.lualine.diagnostics,
+      config.lualine.session_status,
+      config.lualine.keymap,
+    },
+    lualine_y = {
+      config.lualine.selection_count,
+    },
+    lualine_z = {
+      config.lualine.location,
+    },
+  },
 }
 
 P.oil = {
