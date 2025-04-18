@@ -1,3 +1,5 @@
+---@diagnostic disable: redundant-parameter
+
 local M = {}
 
 function M.mode()
@@ -11,13 +13,13 @@ function M.mode()
 end
 
 function M.buffer_count()
-  local current_bufnr = vim.api.nvim_buf_get_number(0)
+  local current_bufnr = vim.api.nvim_get_current_buf()
   local current_buf_i = current_bufnr
   local count = 0
-  for i, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if
       vim.api.nvim_buf_is_loaded(bufnr)
-      and vim.api.nvim_buf_get_option(bufnr, 'buftype') == '' -- normal buffer
+      and vim.api.nvim_get_option_value('buftype', { scope = 'local', buf = bufnr }) == '' -- normal buffer
     then
       count = count + 1
       if bufnr == current_bufnr then current_buf_i = count end
