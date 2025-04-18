@@ -31,6 +31,12 @@ local plugin_id = {
   snacks = 'folke/snacks.nvim',
 }
 
+local config = setmetatable({}, {
+  __index = function(_, key)
+    return require('config.' .. key)
+  end,
+})
+
 local tool = {}
 
 function tool.not_lazy(list)
@@ -285,18 +291,17 @@ P.surround = {
   },
 }
 
-local formatter_config = require 'config.formatter'
 P.formatter = {
   plugin_id.formatter,
   event = 'LspAttach',
-  cmd = formatter_config.lazyspec.cmd,
-  opts = formatter_config.lazyspec.opts,
-  keys = formatter_config.lazyspec.keys,
+  cmd = config.formatter.lazyspec.cmd,
+  opts = config.formatter.lazyspec.opts,
+  keys = config.formatter.lazyspec.keys,
   config = function(lazyspec)
     local formatter = require 'formatter'
 
     formatter.setup(vim.tbl_deep_extend('force', lazyspec.opts, {
-      filetype = formatter_config.get_defined_formatters(),
+      filetype = config.formatter.get_defined_formatters(),
     }))
   end,
 }
@@ -584,7 +589,6 @@ P.lazygit = {
   },
 }
 
-local dap_config = require 'config.dap'
 P.dap = {
   plugin_id.dap,
   dependencies = {
@@ -595,9 +599,9 @@ P.dap = {
   cond = function()
     return shared.util.buf_is_normal()
   end,
-  keys = dap_config.lazyspec.keys,
-  cmd = dap_config.lazyspec.cmd,
-  config = dap_config.lazyspec.config,
+  keys = config.dap.lazyspec.keys,
+  cmd = config.dap.lazyspec.cmd,
+  config = config.dap.lazyspec.config,
 }
 
 P.json5 = {
@@ -797,9 +801,9 @@ P.capsoff = {
 
 P.snacks = {
   plugin_id.snacks,
-  init = require('config.snacks').init,
-  opts = require('config.snacks').opts,
-  keys = require('config.snacks').keys,
+  init = config.snacks.init,
+  opts = config.snacks.opts,
+  keys = config.snacks.keys,
 }
 
 tool.not_lazy {
