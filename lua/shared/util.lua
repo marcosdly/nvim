@@ -17,7 +17,7 @@ function M.is_user_sub_cmdline(mode, prefix)
 end
 
 function M.is_mode_cmdline()
-  return vim.fn.getcmdpos() == 0
+  return vim.fn.getcmdpos() > 0
 end
 
 function M.buf_is_normal(bufnr)
