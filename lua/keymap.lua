@@ -99,3 +99,7 @@ set('n', '<leader>td', '<cmd>tabclose<cr>')
 set('n', '<leader>t[', '<cmd>tabfirst<cr>') -- goto first tab
 set('n', '<leader>t]', '<cmd>tablast<cr>') -- goto last tab
 set('n', '<leader>te', '<ctrl-w>g<tab>') -- goto last accessed tab
+
+-- save file in other modes
+set('i', '<c-z>', '<cmd>write<cr>')
+
