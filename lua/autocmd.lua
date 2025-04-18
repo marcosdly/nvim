@@ -13,14 +13,12 @@ local lib = require 'lib'
 
 -- Toggle relative numbers on insert mode enter/leave
 autocmd('InsertEnter', {
-  buffer = 0,
   desc = 'ENABLE relativenumber',
   callback = function()
     if shared.util.buf_is_normal() then vim.wo.relativenumber = false end
   end,
 })
 autocmd('InsertLeave', {
-  buffer = 0,
   desc = 'DISABLE relativenumber',
   callback = function()
     if shared.util.buf_is_normal() then vim.wo.relativenumber = true end
@@ -29,7 +27,6 @@ autocmd('InsertLeave', {
 
 -- Only highlight search matches while searching
 autocmd('CmdlineEnter', {
-  buffer = 0,
   desc = 'ENABLE hlsearch according to command line mode',
   callback = function()
     if not shared.util.is_user_cmdline '/' then return end
@@ -37,7 +34,6 @@ autocmd('CmdlineEnter', {
   end,
 })
 autocmd('CmdlineLeave', {
-  buffer = 0,
   desc = 'DISABLE hlsearch according to command line mode',
   callback = function()
     if vim.go.hlsearch then vim.go.hlsearch = false end
@@ -75,7 +71,6 @@ autocmd('CmdlineLeave', {
 
 -- Set fold marker
 autocmd({ 'BufEnter', 'FileType' }, {
-  buffer = 0,
   desc = 'Set custom foldmarker per buffer',
   callback = function(event)
     if shared.util.buf_is_normal() then lib.autocmd.set_foldmarker_per_buf(event) end
@@ -84,7 +79,6 @@ autocmd({ 'BufEnter', 'FileType' }, {
 
 -- Set cursorcolumn if buffer is terminal
 autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
-  buffer = 0,
   desc = 'Set cursorcolumn according to buftype',
   callback = function()
     vim.wo.cursorcolumn = vim.bo.buftype == 'terminal'
@@ -93,7 +87,6 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
 
 -- Format buffer
 autocmd('BufWritePost', {
-  buffer = 0,
   desc = 'Format and write buffer (blocking)',
   callback = function()
     if shared.util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
