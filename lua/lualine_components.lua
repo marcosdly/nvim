@@ -1,5 +1,9 @@
 ---@diagnostic disable: redundant-parameter
 
+local function local_buf_option(name, nr)
+  return vim.api.nvim_get_option_value(name, { scope = 'local', buf = nr })
+end
+
 local M = {}
 
 function M.mode()
@@ -14,12 +18,16 @@ end
 
 function M.buffer_count()
   local current_bufnr = vim.api.nvim_get_current_buf()
+  if local_buf_option('buftype', current_bufnr) ~= '' then
+    -- current buf is not normal
+    return ''
+  end
   local current_buf_i = current_bufnr
   local count = 0
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if
       vim.api.nvim_buf_is_loaded(bufnr)
-      and vim.api.nvim_get_option_value('buftype', { scope = 'local', buf = bufnr }) == '' -- normal buffer
+      and local_buf_option('buftype', current_bufnr) == '' -- normal buffer
     then
       count = count + 1
       if bufnr == current_bufnr then current_buf_i = count end
