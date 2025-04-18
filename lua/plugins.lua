@@ -16,7 +16,6 @@ local plugin_id = {
   lspconfig = 'neovim/nvim-lspconfig',
   mason_lspconfig = 'williamboman/mason-lspconfig.nvim',
   mason = 'williamboman/mason.nvim',
-  minimal = 'marcosdly/minimal.nvim',
   dap = 'mfussenegger/nvim-dap',
   dapui = 'rcarriga/nvim-dap-ui',
   nvim_nio = 'nvim-neotest/nvim-nio',
@@ -28,7 +27,6 @@ local plugin_id = {
   colorizer = 'catgoose/nvim-colorizer.lua',
   autoclose = 'm4xshen/autoclose.nvim',
   git_diff = 'echasnovski/mini.diff',
-  rose_pine = 'rose-pine/neovim',
 }
 
 local tool = {}
@@ -596,29 +594,6 @@ P.lazygit = {
   },
 }
 
-P.minimal = {
-  -- 'yazeed1s/minimal.nvim',
-  plugin_id.minimal,
-  init = function()
-    vim.g.minimal_colorscheme = {
-      italic = {
-        keywords = true,
-      },
-    }
-  end,
-  config = function()
-    vim.cmd.colorscheme 'minimal'
-  end,
-}
-
-P.rose_pine = {
-  plugin_id.rose_pine,
-  name = 'rose-pine',
-  config = function()
-    vim.cmd.colorscheme 'rose-pine'
-  end,
-}
-
 local dap_config = require 'config.dap'
 P.dap = {
   plugin_id.dap,
@@ -824,8 +799,6 @@ tool.not_lazy {
   P.wakatime,
   P.treeshitter,
   P.lazygit,
-  P.rose_pine,
-  P.minimal,
   P.neoconf,
   P.auto_session,
   P.mason,
@@ -836,13 +809,10 @@ tool.set_priority {
   [P.neoconf] = 1000,
   -- [P.lspconfig] = 999,
   [P.mason] = 990,
-  [P.rose_pine] = 970,
-  [P.minimal] = 970,
   [P.lualine] = 960,
 }
 
 tool.disable {
-  P.minimal,
   P.auto_session,
   P.toggle_bool,
   P.colorizer,

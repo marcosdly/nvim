@@ -39,6 +39,7 @@ o.cdhome = false
 -- region INTERFACE
 -- theme (color group) to prefer given colorscheme
 o.background = 'dark'
+vim.cmd.colorscheme 'default'
 -- show current mode
 o.showmode = false
 -- show line number
