@@ -34,6 +34,9 @@ require('lazy').setup {
   spec = {
     { import = 'plugins' },
   },
+  install = {
+    colorscheme = { 'ron', 'wildcharm', 'lunaperche', 'habamax' },
+  },
   checker = {
     -- automatically check for plugin updates
     enabled = false,
