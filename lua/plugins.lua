@@ -629,6 +629,7 @@ P.lazydev = {
       'oil.nvim',
       'plenary.nvim',
       'telescope.nvim',
+      'snacks.nvim',
     },
   },
 }
