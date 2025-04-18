@@ -177,39 +177,39 @@ P.lualine = {
       globalstatus = true,
       always_divide_middle = true,
     },
-  },
-  sections = {
-    lualine_a = {
-      config.lualine.mode,
-    },
-    lualine_b = {
-      'branch',
-      {
-        'diff',
-        colored = true,
-        fmt = function(str)
-          return str:gsub('%s+', '')
-        end,
+    sections = {
+      lualine_a = {
+        config.lualine.mode,
       },
-    },
-    lualine_c = {
-      config.lualine.buffer_count,
-      {
-        'filename',
-        path = 1, -- relative path
+      lualine_b = {
+        'branch',
+        {
+          'diff',
+          colored = true,
+          fmt = function(str)
+            return str:gsub('%s+', '')
+          end,
+        },
       },
-      config.lualine.filesize,
-    },
-    lualine_x = {
-      config.lualine.diagnostics,
-      config.lualine.session_status,
-      config.lualine.keymap,
-    },
-    lualine_y = {
-      config.lualine.selection_count,
-    },
-    lualine_z = {
-      config.lualine.location,
+      lualine_c = {
+        config.lualine.buffer_count,
+        {
+          'filename',
+          path = 1, -- relative path
+        },
+        config.lualine.filesize,
+      },
+      lualine_x = {
+        config.lualine.diagnostics,
+        config.lualine.session_status,
+        config.lualine.keymap,
+      },
+      lualine_y = {
+        config.lualine.selection_count,
+      },
+      lualine_z = {
+        config.lualine.location,
+      },
     },
   },
 }
