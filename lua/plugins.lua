@@ -95,7 +95,22 @@ P.telescope = {
   },
   config = function(lazyspec)
     local telescope = require 'telescope'
-    telescope.setup(lazyspec.opts)
+    local actions = require 'telescope.actions'
+
+    local opts_override = {
+      default = {
+        mappings = {
+          i = {
+            ['<c-c>'] = actions.close,
+          },
+          n = {
+            ['<c-c>'] = actions.close,
+          },
+        },
+      },
+    }
+
+    telescope.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
     telescope.load_extension 'fzf'
     telescope.load_extension 'lazygit'
   end,
@@ -253,6 +268,7 @@ P.oil = {
 
     local opts_override = {
       keymaps = {
+        ['<c-c>'] = 'actions.close',
         ['gd'] = {
           desc = 'Toggle file detail view',
           callback = oil_toggle_details,
