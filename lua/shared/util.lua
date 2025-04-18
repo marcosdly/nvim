@@ -20,8 +20,12 @@ function M.is_mode_cmdline()
   return vim.fn.getcmdpos() > 0
 end
 
+function M.buf_local_option(name, bufnr)
+  return vim.api.nvim_get_option_value(name, { buf = bufnr })
+end
+
 function M.buf_is_normal(bufnr)
-  return vim.api.nvim_buf_get_option(bufnr or 0, 'buftype') == ''
+  return vim.api.nvim_get_option_value('buftype', { buf = bufnr or 0 }) == ''
 end
 
 function M.pure_math_int_string_length(n)
