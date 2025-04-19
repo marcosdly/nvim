@@ -62,9 +62,6 @@ set('t', '<esc>', '<c-\\><c-n>')
 -- Switch window/buffer/tab
 set('n', '<leader>bn', '<cmd>bnext<cr>')
 set('n', '<leader>bp', '<cmd>bprevious<cr>')
-set('n', '<leader>bd', function()
-  Snacks.bufdelete()
-end)
 set('n', '<leader>b[', '<cmd>bfirst<cr>') -- goto first buffer
 set('n', '<leader>b]', '<cmd>blast<cr>') -- goto last buffer
 

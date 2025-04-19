@@ -119,23 +119,8 @@ P.telescope = {
   end,
   cmd = 'Telescope',
   keys = {
-    { '<leader>ff', '<cmd>Telescope find_files<cr>' },
-    { '<leader>fg', '<cmd>Telescope live_grep<cr>' },
-    { '<leader>fb', '<cmd>Telescope buffers<cr>' },
-    { '<leader>fz', '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
-    -- git
-    { '<leader>fgf', '<cmd>Telescope git_files<cr>' },
-    { '<leader>fgs', '<cmd>Telescope git_status<cr>' },
-    { '<leader>fgc', '<cmd>Telescope git_commits<cr>' },
-    { '<leader>fgt', '<cmd>Telescope git_stash<cr>' },
-    { '<leader>fgb', '<cmd>Telescope git_branches<cr>' },
     -- vim
-    { '<leader>fvh', '<cmd>Telescope help_tags<cr>' },
     { '<leader>fvo', '<cmd>Telescope vim_options<cr>' },
-    { '<leader>fvs', '<cmd>Telescope search_history<cr>' },
-    { '<leader>fvr', '<cmd>Telescope registers<cr>' },
-    { '<leader>fvk', '<cmd>Telescope keymaps<cr>' },
-    { '<leader>fvc', '<cmd>Telescope command_history<cr>' },
     { '<leader>fvl', '<cmd>Telescope spell_suggest<cr>' },
   },
 }
@@ -442,26 +427,14 @@ P.lspconfig = {
   init = function()
     local set = vim.keymap.set
     set('n', '<leader>la', vim.lsp.buf.code_action)
-    set('n', '<leader>ld', vim.lsp.buf.definition)
-    set('n', '<leader>fd', '<cmd>Telescope lsp_definitions<cr>')
-    set('n', '<leader>fs', '<cmd>Telescope lsp_document_symbols<cr>')
-    set('n', '<leader>fw', '<cmd>Telescope lsp_workspace_symbols<cr>')
-    set('n', '<leader>li', vim.lsp.buf.implementation)
-    set('n', '<leader>fi', '<cmd>Telesope lsp_implementations<cr>')
     -- f as in 'find'; j (down) as in here, myself, where I stand
     set('n', '<leader>fj', '<cmd>Telescope lsp_incoming_calls<cr>')
     -- f as in 'find'; k (up) as in there, somewhere, out
     set('n', '<leader>fj', '<cmd>Telescope lsp_outgoing_calls<cr>')
-    -- f as in 'find'; m as in 'more'
-    set('n', '<leader>fm', '<cmd>Telescope lsp_references<cr>')
     set('n', '<leader>lr', vim.lsp.buf.rename)
     -- NOTE renaming accross workspace is dependent on LSP (implementation), some
     -- may support it, some may do it by default
     set('n', '<leader>ls', vim.lsp.buf.signature_help)
-    set('n', '<leader>lt', vim.lsp.buf.type_definition)
-    set('n', '<leader>lb', function()
-      Snacks.git.blame_line()
-    end)
     -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
     set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
     -- TODO Telescope typehierarchy
