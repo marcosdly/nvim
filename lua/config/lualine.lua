@@ -23,7 +23,8 @@ function M.buffer_count()
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if
       vim.api.nvim_buf_is_loaded(bufnr)
-      and shared.util.buf_is_normal(current_bufnr)
+      and shared.util.buf_local_option('buflisted', bufnr)
+      and shared.util.buf_is_normal(bufnr)
     then
       count = count + 1
       if bufnr == current_bufnr then current_buf_i = count end
