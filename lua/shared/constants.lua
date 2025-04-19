@@ -11,7 +11,12 @@ M.icons = {
     warn = '󰀪', -- x000f002a
     info = '󰋽', -- x000f02fd
     hint = '󰌶', -- x000f0336
-  }
+  },
+  misc = {
+    center_small_dot = '·',
+    center_big_dot = '•',
+    bottom_small_dot = '.',
+  },
 }
 
 

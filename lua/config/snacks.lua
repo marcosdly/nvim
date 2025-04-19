@@ -70,6 +70,18 @@ M.opts = {
     top_down = true,
     refresh = 100, -- ms
   },
+  indent = {
+    indent = {
+      enabled = true,
+      priority = 1,
+      char = shared.const.icons.misc.bottom_small_dot,
+      only_scope = true,
+      only_current = false,
+    },
+    animate = { enabled = false },
+    scope = { enabled = true, priority = 10, only_current = false },
+    chunk = { enabled = true, priority = 100, only_current = false },
+  },
 }
 
 return M

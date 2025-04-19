@@ -91,7 +91,7 @@ o.scrolloff = 5
 -- visually replace some blank-character sequences
 o.list = true
 -- strings to replace whose blank characters with
-o.listchars = 'tab:> ,trail:.,lead:.'
+o.listchars = string.format('trail:%s', shared.const.icons.misc.center_small_dot)
 -- single character flags indicating UI messages/errors to ignore or shorten
 go.shortmess = 'laoOstIcF'
 -- scrolling works with screen lines, not implemented for gj/gk as of nvim v0.10.4
