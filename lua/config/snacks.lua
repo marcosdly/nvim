@@ -58,14 +58,13 @@ M.opts = {
   },
   notifier = {
     enabled = true,
-    timeout = 3000,
+    timeout = 2000,
     width = { min = 32, max = 0.4 },
     height = { min = 1, max = 0.5 },
     margin = { top = 1, right = 1 },
     padding = true,
-    sort = { 'updated', 'added' },
+    sort = { 'added', 'level' },
     level = vim.log.levels.INFO,
-    keep = shared.util.is_mode_cmdline,
     style = 'compact',
     top_down = true,
     refresh = 100, -- ms
