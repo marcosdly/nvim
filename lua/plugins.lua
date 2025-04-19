@@ -28,6 +28,7 @@ local plugin_id = {
   git_diff = 'echasnovski/mini.diff',
   capsoff = 'zongben/capsoff.nvim',
   snacks = 'folke/snacks.nvim',
+  numb = 'nacro90/numb.nvim',
 }
 
 local config = setmetatable({}, {
@@ -748,6 +749,18 @@ P.snacks = {
   keys = config.snacks.keys,
 }
 
+P.numb = {
+  plugin_id.numb,
+  event = 'VeryLazy',
+  opts = {
+    show_number = true,
+    show_cursorline = true,
+    hide_relativenumber = true,
+    number_only = true,
+    centered_peeking = true,
+  },
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -811,7 +824,6 @@ shared.plugins = plugins
 -- TODO add https://github.com/zhisme/copy_with_context.nvim (copy line number with metadata)
 -- TODO add https://github.com/shortcuts/no-neck-pain.nvim (center single buffer on screen)
 -- TODO add textobject base surrounding
--- TODO consider https://github.com/nacro90/numb.nvim (peeking line by typing :{number})
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#keybinding
 --   for input language support
 -- TODO consider https://github.com/YaroSpace/lua-console.nvim (lua scratchpad/REPL)
