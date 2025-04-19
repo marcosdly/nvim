@@ -30,6 +30,7 @@ local plugin_id = {
   snacks = 'folke/snacks.nvim',
   numb = 'nacro90/numb.nvim',
   no_neck_pain = 'shortcuts/no-neck-pain.nvim',
+  treesj = 'Wansmer/treesj',
 }
 
 local config = setmetatable({}, {
@@ -798,6 +799,14 @@ P.no_neck_pain = {
   },
 }
 
+P.treesj = {
+  plugin_id.treesj,
+  events = 'VeryLazy',
+  keys = { '<space>m', '<space>j', '<space>s' },
+  dependencies = { plugin_id.treesitter },
+  config = true,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -857,7 +866,6 @@ shared.plugins = plugins
 -- TODO consider https://github.com/tmillr/sos.nvim (auto saving buffer)
 -- TODO consider https://github.com/Jxstxs/conceal.nvim (minimize visual clutter)
 -- TODO add snippets
--- TODO consider split/join of code structures (similar to command capital J)
 -- TODO add treesitter context display (context of breadcrumbs)
 -- TODO add https://github.com/kiyoon/telescope-insert-path.nvim (insert filepath using telescope)
 -- TODO add https://github.com/zhisme/copy_with_context.nvim (copy line number with metadata)
