@@ -29,6 +29,7 @@ local plugin_id = {
   capsoff = 'zongben/capsoff.nvim',
   snacks = 'folke/snacks.nvim',
   numb = 'nacro90/numb.nvim',
+  no_neck_pain = 'shortcuts/no-neck-pain.nvim',
 }
 
 local config = setmetatable({}, {
@@ -761,6 +762,42 @@ P.numb = {
   },
 }
 
+P.no_neck_pain = {
+  plugin_id.no_neck_pain,
+  opts = {
+    debug = false,
+    width = 88,
+    disableOnLastBuffer = true,
+    autocmds = {
+      enableOnVimEnter = true,
+      enableOnTabEnter = true,
+      reloadOnColorSchemeChange = true,
+      skipEnteringNoNeckPainBuffer = true,
+    },
+    buffers = {
+      setNames = false,
+      scratchPad = { enabled = false },
+      wo = {
+        fillchars = 'eob: ',
+      },
+      bo = {
+        buftype = 'nofile',
+      },
+    },
+    integrations = {
+      NvimTree = { reopen = false },
+      NeoTree = { reopen = false },
+      undotree = { reopen = false },
+      neotest = { reopen = false },
+      TSPlayground = { reopen = false },
+      NvimDAPUI = { reopen = false },
+      outline = { reopen = false },
+      aerial = { reopen = false },
+      dashboard = { enabled = false },
+    },
+  },
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -772,9 +809,11 @@ tool.not_lazy {
   P.mason,
   P.capsoff,
   P.snacks,
+  P.no_neck_pain,
 }
 
 tool.set_priority {
+  [P.no_neck_pain] = 3000,
   [P.snacks] = 2000,
   [P.auto_session] = 2000,
   [P.neoconf] = 1000,
@@ -822,7 +861,6 @@ shared.plugins = plugins
 -- TODO add treesitter context display (context of breadcrumbs)
 -- TODO add https://github.com/kiyoon/telescope-insert-path.nvim (insert filepath using telescope)
 -- TODO add https://github.com/zhisme/copy_with_context.nvim (copy line number with metadata)
--- TODO add https://github.com/shortcuts/no-neck-pain.nvim (center single buffer on screen)
 -- TODO add textobject base surrounding
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#keybinding
 --   for input language support
