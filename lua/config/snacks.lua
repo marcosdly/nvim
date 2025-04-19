@@ -136,6 +136,20 @@ M.keys = {
       Snacks.scratch.list()
     end,
   },
+  {
+    '<leader>nl',
+    function()
+      Snacks.notifier.show_history()
+    end,
+    desc = 'Notification History',
+  },
+  {
+    '<leader>nc',
+    function()
+      Snacks.notifier.hide()
+    end,
+    desc = 'Dismiss All Notifications',
+  },
 }
 
 function M.init()
