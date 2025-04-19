@@ -92,12 +92,3 @@ autocmd('BufWritePost', {
     if shared.util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
   end,
 })
-
--- Trach file with lazygit
-autocmd('BufEnter', {
-  desc = 'Keep track of file with lazygit',
-  callback = function()
-    if not shared.util.buf_is_normal() then return end
-    require'lazygit.utils'.project_root_dir()
-  end,
-})

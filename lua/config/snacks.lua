@@ -82,6 +82,37 @@ M.opts = {
     scope = { enabled = true, priority = 10, only_current = false },
     chunk = { enabled = true, priority = 100, only_current = false },
   },
+  lazygit = {
+    configure = true,
+    config = {
+      os = { editPreset = 'nvim-remote' },
+      gui = {
+        -- set to an empty string "" to disable icons
+        nerdFontsVersion = '3',
+      },
+    },
+  },
+}
+
+M.keys = {
+  {
+    '<leader>lgs',
+    function()
+      Snacks.lazygit()
+    end,
+  },
+  {
+    '<leader>lgl',
+    function()
+      Snacks.lazygit.log()
+    end,
+  },
+  {
+    '<leader>lgh',
+    function()
+      Snacks.lazygit.log_file()
+    end,
+  },
 }
 
 return M

@@ -3,7 +3,6 @@ local plugin_id = {
   telescope = 'nvim-telescope/telescope.nvim',
   telescope_fzf = 'nvim-telescope/telescope-fzf-native.nvim',
   web_devicons = 'nvim-tree/nvim-web-devicons',
-  lazygit = 'kdheepak/lazygit.nvim',
   lualine = 'nvim-lualine/lualine.nvim',
   oil = 'stevearc/oil.nvim',
   wakatime = 'wakatime/vim-wakatime',
@@ -83,7 +82,6 @@ P.telescope = {
   tag = '0.1.8',
   dependencies = {
     plugin_id.plenary,
-    plugin_id.lazygit,
     plugin_id.web_devicons,
     plugin_id.telescope_fzf,
   },
@@ -118,7 +116,6 @@ P.telescope = {
 
     telescope.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
     telescope.load_extension 'fzf'
-    telescope.load_extension 'lazygit'
   end,
   cmd = 'Telescope',
   keys = {
@@ -132,7 +129,6 @@ P.telescope = {
     { '<leader>fgc', '<cmd>Telescope git_commits<cr>' },
     { '<leader>fgt', '<cmd>Telescope git_stash<cr>' },
     { '<leader>fgb', '<cmd>Telescope git_branches<cr>' },
-    { '<leader>fgl', '<cmd>Telescope lazygit<cr>' },
     -- vim
     { '<leader>fvh', '<cmd>Telescope help_tags<cr>' },
     { '<leader>fvo', '<cmd>Telescope vim_options<cr>' },
@@ -463,6 +459,9 @@ P.lspconfig = {
     -- may support it, some may do it by default
     set('n', '<leader>ls', vim.lsp.buf.signature_help)
     set('n', '<leader>lt', vim.lsp.buf.type_definition)
+    set('n', '<leader>lb', function()
+      Snacks.git.blame_line()
+    end)
     -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
     set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
     -- TODO Telescope typehierarchy
@@ -556,28 +555,6 @@ P.mason = {
 
 P.masonlspconfig = {
   plugin_id.mason_lspconfig,
-}
-
-P.lazygit = {
-  plugin_id.lazygit,
-  dependencies = {
-    plugin_id.plenary,
-  },
-  init = function()
-    vim.g.lazygit_floating_window_winblend = 0 -- transparency of floating window
-    vim.g.lazygit_floating_window_scaling_factor = 0.8
-    vim.g.lazygit_floating_window_border_chars =
-      { '╭', '─', '╮', '│', '╯', '─', '╰', '│' }
-    vim.g.lazygit_floating_window_use_plenary = shared.const.FALSE
-    vim.g.lazygit_use_neovim_remote = shared.const.TRUE
-    vim.g.lazygit_use_custom_config_file_path = shared.const.FALSE
-  end,
-  keys = {
-    -- status
-    { '<leader>lgs', '<cmd>LazyGit<cr>' },
-    -- current
-    { '<leader>lgc', '<cmd>LazyGitCurrentFile<cr>' },
-  },
 }
 
 P.dap = {
@@ -804,7 +781,6 @@ tool.not_lazy {
   P.oil,
   P.wakatime,
   P.treeshitter,
-  P.lazygit,
   P.neoconf,
   P.auto_session,
   P.mason,
