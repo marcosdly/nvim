@@ -92,6 +92,11 @@ M.opts = {
       },
     },
   },
+  quickfile = { enabled = true },
+  scratch = {
+    autowrite = true,
+    filekey = { cwd = true, branch = true, count = false },
+  },
 }
 
 M.keys = {
@@ -113,6 +118,39 @@ M.keys = {
       Snacks.lazygit.log_file()
     end,
   },
+  {
+    '<leader>s.',
+    function()
+      Snacks.scratch()
+    end,
+  },
+  {
+    '<leader>ss',
+    function()
+      Snacks.scratch.select()
+    end,
+  },
+  {
+    '<leader>sl',
+    function()
+      Snacks.scratch.list()
+    end,
+  },
 }
+
+function M.init()
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'OilActionsPost',
+    desc = 'Lets LSP clients know that a file has been renamed',
+    callback = function(event)
+      if event.data.actions.type == 'move' then
+        Snacks.rename.on_rename_file(
+          event.data.actions.src_url,
+          event.data.actions.dest_url
+        )
+      end
+    end,
+  })
+end
 
 return M
