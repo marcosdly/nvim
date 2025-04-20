@@ -32,7 +32,7 @@ local plugin_id = {
   no_neck_pain = 'shortcuts/no-neck-pain.nvim',
   treesj = 'Wansmer/treesj',
   lua_console = 'YaroSpace/lua-console.nvim', -- TODO add
-  dropbar = 'Bekaboo/dropbar.nvim', -- TODO add
+  dropbar = 'Bekaboo/dropbar.nvim',
   remote_nvim = 'amitds1997/remote-nvim.nvim', -- TODO add
   sos = 'tmillr/sos.nvim',
   conceal = 'Jxstxs/conceal.nvim', -- TODO add
@@ -876,6 +876,59 @@ tool.not_lazy {
   P.no_neck_pain,
   P.rainbow_delimiters,
   P.sos,
+}
+
+P.dropbar = {
+  plugin_id.dropbar,
+  event = { 'VeryLazy', 'LspAttach' },
+  opts = {
+    bar = {
+      enable = function(bufnr, _, _)
+        return shared.util.buf_is_normal(bufnr)
+      end,
+      update_debounce = 100,
+      update_events = {
+        global = { 'DirChanged', 'VimResized', 'FocusGained' },
+      },
+      hover = true,
+    },
+    menu = {
+      quick_navigation = true, -- TODO is mouse pointer only?
+      hover = true,
+    },
+    symbol = {
+      on_click = function() end,
+    },
+    sources = {
+      path = { max_depth = 8 },
+      treesiter = { max_depth = 8 },
+      lsp = { max_depth = 8 },
+      markdown = { max_depth = 8 },
+    },
+  },
+  keys = {
+    {
+      '<leader>;',
+      function()
+        require('dropbar.api').pick()
+      end,
+      desc = 'Pick symbols in winbar',
+    },
+    {
+      '[;',
+      function()
+        require('dropbar.api').goto_context_start()
+      end,
+      desc = 'Go to start of current context',
+    },
+    {
+      '];',
+      function()
+        require('dropbar.api').select_next_context()
+      end,
+      desc = 'Select next context',
+    },
+  },
 }
 
 tool.set_priority {
