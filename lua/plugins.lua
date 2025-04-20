@@ -31,7 +31,24 @@ local plugin_id = {
   numb = 'nacro90/numb.nvim',
   no_neck_pain = 'shortcuts/no-neck-pain.nvim',
   treesj = 'Wansmer/treesj',
+  lua_console = 'YaroSpace/lua-console.nvim', -- TODO add
+  dropbar = 'Bekaboo/dropbar.nvim', -- TODO add
+  remote_nvim = 'amitds1997/remote-nvim.nvim', -- TODO add
+  sos = 'tmillr/sos.nvim', -- TODO add
+  conceal = 'Jxstxs/conceal.nvim', -- TODO add
+  hardtime = 'm4xshen/hardtime.nvim', -- TODO add
+  neotest = 'nvim-neotest/neotest', -- TODO add
+  copy_with_context = 'zhisme/copy_with_context.nvim', -- TODO add
+  telescope_insert_path = 'kiyoon/telescope-insert-path.nvim', -- TODO add
+  rainbow_delimiters = 'hiphish/rainbow-delimiters.nvim', -- TODO add
+  mini = 'echasnovski/mini.nvim', -- TODO add
+  neoterm = 'kassio/neoterm', -- TODO add
+  multicursors = 'jake-stewart/multicursor.nvim', -- TODO add
+  actions_preview = 'aznhe21/actions-preview.nvim', -- TODO add
+  telescope_ui_select = 'nvim-telescope/telescope-ui-select.nvim', -- TODO add
 }
+
+-- TODO config https://old.reddit.com/r/neovim/comments/16xz3q9/treesitter_highlighted_folds_are_now_in_neovim/
 
 local config = setmetatable({}, {
   __index = function(_, key)
@@ -852,39 +869,15 @@ end)
 
 shared.plugins = plugins
 
--- TODO mini.move
--- TODO multi cursor
--- TODO add treesitter fold code block
--- TODO patch 'marcosdly/minimal' colorscheme
--- TODO see file info in telescope (enter will copy to yank register)
--- TODO show file size on lualine only for sometime after writing
--- TODO add plugin https://github.com/m4xshen/hardtime.nvim to enforce good practices
--- TODO add plugin for aligning
--- TODO add remote development
--- TODO color current scope's bracket
--- TODO add zenmode custom config
--- TODO consider https://github.com/tmillr/sos.nvim (auto saving buffer)
--- TODO consider https://github.com/Jxstxs/conceal.nvim (minimize visual clutter)
--- TODO add snippets
--- TODO add treesitter context display (context of breadcrumbs)
--- TODO add https://github.com/kiyoon/telescope-insert-path.nvim (insert filepath using telescope)
--- TODO add https://github.com/zhisme/copy_with_context.nvim (copy line number with metadata)
--- TODO add textobject base surrounding
+-- TODO print file stat on notification (Snacks.notify)
+-- TODO remove file size from lualine
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#keybinding
 --   for input language support
--- TODO consider https://github.com/YaroSpace/lua-console.nvim (lua scratchpad/REPL)
--- TODO consider general srcratchpad plugin (taking notes)
--- TODO add test runner
--- TODO add subterminal
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#debugging (nvim-dap extensions)
--- TODO consider this or similars https://github.com/samharju/yeet.nvim (run shell commands in buffers)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#utility (different utility functions)
 -- TODO checkout and consider https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#media (media viewer in the terminal)
 -- TODO checkout and consider https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#bars-and-lines (bars and lines customization)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#project (project management)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#search (search improvements)
--- TODO add conditional completion
--- TODO add code actinos support
--- TODO consider language specific plugins for better feature support *without compromizing general experience*
 
 return plugins.as_list

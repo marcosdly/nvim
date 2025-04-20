@@ -50,6 +50,7 @@ local M = {}
 
 ---@type snacks.Config
 M.opts = {
+  -- TODO custom styles
   bigfile = {
     enabled = true,
     notify = true,
@@ -82,6 +83,7 @@ M.opts = {
     chunk = { enabled = true, priority = 100, only_current = false },
   },
   lazygit = {
+    -- TODO style: better hl groups
     configure = true,
     config = {
       os = { editPreset = 'nvim-remote' },
@@ -96,9 +98,15 @@ M.opts = {
     autowrite = true,
     filekey = { cwd = true, branch = true, count = false },
   },
+  -- TODO statuscolumn
+  -- TODO terminal
+  -- TODO dim
+  -- TODO toggle
+  -- TODO profiler
 }
 
 M.keys = {
+  -- TODO remap keys
   {
     '<leader>lgs',
     function()
