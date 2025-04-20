@@ -43,7 +43,7 @@ function M.filesize()
   local file = vim.fn.expand '%:p'
   if file == nil or #file == 0 then return '' end
   local size = vim.fn.getfsize(file)
-  local min_size = 10 * 1024 -- 10kb
+  local min_size = shared.const.kilobyte * 10
   if size <= 0 or size < min_size then return '' end
 
   local suffixes = { 'B', 'KiB', 'MiB', 'GiB' }

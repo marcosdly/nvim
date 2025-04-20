@@ -1,4 +1,3 @@
-
 local M = {}
 
 M.TRUE = 1
@@ -18,6 +17,9 @@ M.icons = {
     bottom_small_dot = '.',
   },
 }
-
+M.second = 1000
+M.minute = 1000 * 60
+M.kilobyte = 1024
+M.megabyte = 1024 * 1024
 
 return M
