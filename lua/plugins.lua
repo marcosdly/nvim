@@ -40,7 +40,7 @@ local plugin_id = {
   neotest = 'nvim-neotest/neotest', -- TODO add
   copy_with_context = 'zhisme/copy_with_context.nvim', -- TODO add
   telescope_insert_path = 'kiyoon/telescope-insert-path.nvim', -- TODO add
-  rainbow_delimiters = 'hiphish/rainbow-delimiters.nvim', -- TODO add
+  rainbow_delimiters = 'hiphish/rainbow-delimiters.nvim',
   mini = 'echasnovski/mini.nvim', -- TODO add
   neoterm = 'kassio/neoterm', -- TODO add
   multicursors = 'jake-stewart/multicursor.nvim', -- TODO add
@@ -824,6 +824,17 @@ P.treesj = {
   config = true,
 }
 
+P.rainbow_delimiters = {
+  plugin_id.rainbow_delimiters,
+  dependencies = { plugin_id.treesitter },
+  init = function()
+    vim.g.rainbow_delimiters = {
+      condition = shared.util.buf_is_normal,
+      highlight = { 'RainbowDelimiterBlue', 'RainbowDelimiterGreen' },
+    }
+  end,
+}
+
 tool.not_lazy {
   P.telescope,
   P.lualine,
@@ -836,6 +847,7 @@ tool.not_lazy {
   P.capsoff,
   P.snacks,
   P.no_neck_pain,
+  P.rainbow_delimiters,
 }
 
 tool.set_priority {
