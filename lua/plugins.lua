@@ -840,7 +840,7 @@ P.sos = {
   opts = {
     enabled = true,
     timeout = shared.const.second * 10,
-    create_parent_dist = true,
+    create_parent_dirs = true,
     autowrite = false,
     save_on_cmd = 'some',
     save_on_bufleave = false,
@@ -875,6 +875,7 @@ tool.not_lazy {
   P.snacks,
   P.no_neck_pain,
   P.rainbow_delimiters,
+  P.sos,
 }
 
 tool.set_priority {
