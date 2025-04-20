@@ -44,8 +44,8 @@ local plugin_id = {
   mini = 'echasnovski/mini.nvim', -- TODO add
   neoterm = 'kassio/neoterm', -- TODO add
   multicursors = 'jake-stewart/multicursor.nvim', -- TODO add
-  actions_preview = 'aznhe21/actions-preview.nvim', -- TODO add
-  telescope_ui_select = 'nvim-telescope/telescope-ui-select.nvim', -- TODO add
+  actions_preview = 'aznhe21/actions-preview.nvim',
+  telescope_ui_select = 'nvim-telescope/telescope-ui-select.nvim',
 }
 
 -- TODO config https://old.reddit.com/r/neovim/comments/16xz3q9/treesitter_highlighted_folds_are_now_in_neovim/
@@ -104,6 +104,7 @@ P.telescope = {
     plugin_id.plenary,
     plugin_id.web_devicons,
     plugin_id.telescope_fzf,
+    plugin_id.telescope_ui_select,
   },
   opts = {
     extensions = {
@@ -927,6 +928,29 @@ P.dropbar = {
         require('dropbar.api').select_next_context()
       end,
       desc = 'Select next context',
+    },
+  },
+}
+
+P.actions_preview = {
+  plugin_id.actions_preview,
+  event = { 'VeryLazy', 'LspAttach' },
+  opts = {
+    -- options for vim.diff(): https://neovim.io/doc/user/lua.html#vim.diff()
+    -- diff = {},
+    backend = { 'snacks' },
+    snacks = {
+      layout = { preset = 'default' },
+    },
+  },
+  keys = {
+    {
+      '<leader>ac',
+      function()
+        require('actions-preview').code_actions()
+      end,
+      desc = 'Display code actions with change preview',
+      mode = { 'n', 'v' },
     },
   },
 }
