@@ -122,6 +122,7 @@ o.mousemodel = 'popup'
 -- modes/situations (single character flags) in which mouse support is enabled
 o.mouse = 'a'
 -- swapfile for the buffer
+-- NOTE let swapfile=false because otherwise auto-write plugins are unsafe
 -- TODO study about swap files and how it works more specifically
 o.swapfile = false
 -- allows for sound/visual bells to be rang on errors
@@ -184,6 +185,14 @@ o.showmatch = false
 o.autowrite = true
 -- save on exit, edit, new
 o.autowriteall = false
+-- save undo history
+o.undofile = true
+-- how many changes are save in the undofile
+o.undolevels = 1000
+-- allow files to be stored in RAM so the undo action can restore
+-- reloaded buffer's (files changed outsife vim) pre-reload content
+-- files will be saved if this value is negative of buffer's number of lines is smaller
+o.undoreload = 10000
 
 -- region WINDOWS SPECIFIC
 if win32 then

@@ -34,7 +34,7 @@ local plugin_id = {
   lua_console = 'YaroSpace/lua-console.nvim', -- TODO add
   dropbar = 'Bekaboo/dropbar.nvim', -- TODO add
   remote_nvim = 'amitds1997/remote-nvim.nvim', -- TODO add
-  sos = 'tmillr/sos.nvim', -- TODO add
+  sos = 'tmillr/sos.nvim',
   conceal = 'Jxstxs/conceal.nvim', -- TODO add
   hardtime = 'm4xshen/hardtime.nvim', -- TODO add
   neotest = 'nvim-neotest/neotest', -- TODO add
@@ -833,6 +833,33 @@ P.rainbow_delimiters = {
       highlight = { 'RainbowDelimiterBlue', 'RainbowDelimiterGreen' },
     }
   end,
+}
+
+P.sos = {
+  plugin_id.sos,
+  opts = {
+    enabled = true,
+    timeout = shared.const.second * 10,
+    create_parent_dist = true,
+    autowrite = false,
+    save_on_cmd = 'some',
+    save_on_bufleave = false,
+    save_on_focuslost = true,
+    should_save = {
+      unmodifiable = false,
+      acwrite = {
+        net = false,
+        git = false,
+        compress = false,
+        other = false,
+        schemes = {
+          octo = false,
+          term = false,
+          file = true,
+        },
+      },
+    },
+  },
 }
 
 tool.not_lazy {
