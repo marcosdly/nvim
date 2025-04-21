@@ -114,8 +114,15 @@ M.opts = {
     },
     refresh = 100,
   },
+  dim = {
+    scope = {
+      min_size = 3,
+      max_size = 50,
+      siblings = true,
+    },
+    animate = { enabled = false },
+  },
   -- TODO terminal
-  -- TODO dim
   -- TODO toggle
 }
 
