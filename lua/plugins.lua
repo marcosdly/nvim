@@ -35,7 +35,7 @@ local plugin_id = {
   dropbar = 'Bekaboo/dropbar.nvim',
   remote_nvim = 'amitds1997/remote-nvim.nvim', -- TODO add
   sos = 'tmillr/sos.nvim',
-  conceal = 'Jxstxs/conceal.nvim', -- TODO add
+  conceal = 'Jxstxs/conceal.nvim',
   hardtime = 'm4xshen/hardtime.nvim', -- TODO add
   neotest = 'nvim-neotest/neotest', -- TODO add
   copy_with_context = 'zhisme/copy_with_context.nvim', -- TODO add
@@ -951,6 +951,51 @@ P.actions_preview = {
       end,
       desc = 'Display code actions with change preview',
       mode = { 'n', 'v' },
+    },
+  },
+}
+
+P.conceal = {
+  plugin_id.conceal,
+  event = 'VeryLazy',
+  dependencies = {
+    plugin_id.treesitter,
+  },
+  opts = {
+    ['lua'] = {
+      enabled = true,
+      keywords = {
+        ['local'] = {
+          conceal = 'L',
+        },
+        ['return'] = {
+          conceal = 'R',
+        },
+        ['for'] = {
+          conceal = 'F',
+          highlight = 'keyword',
+        },
+        ['function'] = {
+          conceal = 'Fn',
+        },
+        ['end'] = {
+          conceal = 'E',
+        },
+      },
+    },
+  },
+  config = function(lazyspec)
+    local conceal = require 'conceal'
+    conceal.setup(lazyspec.opts)
+    conceal.generate_conceals()
+  end,
+  keys = {
+    {
+      '<leader>tc',
+      function()
+        require('conceal').toggle_conceal(1)
+      end,
+      desc = 'Toggle keyword conceal',
     },
   },
 }
