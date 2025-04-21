@@ -98,7 +98,22 @@ M.opts = {
     autowrite = true,
     filekey = { cwd = true, branch = true, count = false },
   },
-  -- TODO statuscolumn
+  statuscolumn = {
+    enabled = true,
+    left = { 'mark', 'sign' },
+    right = { 'fold' },
+    folds = { open = true, git_hl = true },
+    git = {
+      patterns = {
+        'GitSign',
+        'MiniDiffSign',
+        'MiniDiffOverAdd',
+        'MiniDiffOverDelete',
+        'MiniDiffOverAdd',
+      },
+    },
+    refresh = 100,
+  },
   -- TODO terminal
   -- TODO dim
   -- TODO toggle
