@@ -100,8 +100,8 @@ M.opts = {
   },
   statuscolumn = {
     enabled = true,
-    left = { 'mark', 'sign' },
-    right = { 'fold' },
+    left = { 'sign', 'fold' },
+    right = { 'mark' },
     folds = { open = true, git_hl = true },
     git = {
       patterns = {
