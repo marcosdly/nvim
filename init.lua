@@ -1,3 +1,4 @@
+if vim.env.PROF then require 'profiler' end
 
 require 'shared'
 -- Make sure to setup `mapleader` and `maplocalleader` before
@@ -7,4 +8,3 @@ require 'bootstrap'
 require 'options'
 require 'plugins'
 require 'autocmd'
-

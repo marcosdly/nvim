@@ -117,7 +117,6 @@ M.opts = {
   -- TODO terminal
   -- TODO dim
   -- TODO toggle
-  -- TODO profiler
 }
 
 M.keys = {
