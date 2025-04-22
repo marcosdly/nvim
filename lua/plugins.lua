@@ -137,6 +137,7 @@ P.telescope = {
 
     telescope.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
     telescope.load_extension 'fzf'
+    telescope.load_extension 'ui-select'
   end,
   cmd = 'Telescope',
   keys = {
