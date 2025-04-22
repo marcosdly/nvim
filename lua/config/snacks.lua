@@ -129,19 +129,19 @@ M.opts = {
 M.keys = {
   -- TODO remap keys
   {
-    '<leader>lgs',
+    '<leader>ggs',
     function()
       Snacks.lazygit()
     end,
   },
   {
-    '<leader>lgl',
+    '<leader>ggl',
     function()
       Snacks.lazygit.log()
     end,
   },
   {
-    '<leader>lgh',
+    '<leader>ggh',
     function()
       Snacks.lazygit.log_file()
     end,
@@ -229,21 +229,21 @@ M.keys = {
     desc = 'Git Diff (Hunks)',
   },
   {
-    '<leader>gf',
+    '<leader>gF',
     function()
       Snacks.picker.git_log_file()
     end,
     desc = 'Git Log File',
   },
   {
-    '<leader>fg',
+    '<leader>gf',
     function()
       Snacks.picker.git_files()
     end,
     desc = 'Find Git Files',
   },
   {
-    '<leader>lb',
+    '<leader>gB',
     function()
       Snacks.git.blame_line()
     end,
@@ -251,71 +251,50 @@ M.keys = {
   },
   -- Top Pickers & Explorer
   {
-    '<leader><space>',
+    's<space>',
     function()
       Snacks.picker.smart()
     end,
     desc = 'Smart Find Files',
   },
   {
-    '<leader>,',
+    's,',
     function()
       Snacks.picker.buffers()
     end,
     desc = 'Buffers',
   },
   {
-    '<leader>/',
+    's/',
     function()
       Snacks.picker.grep()
     end,
     desc = 'Grep',
   },
-  {
-    '<leader>:',
-    function()
-      Snacks.picker.command_history()
-    end,
-    desc = 'Command History',
-  },
-  {
-    '<leader>n',
-    function()
-      Snacks.picker.notifications()
-    end,
-    desc = 'Notification History',
-  },
   -- find
   {
-    '<leader>fb',
-    function()
-      Snacks.picker.buffers()
-    end,
-    desc = 'Buffers',
-  },
-  {
-    '<leader>fc',
+    'sc',
     function()
       Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
     end,
     desc = 'Find Config File',
   },
   {
-    '<leader>ff',
+    'sf',
     function()
       Snacks.picker.files()
     end,
     desc = 'Find Files',
   },
   {
-    '<leader>fp',
+    'sp',
     function()
       Snacks.picker.projects()
     end,
     desc = 'Projects',
   },
   {
-    '<leader>fr',
+    'sr',
     function()
       Snacks.picker.recent()
     end,
@@ -323,28 +302,28 @@ M.keys = {
   },
   -- Grep
   {
-    '<leader>sb',
+    'sl',
     function()
       Snacks.picker.lines()
     end,
     desc = 'Buffer Lines',
   },
   {
-    '<leader>sB',
+    's;',
     function()
       Snacks.picker.grep_buffers()
     end,
     desc = 'Grep Open Buffers',
   },
   {
-    '<leader>sg',
+    'sg',
     function()
       Snacks.picker.grep()
     end,
     desc = 'Grep',
   },
   {
-    '<leader>sw',
+    'sw',
     function()
       Snacks.picker.grep_word()
     end,
@@ -353,147 +332,140 @@ M.keys = {
   },
   -- search
   {
-    '<leader>s"',
+    "sv'",
     function()
       Snacks.picker.registers()
     end,
     desc = 'Registers',
   },
   {
-    '<leader>s/',
+    'sv/',
     function()
       Snacks.picker.search_history()
     end,
     desc = 'Search History',
   },
   {
-    '<leader>sa',
+    'sva',
     function()
       Snacks.picker.autocmds()
     end,
     desc = 'Autocmds',
   },
   {
-    '<leader>sb',
-    function()
-      Snacks.picker.lines()
-    end,
-    desc = 'Buffer Lines',
-  },
-  {
-    '<leader>sc',
+    'sv:',
     function()
       Snacks.picker.command_history()
     end,
     desc = 'Command History',
   },
   {
-    '<leader>sC',
+    'svc',
     function()
       Snacks.picker.commands()
     end,
     desc = 'Commands',
   },
   {
-    '<leader>sd',
+    'sd',
     function()
       Snacks.picker.diagnostics()
     end,
     desc = 'Diagnostics',
   },
   {
-    '<leader>sD',
+    'sD',
     function()
       Snacks.picker.diagnostics_buffer()
     end,
     desc = 'Buffer Diagnostics',
   },
   {
-    '<leader>sh',
+    'svh',
     function()
       Snacks.picker.help()
     end,
     desc = 'Help Pages',
   },
   {
-    '<leader>sH',
+    'svh',
     function()
       Snacks.picker.highlights()
     end,
     desc = 'Highlights',
   },
   {
-    '<leader>si',
+    'svi',
     function()
       Snacks.picker.icons()
     end,
     desc = 'Icons',
   },
   {
-    '<leader>sj',
+    'sj',
     function()
       Snacks.picker.jumps()
     end,
     desc = 'Jumps',
   },
   {
-    '<leader>sk',
+    'svk',
     function()
       Snacks.picker.keymaps()
     end,
     desc = 'Keymaps',
   },
   {
-    '<leader>sl',
+    'svl',
     function()
       Snacks.picker.loclist()
     end,
     desc = 'Location List',
   },
   {
-    '<leader>sm',
+    'sm',
     function()
       Snacks.picker.marks()
     end,
     desc = 'Marks',
   },
   {
-    '<leader>sM',
+    'svm',
     function()
       Snacks.picker.man()
     end,
     desc = 'Man Pages',
   },
   {
-    '<leader>sp',
+    'svl',
     function()
       Snacks.picker.lazy()
     end,
     desc = 'Search for Plugin Spec',
   },
   {
-    '<leader>sq',
+    'sq',
     function()
       Snacks.picker.qflist()
     end,
     desc = 'Quickfix List',
   },
   {
-    '<leader>sR',
+    'svp',
     function()
       Snacks.picker.resume()
     end,
     desc = 'Resume',
   },
   {
-    '<leader>su',
+    'svu',
     function()
       Snacks.picker.undo()
     end,
     desc = 'Undo History',
   },
   {
-    '<leader>uC',
+    'svC',
     function()
       Snacks.picker.colorschemes()
     end,
@@ -508,7 +480,7 @@ M.keys = {
     desc = 'Goto Definition',
   },
   {
-    'gD',
+    'ge',
     function()
       Snacks.picker.lsp_declarations()
     end,
@@ -523,7 +495,7 @@ M.keys = {
     desc = 'References',
   },
   {
-    'gI',
+    'gi',
     function()
       Snacks.picker.lsp_implementations()
     end,
@@ -537,14 +509,14 @@ M.keys = {
     desc = 'Goto T[y]pe Definition',
   },
   {
-    '<leader>ss',
+    'gs',
     function()
       Snacks.picker.lsp_symbols()
     end,
     desc = 'LSP Symbols',
   },
   {
-    '<leader>sS',
+    'gS',
     function()
       Snacks.picker.lsp_workspace_symbols()
     end,
@@ -552,14 +524,14 @@ M.keys = {
   },
   -- Other
   {
-    '<leader>cR',
+    'cR',
     function()
       Snacks.rename.rename_file()
     end,
     desc = 'Rename File',
   },
   {
-    '<leader>gB',
+    'sb',
     function()
       Snacks.gitbrowse()
     end,

@@ -140,9 +140,8 @@ P.telescope = {
   end,
   cmd = 'Telescope',
   keys = {
-    -- vim
-    { '<leader>fvo', '<cmd>Telescope vim_options<cr>' },
-    { '<leader>fvl', '<cmd>Telescope spell_suggest<cr>' },
+    { 'svo', '<cmd>Telescope vim_options<cr>' },
+    { 'svs', '<cmd>Telescope spell_suggest<cr>' },
   },
 }
 
@@ -909,21 +908,21 @@ P.dropbar = {
   },
   keys = {
     {
-      '<leader>;',
+      'gc;',
       function()
         require('dropbar.api').pick()
       end,
       desc = 'Pick symbols in winbar',
     },
     {
-      '[;',
+      'gc[',
       function()
         require('dropbar.api').goto_context_start()
       end,
       desc = 'Go to start of current context',
     },
     {
-      '];',
+      'gc]',
       function()
         require('dropbar.api').select_next_context()
       end,
@@ -945,7 +944,7 @@ P.actions_preview = {
   },
   keys = {
     {
-      '<leader>ac',
+      'ca',
       function()
         require('actions-preview').code_actions()
       end,
@@ -991,7 +990,7 @@ P.conceal = {
   end,
   keys = {
     {
-      '<leader>tc',
+      'ct',
       function()
         require('conceal').toggle_conceal(1)
       end,

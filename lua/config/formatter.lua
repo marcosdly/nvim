@@ -10,8 +10,8 @@ M.lazyspec.opts = {
 M.lazyspec.cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' }
 
 M.lazyspec.keys = {
-  { '<leader>f', '<cmd>FormatLock<cr>' },
-  { '<leader>F', '<cmd>FormatWriteLock<cr>' },
+  { 'cf', '<cmd>FormatLock<cr>' },
+  { 'cF', '<cmd>FormatWriteLock<cr>' },
 }
 
 M._cached_formatter_config = nil
