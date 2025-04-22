@@ -1034,7 +1034,7 @@ P.conceal = {
         return vim.wo.conceallevel == level
       end,
       set = function(state)
-        vim.wo.conceallevel = state and level or nil
+        vim.wo.conceallevel = state and level or 0
       end,
     }):map 'tc'
   end,
