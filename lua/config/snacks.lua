@@ -116,11 +116,14 @@ M.opts = {
   },
   dim = {
     scope = {
-      min_size = 3,
+      min_size = 5,
       max_size = 50,
       siblings = true,
     },
     animate = { enabled = false },
+  },
+  words = {
+    debounce = 100,
   },
   -- TODO terminal
   -- TODO toggle
@@ -601,6 +604,27 @@ function M.init()
       end
     end,
   })
+end
+
+function M.config(lazyspec)
+  Snacks.toggle.diagnostics():map 'td'
+  Snacks.toggle.dim():map 'tD'
+  -- Snacks.toggle.indent():map 'ti'
+  Snacks.toggle.inlay_hints():map 'th'
+  Snacks.toggle.line_number():map 'tn'
+  -- Snacks.toggle.treesitter():map 'tt'
+  Snacks.toggle.words():map 'tw'
+
+  -- Toggle portuguese mbyte-keymap
+  Snacks.toggle({
+    name = 'mbyte-keymap: Portuguese ABNT2',
+    get = function()
+      return vim.o.keymap == 'portuguese-accents-abnt2'
+    end,
+    set = function(state)
+      vim.o.keymap = state and 'portuguese-accents-abnt2' or ''
+    end,
+  }):map 'tkp'
 end
 
 return M

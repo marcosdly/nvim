@@ -44,17 +44,6 @@ set('n', 'dD', '0"_D')
 -- Remap visual block mode
 set('n', '<c-b>', '<c-v>')
 
--- Toggle keymap layout
-function _G.toggle_keymap()
-  if vim.o.keymap == '' then
-    vim.o.keymap = 'portuguese-accents-abnt2'
-  else
-    vim.o.keymap = ''
-  end
-end
-set('n', '<c-k>', toggle_keymap)
-set('i', '<c-k>', '<esc><cmd>lua toggle_keymap()<cr>i')
-
 -- region TERMINAL
 set('t', '<esc>', '<c-\\><c-n>')
 -- endregion

@@ -812,7 +812,25 @@ P.no_neck_pain = {
       aerial = { reopen = false },
       dashboard = { enabled = false },
     },
+    mappings = {
+      enabled = false,
+    },
   },
+  config = function(lazyspec)
+    local no_neck_pain = require 'no-neck-pain'
+
+    no_neck_pain.setup(lazyspec.opts)
+
+    Snacks.toggle({
+      name = 'Centered buffer',
+      get = function()
+        return require('no-neck-pain').state.enabled
+      end,
+      set = function(state)
+        (state and no_neck_pain.enable or no_neck_pain.disable)()
+      end,
+    }):map 'tC'
+  end,
 }
 
 P.treesj = {
@@ -859,6 +877,28 @@ P.sos = {
       },
     },
   },
+  config = function(lazyspec)
+    local sos = require 'sos'
+    sos.setup(lazyspec.opts)
+    Snacks.toggle({
+      name = '(buffer) Auto-write',
+      get = function()
+        return sos.buf_enabled(0)
+      end,
+      set = function(state)
+        (state and sos.enable_buf or sos.disable_buf)(0)
+      end,
+    }):map 'tab'
+    Snacks.toggle({
+      name = '(global) Auto-write',
+      get = function()
+        return require('sos.config').opts.enabled
+      end,
+      set = function(state)
+        vim.cmd(state and 'SosEnable' or 'SosDisable')
+      end,
+    }):map 'tag'
+  end,
 }
 
 tool.not_lazy {
@@ -986,21 +1026,24 @@ P.conceal = {
     local conceal = require 'conceal'
     conceal.setup(lazyspec.opts)
     conceal.generate_conceals()
-  end,
-  keys = {
-    {
-      'ct',
-      function()
-        require('conceal').toggle_conceal(1)
+
+    local level = 1
+    Snacks.toggle({
+      name = 'Keyword conceal',
+      get = function()
+        return vim.wo.conceallevel == level
       end,
-      desc = 'Toggle keyword conceal',
-    },
-  },
+      set = function(state)
+        vim.wo.conceallevel = state and level or nil
+      end,
+    }):map 'tc'
+  end,
+  keys = { 'tc' },
 }
 
 tool.set_priority {
+  [P.snacks] = 9999,
   [P.no_neck_pain] = 3000,
-  [P.snacks] = 2000,
   [P.auto_session] = 2000,
   [P.neoconf] = 1000,
   -- [P.lspconfig] = 999,
