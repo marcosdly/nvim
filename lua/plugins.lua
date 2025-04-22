@@ -240,29 +240,28 @@ P.oil = {
     },
   },
   config = function(lazyspec)
-    _G.oil_state = { view_detail = false }
+    shared.state.oil = {
+      view_detail = false,
+    }
 
-    local function oil_toggle_details()
-      local oil = require 'oil'
-      oil_state.view_detail = not oil_state.view_detail
-      if oil_state.view_detail then
-        oil.set_columns { 'mtime', 'size', 'permissions' }
-      else
-        oil.set_columns {}
-      end
-    end
+    local oil = require 'oil'
 
     local opts_override = {
       keymaps = {
         ['<c-c>'] = 'actions.close',
         ['gd'] = {
           desc = 'Toggle file detail view',
-          callback = oil_toggle_details,
+          callback = function()
+            shared.state.oil.view_detail = not shared.state.oil.view_detail
+            oil.set_columns(
+              shared.state.oil.view_detail and { 'mtime', 'size', 'permissions' } or {}
+            )
+          end,
         },
       },
     }
 
-    require('oil').setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
+    oil.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
   end,
   keys = {
     { '-', '<cmd>Oil --float<cr>' }, -- open parent
