@@ -801,6 +801,12 @@ P.no_neck_pain = {
       bo = {
         buftype = 'nofile',
       },
+      left = {
+        enabled = false,
+      },
+      right = {
+        enabled = false,
+      },
     },
     integrations = {
       NvimTree = { reopen = false },
@@ -1002,7 +1008,6 @@ P.conceal = {
   },
   opts = {
     ['lua'] = {
-      enabled = true,
       keywords = {
         ['local'] = {
           conceal = 'L',
@@ -1035,7 +1040,7 @@ P.conceal = {
         return vim.wo.conceallevel == level
       end,
       set = function(state)
-        vim.wo.conceallevel = state and level or 0
+        vim.wo.conceallevel = state and level or nil
       end,
     }):map 'tc'
   end,
