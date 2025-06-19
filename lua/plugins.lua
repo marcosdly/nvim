@@ -27,7 +27,6 @@ end
 add {
   'nvim-tree/nvim-web-devicons',
   cmd = { 'NvimWebDeviconsHiTest' },
-  event = 'VeryLazy',
   lazy = false,
   pin = true,
   config = true,
@@ -223,7 +222,7 @@ add { 'wakatime/vim-wakatime', lazy = false }
 
 add {
   'echasnovski/mini.surround',
-  event = 'BufEnter',
+  lazy = false,
   opts = {
     respect_selection_type = true,
   },
@@ -231,7 +230,6 @@ add {
 
 add {
   'mhartington/formatter.nvim',
-  event = 'LspAttach',
   cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' },
   opts = {
     logging = false,
@@ -252,34 +250,20 @@ add {
 }
 
 add {
-  'windwp/nvim-ts-autotag',
-  opts = {
-    opts = {
-      enable_close_on_slash = true, -- Auto close on trailing </
-    },
-  },
-  -- if LSP breaks because was formatted in insert mode, uncomment this
-  -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
-  -- config = function(opts)
-  -- require('nvim-ts-autotag').setup(opts)
-  -- vim.lsp.handlers['textDocument/publishDiagnostics'] =
-  --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  --     underline = true,
-  --     virtual_text = {
-  --       spacing = 5,
-  --       severity_limit = 'Warning',
-  --     },
-  --     update_in_insert = true,
-  --   })
-  -- end,
-}
-
-add {
   'nvim-treesitter/nvim-treesitter',
   lazy = false,
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'windwp/nvim-ts-autotag',
+    {
+      'windwp/nvim-ts-autotag',
+      opts = {
+        opts = {
+          enable_close_on_slash = true, -- Auto close on trailing </
+        },
+      },
+      -- LSP may break because was formatted in insert mode
+      -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
+    },
   },
   build = ':TSUpdate',
   opts = {
@@ -388,7 +372,6 @@ add {
   'gerazov/toggle-bool.nvim',
   enabled = false,
   pin = true,
-  event = 'LspAttach',
   opts = {
     mapping = '<leader>ab',
     additional_toggles = {
@@ -567,7 +550,6 @@ add {
 add {
   'folke/lazydev.nvim',
   ft = 'lua', -- only load on lua files
-  event = 'BufEnter',
   opts = {
     library = {
       -- See the configuration section for more details
@@ -594,10 +576,6 @@ add {
       'snacks.nvim',
     },
   },
-}
-
-add {
-  'jay-babu/mason-nvim-dap.nvim',
 }
 
 add {
@@ -687,7 +665,7 @@ add {
 
 add {
   'm4xshen/autoclose.nvim',
-  event = 'InsertEnter',
+  event = { 'InsertEnter', 'VeryLazy' },
   cond = function()
     return shared.util.buf_is_normal()
   end,
@@ -771,7 +749,7 @@ add {
 
 add {
   'nacro90/numb.nvim',
-  event = 'VeryLazy',
+  event = 'CmdlineEnter',
   opts = {
     show_number = true,
     show_cursorline = true,
@@ -784,6 +762,7 @@ add {
 add {
   'shortcuts/no-neck-pain.nvim',
   lazy = false,
+  enabled = false,
   opts = {
     debug = false,
     width = 88,
@@ -844,7 +823,6 @@ add {
 
 add {
   'Wansmer/treesj',
-  events = 'VeryLazy',
   keys = { '<space>m', '<space>j', '<space>s' },
   dependencies = { 'nvim-treesitter/nvim-treesitter' },
   config = true,
@@ -935,7 +913,7 @@ add {
 
 add {
   'Bekaboo/dropbar.nvim',
-  event = { 'VeryLazy', 'LspAttach' },
+  event = 'LspAttach',
   opts = {
     bar = {
       enable = function(bufnr, _, _)
@@ -988,7 +966,6 @@ add {
 
 add {
   'aznhe21/actions-preview.nvim',
-  event = { 'VeryLazy', 'LspAttach' },
   opts = {
     -- options for vim.diff(): https://neovim.io/doc/user/lua.html#vim.diff()
     -- diff = {},
@@ -1011,7 +988,6 @@ add {
 
 add {
   'Jxstxs/conceal.nvim',
-  event = 'VeryLazy',
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
   },
@@ -1057,12 +1033,25 @@ add {
 }
 
 priority {
-  'folke/snacks.nvim',
-  'shortcuts/no-neck-pain.nvim',
-  'rmagatti/auto-session',
-  'folke/neoconf.nvim',
-  'williamboman/mason.nvim',
+  -- essential
+  'nvim-treesitter/nvim-treesitter',
+  'wakatime/vim-wakatime',
+  -- main dependencies
+  'nvim-tree/nvim-web-devicons',
+  -- main editor utility
   'nvim-lualine/lualine.nvim',
+  'nvim-telescope/telescope.nvim',
+  'stevearc/oil.nvim',
+  -- important plugins
+  'folke/snacks.nvim',
+  'folke/neoconf.nvim',
+  'rmagatti/auto-session',
+  'williamboman/mason.nvim',
+  'tmillr/sos.nvim',
+  -- would like to load as soon as possible
+  'hiphish/rainbow-delimiters.nvim',
+  'shortcuts/no-neck-pain.nvim',
+  'zongben/capsoff.nvim',
 }
 
 shared.plugins = P
