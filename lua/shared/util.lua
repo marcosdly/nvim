@@ -1,4 +1,3 @@
-
 local M = {}
 
 function M.is_user_cmdline(mode)
@@ -7,7 +6,7 @@ end
 
 function M.is_user_sub_cmdline(mode, prefix)
   if not M.is_user_cmdline(mode) then return false end
-  vim.print('here')
+  vim.print 'here'
   local reg_content = vim.fn.getreg(mode)
   if reg_content == '' then return false end
   prefix = vim.trim(prefix)
@@ -33,6 +32,24 @@ function M.pure_math_int_string_length(n)
   -- source: voices in my head
   -- SEE https://stackoverflow.com/a/10952773
   return math.ceil(math.log10(n + 1))
+end
+
+function M.is_headless()
+  if not FLAG.CAN_TEST_UI_RELATED then return false end
+  return #vim.api.nvim_list_uis() == 0
+end
+
+function M.is_vscode_extension()
+  return M.is_headless() and vim.g.vscode == true -- force cast to boolean
+end
+
+function M.is_gui_formal_nvim_wrapper()
+  if not FLAG.CAN_TEST_UI_RELATED then return false end
+  return vim.fn.has 'gui_running' and #vim.api.nvim_list_uis() > 0
+end
+
+function M.is_gui()
+  return M.is_gui_formal_nvim_wrapper() or not M.is_headless()
 end
 
 return M
