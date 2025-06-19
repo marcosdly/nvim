@@ -4,9 +4,9 @@ local P = {}
 
 function add(tab)
   if type(tab) ~= 'table' then return end
-  tab.enabled = tab.enabled or true
+  if tab.enabled == nil then tab.enabled = true end
   if not tab.enabled then return end
-  tab.vscode = tab.vscode or false
+  if type(tab.vscode) ~= 'boolean' then tab.vscode = false end
   if vim.g.vscode and not tab.vscode then return end
   tab.priority = nil
   table.insert(P, tab)
