@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
   ---SEE https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
   ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
   callback = function(ev)
+    if util.is_vscode_extension() then return true end
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
     if not client or type(value) ~= 'table' then return end
@@ -48,17 +49,19 @@ vim.api.nvim_create_autocmd('LspProgress', {
 
 local M = {}
 
+local isvscode = util.is_vscode_extension()
+
 ---@type snacks.Config
 M.opts = {
   -- TODO custom styles
   bigfile = {
-    enabled = true,
+    enabled = not isvscode,
     notify = true,
     size = 2 * 1024 * 1024,
     line_lenght = 5000,
   },
   notifier = {
-    enabled = true,
+    enabled = not isvscode,
     timeout = 2000,
     width = { min = 32, max = 0.4 },
     height = { min = 1, max = 0.5 },
@@ -72,19 +75,19 @@ M.opts = {
   },
   indent = {
     indent = {
-      enabled = true,
+      enabled = not isvscode,
       priority = 1,
       char = shared.const.icons.misc.bottom_small_dot,
       only_scope = true,
       only_current = false,
     },
     animate = { enabled = false },
-    scope = { enabled = true, priority = 10, only_current = false },
-    chunk = { enabled = true, priority = 100, only_current = false },
+    scope = { enabled = not isvscode, priority = 10, only_current = false },
+    chunk = { enabled = not isvscode, priority = 100, only_current = false },
   },
   lazygit = {
     -- TODO style: better hl groups
-    configure = true,
+    configure = not isvscode,
     config = {
       os = { editPreset = 'nvim-remote' },
       gui = {
@@ -93,13 +96,13 @@ M.opts = {
       },
     },
   },
-  quickfile = { enabled = true },
+  quickfile = { enabled = not isvscode },
   scratch = {
     autowrite = true,
     filekey = { cwd = true, branch = true, count = false },
   },
   statuscolumn = {
-    enabled = true,
+    enabled = not isvscode,
     left = { 'sign', 'fold' },
     right = { 'mark' },
     folds = { open = true, git_hl = true },
@@ -607,6 +610,7 @@ function M.init()
 end
 
 function M.config(lazyspec)
+  if util.is_vscode_extension() then return end
   Snacks.toggle.diagnostics():map 'td'
   Snacks.toggle.dim():map 'tD'
   -- Snacks.toggle.indent():map 'ti'

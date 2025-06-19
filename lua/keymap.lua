@@ -44,9 +44,11 @@ set('n', 'dD', '0"_D')
 -- Remap visual block mode
 set('n', '<c-b>', '<c-v>')
 
--- region TERMINAL
-set('t', '<esc>', '<c-\\><c-n>')
--- endregion
+if not util.is_vscode_extension() then
+  -- region TERMINAL
+  set('t', '<esc>', '<c-\\><c-n>')
+  -- endregion
+end
 
 -- Switch window/buffer/tab
 set('n', '<leader>bn', '<cmd>bnext<cr>')
@@ -88,5 +90,7 @@ set('n', '<leader>t[', '<cmd>tabfirst<cr>') -- goto first tab
 set('n', '<leader>t]', '<cmd>tablast<cr>') -- goto last tab
 set('n', '<leader>te', '<ctrl-w>g<tab>') -- goto last accessed tab
 
--- save file in other modes
-set('i', '<c-z>', '<cmd>write<cr>')
+if not util.is_vscode_extension() then
+  -- save file in other modes
+  set('i', '<c-z>', '<cmd>write<cr>')
+end
