@@ -1,5 +1,4 @@
 -- TODO config https://old.reddit.com/r/neovim/comments/16xz3q9/treesitter_highlighted_folds_are_now_in_neovim/
-
 local P = {}
 
 function add(tab)
@@ -249,22 +248,23 @@ add {
   end,
 }
 
+add { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'LspAttach' }
+
+add {
+  'windwp/nvim-ts-autotag',
+  ft = { 'html', 'xml', 'javascriptreact', 'typescriptreact' },
+  opts = {
+    opts = {
+      enable_close_on_slash = true, -- Auto close on trailing </
+    },
+  },
+  -- LSP may break because was formatted in insert mode
+  -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
+}
+
 add {
   'nvim-treesitter/nvim-treesitter',
   lazy = false,
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    {
-      'windwp/nvim-ts-autotag',
-      opts = {
-        opts = {
-          enable_close_on_slash = true, -- Auto close on trailing </
-        },
-      },
-      -- LSP may break because was formatted in insert mode
-      -- SEE https://github.com/windwp/nvim-ts-autotag/issues/19
-    },
-  },
   build = ':TSUpdate',
   opts = {
     sync_install = false,
@@ -443,7 +443,6 @@ add {
   lazy = false,
   dependencies = {
     'williamboman/mason-lspconfig.nvim',
-    'jay-babu/mason-nvim-dap.nvim',
     'neovim/nvim-lspconfig',
   },
   config = function(lazyspec)
@@ -473,15 +472,8 @@ add {
       },
     }
 
-    local mason_dap_opts = {
-      ensure_installed = { 'python' },
-      automatic_installation = true,
-      handlers = {}, -- sets up dap in the predefined manner
-    }
-
     require('mason').setup(mason_opts)
     require('mason-lspconfig').setup(mason_lspconfig_opts)
-    require('mason-nvim-dap').setup(mason_dap_opts)
   end,
 }
 
@@ -489,6 +481,7 @@ local dap_config = require 'config.dap'
 add {
   'mfussenegger/nvim-dap',
   dependencies = {
+    'jay-babu/mason-nvim-dap.nvim',
     'rcarriga/nvim-dap-ui',
     'nvim-neotest/nvim-nio',
     'Joakker/lua-json5',
@@ -533,10 +526,17 @@ add {
     dap.listeners.before.event_terminated.dapui_config = dapui.close
     dap.listeners.before.event_exited.dapui_config = dapui.close
 
+    local mason_dap_opts = {
+      ensure_installed = { 'python' },
+      automatic_installation = true,
+      handlers = {}, -- sets up dap in the predefined manner
+    }
+
     -- Config
     dap_vscode.json_decode = require('json5').parse
     dap.configurations = dap_config.configurations
     dapui.setup {}
+    require('mason-nvim-dap').setup(mason_dap_opts)
   end,
 }
 
