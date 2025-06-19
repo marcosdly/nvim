@@ -393,23 +393,12 @@ add {
   },
 }
 
+local lspconfig_config = require 'config.lspconfig'
 add {
   'neovim/nvim-lspconfig',
-  init = function()
-    local set = vim.keymap.set
-    set('n', '<leader>la', vim.lsp.buf.code_action)
-    -- f as in 'find'; j (down) as in here, myself, where I stand
-    set('n', '<leader>fj', '<cmd>Telescope lsp_incoming_calls<cr>')
-    -- f as in 'find'; k (up) as in there, somewhere, out
-    set('n', '<leader>fj', '<cmd>Telescope lsp_outgoing_calls<cr>')
-    set('n', '<leader>lr', vim.lsp.buf.rename)
-    -- NOTE renaming accross workspace is dependent on LSP (implementation), some
-    -- may support it, some may do it by default
-    set('n', '<leader>ls', vim.lsp.buf.signature_help)
-    -- f as in 'find'; p as in parent, what allowed it to be, from which is inherits
-    set('n', '<leader>fp', '<cmd>Telescope lsp_type_definitions<cr>')
-    -- TODO Telescope typehierarchy
-
+  event = 'LspAttach',
+  keys = lspconfig_config.keys,
+  config = function()
     -- Diagnostics
     vim.diagnostic.config {
       underline = {
