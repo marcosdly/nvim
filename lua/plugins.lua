@@ -221,7 +221,7 @@ add { 'wakatime/vim-wakatime', lazy = false }
 
 add {
   'echasnovski/mini.surround',
-  lazy = false,
+  event = { 'CmdlineEnter', 'InsertEnter', 'BufReadPost', 'VeryLazy' },
   opts = {
     respect_selection_type = true,
   },
@@ -248,7 +248,27 @@ add {
   end,
 }
 
-add { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'LspAttach' }
+add {
+  'nvim-treesitter/nvim-treesitter-textobjects',
+  keys = {
+    -- Repeat movement with ; and ,
+    -- vim way: ; goes to the direction you were moving.
+    {
+      ';',
+      function()
+        require('nvim-treesitter.textobjects.repeatable_move').repeat_last_move()
+      end,
+      mode = { 'n', 'x', 'o' },
+    },
+    {
+      ',',
+      function()
+        require('nvim-treesitter.textobjects.repeatable_move').repeat_last_move_opposite()
+      end,
+      mode = { 'n', 'x', 'o' },
+    },
+  },
+}
 
 add {
   'windwp/nvim-ts-autotag',
@@ -352,13 +372,6 @@ add {
       { 'zig', 'clang', 'gcc', 'cc', 'cl', vim.fn.getenv 'CC' }
 
     treesitter.setup(lazyspec.opts)
-
-    local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
-
-    -- Repeat movement with ; and ,
-    -- vim way: ; goes to the direction you were moving.
-    vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
-    vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
 
     -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
     -- vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
@@ -550,6 +563,9 @@ add {
 add {
   'folke/lazydev.nvim',
   ft = 'lua', -- only load on lua files
+  cond = function()
+    return vim.fs.relpath(vim.fn.stdpath 'config', vim.fs.abspath '.') ~= nil
+  end,
   opts = {
     library = {
       -- See the configuration section for more details
@@ -665,10 +681,7 @@ add {
 
 add {
   'm4xshen/autoclose.nvim',
-  event = { 'InsertEnter', 'VeryLazy' },
-  cond = function()
-    return shared.util.buf_is_normal()
-  end,
+  event = { 'CmdlineEnter', 'InsertEnter', 'BufReadPost', 'VeryLazy' },
   opts = {
     options = {
       disabled_filetypes = { 'text', 'markdown' },
@@ -844,7 +857,14 @@ add {
 
 add {
   'tmillr/sos.nvim',
-  lazy = false,
+  event = 'VeryLazy',
+  -- cond = function()
+  --   return vim.bo[0].buftype == ''
+  --     and vim.bo[0].filetype ~= ''
+  --     and vim.bo[0].modifiable
+  --     and not vim.bo[0].readonly
+  --     and vim.uv.fs_stat(vim.api.nvim_buf_get_name(0) or '')
+  -- end,
   opts = {
     enabled = true,
     timeout = shared.const.second * 10,
@@ -1047,7 +1067,7 @@ priority {
   'folke/neoconf.nvim',
   'rmagatti/auto-session',
   'williamboman/mason.nvim',
-  'tmillr/sos.nvim',
+  -- 'tmillr/sos.nvim',
   -- would like to load as soon as possible
   'hiphish/rainbow-delimiters.nvim',
   'shortcuts/no-neck-pain.nvim',
