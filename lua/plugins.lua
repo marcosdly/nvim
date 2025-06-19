@@ -1,17 +1,14 @@
 -- TODO config https://old.reddit.com/r/neovim/comments/16xz3q9/treesitter_highlighted_folds_are_now_in_neovim/
 local P = {}
 
-function add(tab)
-  if type(tab) ~= 'table' then return end
-  if tab.enabled == nil then tab.enabled = true end
-  if not tab.enabled then return end
-  if type(tab.vscode) ~= 'boolean' then tab.vscode = false end
-  if vim.g.vscode and not tab.vscode then return end
+local function add(tab)
+  if type(tab.vscode) ~= 'boolean' then tab.vscode = not not tab.vscode end
+  if util.is_vscode_extension() and not tab.vscode then tab.cond = false end
   tab.priority = nil
   table.insert(P, tab)
 end
 
-function priority(id_list)
+local function priority(id_list)
   local length = #id_list + 1000 -- minimum of 1000 to make numbers cleaner
   for i, _id in ipairs(id_list) do
     for _, tab in ipairs(P) do
@@ -27,12 +24,14 @@ add {
   'nvim-tree/nvim-web-devicons',
   cmd = { 'NvimWebDeviconsHiTest' },
   lazy = false,
+  cond = util.is_gui,
   pin = true,
   config = true,
 }
 
 add {
   'nvim-telescope/telescope.nvim',
+  cond = util.is_gui,
   lazy = false,
   tag = '0.1.8',
   dependencies = {
@@ -113,6 +112,7 @@ SEE :h mode()
 
 add {
   'nvim-lualine/lualine.nvim',
+  cond = util.is_gui,
   lazy = false,
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
@@ -165,6 +165,7 @@ add {
 
 add {
   'stevearc/oil.nvim',
+  cond = util.is_gui,
   lazy = false,
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
@@ -221,6 +222,7 @@ add { 'wakatime/vim-wakatime', lazy = false }
 
 add {
   'echasnovski/mini.surround',
+  vscode = true,
   event = { 'CmdlineEnter', 'InsertEnter', 'BufReadPost', 'VeryLazy' },
   opts = {
     respect_selection_type = true,
@@ -250,6 +252,7 @@ add {
 
 add {
   'nvim-treesitter/nvim-treesitter-textobjects',
+  vscode = true,
   keys = {
     -- Repeat movement with ; and ,
     -- vim way: ; goes to the direction you were moving.
@@ -284,6 +287,7 @@ add {
 
 add {
   'nvim-treesitter/nvim-treesitter',
+  vscode = true,
   lazy = false,
   build = ':TSUpdate',
   opts = {
@@ -366,6 +370,12 @@ add {
     local treesitter = require 'nvim-treesitter.configs'
     local treesitter_install = require 'nvim-treesitter.install'
 
+    if util.is_vscode_extension() then
+      vim.tbl_deep_extend('force', lazyspec.opts, {
+        highlight = false,
+      })
+    end
+
     treesitter_install.prefer_git = true
     -- C compiler priority order
     treesitter_install.compilers =
@@ -383,7 +393,8 @@ add {
 
 add {
   'gerazov/toggle-bool.nvim',
-  enabled = false,
+  cond = false,
+  vscode = true,
   pin = true,
   opts = {
     mapping = '<leader>ab',
@@ -443,10 +454,7 @@ add {
 add {
   'williamboman/mason.nvim',
   lazy = false,
-  dependencies = {
-    'williamboman/mason-lspconfig.nvim',
-    'neovim/nvim-lspconfig',
-  },
+  dependencies = 'williamboman/mason-lspconfig.nvim',
   config = function(lazyspec)
     local mason_opts = {
       pip = {
@@ -484,13 +492,10 @@ add {
   'mfussenegger/nvim-dap',
   dependencies = {
     'jay-babu/mason-nvim-dap.nvim',
-    'rcarriga/nvim-dap-ui',
-    'nvim-neotest/nvim-nio',
+    { 'rcarriga/nvim-dap-ui', cond = util.is_gui },
+    { 'nvim-neotest/nvim-nio', cond = util.is_gui },
     'Joakker/lua-json5',
   },
-  cond = function()
-    return shared.util.buf_is_normal()
-  end,
   keys = dap_config.keys,
   cmd = {
     -- Session management
@@ -544,6 +549,7 @@ add {
 
 add {
   'Joakker/lua-json5',
+  vscode = true,
   optional = true,
   pin = true,
   build = shared.const.is_windows and 'powershell ./install.ps1' or './install.sh',
@@ -586,7 +592,7 @@ add {
 add {
   'folke/neoconf.nvim',
   lazy = false,
-  enabled = false,
+  cond = false,
   cmd = 'Neoconf',
   opts = {
     plugins = {
@@ -600,7 +606,7 @@ add {
 add {
   'rmagatti/auto-session',
   lazy = false,
-  enabled = false,
+  cond = false,
   dependencies = {
     'nvim-telescope/telescope.nvim',
   },
@@ -646,7 +652,7 @@ add {
 
 add {
   'catgoose/nvim-colorizer.lua',
-  enabled = false,
+  cond = util.is_gui,
   pin = true,
   ft = { 'css', 'scss', 'sass', 'less', 'html' },
   cmd = {
@@ -680,6 +686,7 @@ add {
 
 add {
   'echasnovski/mini.diff',
+  cond = util.is_gui,
   pin = true,
   event = 'VeryLazy',
   opts = {
@@ -728,7 +735,7 @@ add {
 add {
   'zongben/capsoff.nvim',
   lazy = false,
-  enabled = false,
+  cond = IS_WINDOWS,
   build = ':CapsLockOffBuild',
   config = function()
     require('capsoff').setup { auto = false }
@@ -743,6 +750,7 @@ add {
 local snacks_config = require 'config.snacks'
 add {
   'folke/snacks.nvim',
+  vscode = true,
   lazy = false,
   init = snacks_config.init,
   opts = snacks_config.opts,
@@ -751,6 +759,7 @@ add {
 
 add {
   'nacro90/numb.nvim',
+  vscode = true,
   event = 'CmdlineEnter',
   opts = {
     show_number = true,
@@ -763,8 +772,9 @@ add {
 
 add {
   'shortcuts/no-neck-pain.nvim',
+  cond = util.is_gui,
   lazy = false,
-  enabled = false,
+  cond = false,
   opts = {
     debug = false,
     width = 88,
@@ -825,6 +835,7 @@ add {
 
 add {
   'Wansmer/treesj',
+  vscode = true,
   keys = { '<space>m', '<space>j', '<space>s' },
   dependencies = { 'nvim-treesitter/nvim-treesitter' },
   config = true,
@@ -832,13 +843,14 @@ add {
 
 add {
   'hiphish/rainbow-delimiters.nvim',
-  lazy = false,
+  event = { 'BufReadPost', 'VeryLazy' },
+  cond = util.is_gui,
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
   },
   init = function()
     vim.g.rainbow_delimiters = {
-      condition = shared.util.buf_is_normal,
+      condition = util.buf_is_normal,
       highlight = { 'RainbowDelimiterBlue', 'RainbowDelimiterGreen' },
     }
   end,
@@ -903,6 +915,7 @@ add {
 
 add {
   'zaldih/themery.nvim',
+  cond = util.is_gui,
   config = function()
     local function get_std_colorscheme_names()
       return vim
@@ -922,11 +935,12 @@ add {
 
 add {
   'Bekaboo/dropbar.nvim',
+  cond = util.is_gui,
   event = 'LspAttach',
   opts = {
     bar = {
       enable = function(bufnr, _, _)
-        return shared.util.buf_is_normal(bufnr)
+        return util.buf_is_normal(bufnr)
       end,
       update_debounce = 100,
       update_events = {
@@ -975,6 +989,7 @@ add {
 
 add {
   'aznhe21/actions-preview.nvim',
+  cond = util.is_gui,
   opts = {
     -- options for vim.diff(): https://neovim.io/doc/user/lua.html#vim.diff()
     -- diff = {},
@@ -997,9 +1012,7 @@ add {
 
 add {
   'Jxstxs/conceal.nvim',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter',
-  },
+  cond = util.is_gui,
   opts = {
     ['lua'] = {
       keywords = {
@@ -1058,7 +1071,7 @@ priority {
   'williamboman/mason.nvim',
   -- 'tmillr/sos.nvim',
   -- would like to load as soon as possible
-  'hiphish/rainbow-delimiters.nvim',
+  -- 'hiphish/rainbow-delimiters.nvim',
   'shortcuts/no-neck-pain.nvim',
   'zongben/capsoff.nvim',
 }
