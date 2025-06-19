@@ -1,52 +1,4 @@
-local plugin_id = {
-  plenary = 'nvim-lua/plenary.nvim',
-  telescope = 'nvim-telescope/telescope.nvim',
-  telescope_fzf = 'nvim-telescope/telescope-fzf-native.nvim',
-  web_devicons = 'nvim-tree/nvim-web-devicons',
-  lualine = 'nvim-lualine/lualine.nvim',
-  oil = 'stevearc/oil.nvim',
-  wakatime = 'wakatime/vim-wakatime',
-  surround = 'echasnovski/mini.surround',
-  formatter = 'mhartington/formatter.nvim',
-  treesitter = 'nvim-treesitter/nvim-treesitter',
-  treesitter_textobjects = 'nvim-treesitter/nvim-treesitter-textobjects',
-  treesitter_autotag = 'windwp/nvim-ts-autotag',
-  toggle_bool = 'gerazov/toggle-bool.nvim',
-  lspconfig = 'neovim/nvim-lspconfig',
-  mason_lspconfig = 'williamboman/mason-lspconfig.nvim',
-  mason = 'williamboman/mason.nvim',
-  dap = 'mfussenegger/nvim-dap',
-  dapui = 'rcarriga/nvim-dap-ui',
-  nvim_nio = 'nvim-neotest/nvim-nio',
-  json5 = 'Joakker/lua-json5',
-  lazydev = 'folke/lazydev.nvim',
-  neoconf = 'folke/neoconf.nvim',
-  auto_session = 'rmagatti/auto-session',
-  mason_dap = 'jay-babu/mason-nvim-dap.nvim',
-  colorizer = 'catgoose/nvim-colorizer.lua',
-  autoclose = 'm4xshen/autoclose.nvim',
-  git_diff = 'echasnovski/mini.diff',
-  capsoff = 'zongben/capsoff.nvim',
-  snacks = 'folke/snacks.nvim',
-  numb = 'nacro90/numb.nvim',
-  no_neck_pain = 'shortcuts/no-neck-pain.nvim',
-  treesj = 'Wansmer/treesj',
-  lua_console = 'YaroSpace/lua-console.nvim', -- TODO add
-  dropbar = 'Bekaboo/dropbar.nvim',
-  remote_nvim = 'amitds1997/remote-nvim.nvim', -- TODO add
-  sos = 'tmillr/sos.nvim',
-  conceal = 'Jxstxs/conceal.nvim',
-  hardtime = 'm4xshen/hardtime.nvim', -- TODO add
-  neotest = 'nvim-neotest/neotest', -- TODO add
-  copy_with_context = 'zhisme/copy_with_context.nvim', -- TODO add
-  telescope_insert_path = 'kiyoon/telescope-insert-path.nvim', -- TODO add
-  rainbow_delimiters = 'hiphish/rainbow-delimiters.nvim',
-  mini = 'echasnovski/mini.nvim', -- TODO add
-  neoterm = 'kassio/neoterm', -- TODO add
-  multicursors = 'jake-stewart/multicursor.nvim', -- TODO add
-  actions_preview = 'aznhe21/actions-preview.nvim',
-  telescope_ui_select = 'nvim-telescope/telescope-ui-select.nvim',
-}
+
 
 -- TODO config https://old.reddit.com/r/neovim/comments/16xz3q9/treesitter_highlighted_folds_are_now_in_neovim/
 
@@ -56,38 +8,41 @@ local config = setmetatable({}, {
   end,
 })
 
-local tool = {}
-
-function tool.not_lazy(list)
-  for _, lazyspec in ipairs(list) do
-    lazyspec.lazy = false
-  end
-end
-
-function tool.set_priority(priority_table)
-  for lazyspec, priority_int in pairs(priority_table) do
-    lazyspec.priority = priority_int
-  end
-end
-
-function tool.disable(disable_list)
-  for _, lazyspec in ipairs(disable_list) do
-    lazyspec.enabled = false
-  end
-end
-
 local P = {}
 
-P.web_devicons = {
-  plugin_id.web_devicons,
+function add(tab)
+  if type(tab) ~= 'table' then return end
+  tab.enabled = tab.enabled or true
+  if not tab.enabled then return end
+  tab.vscode = tab.vscode or false
+  if vim.g.vscode and not tab.vscode then return end
+  tab.priority = nil
+  table.insert(P, tab)
+end
+
+function priority(id_list)
+  local length = #id_list + 1000 -- minimum of 1000 to make numbers cleaner
+  for i, _id in ipairs(id_list) do
+    for _, tab in ipairs(P) do
+      if tab[1] == _id then
+        tab.priority = length - i
+        break
+      end
+    end
+  end
+end
+
+add {
+  'nvim-tree/nvim-web-devicons',
   cmd = { 'NvimWebDeviconsHiTest' },
   event = 'VeryLazy',
+  lazy = false,
   pin = true,
   config = true,
 }
 
-P.telescope_fzf = {
-  plugin_id.telescope_fzf,
+add {
+  'nvim-telescope/telescope-fzf-native.nvim',
   -- cmake is the starndard way of building; may be broken on windows
   -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
   build = vim.fn.join {
@@ -97,14 +52,15 @@ P.telescope_fzf = {
   },
 }
 
-P.telescope = {
-  plugin_id.telescope,
+add {
+  'nvim-telescope/telescope.nvim',
+  lazy=false,
   tag = '0.1.8',
   dependencies = {
-    plugin_id.plenary,
-    plugin_id.web_devicons,
-    plugin_id.telescope_fzf,
-    plugin_id.telescope_ui_select,
+    'nvim-lua/plenary.nvim',
+    'nvim-tree/nvim-web-devicons',
+    'nvim-telescope/telescope-fzf-native.nvim',
+    'nvim-telescope/telescope-ui-select.nvim',
   },
   opts = {
     extensions = {
@@ -167,11 +123,10 @@ SEE :h mode()
   t       Terminal
 ]]
 
-P.lualine = {
-  plugin_id.lualine,
-  dependencies = {
-    P.web_devicons,
-  },
+add {
+  'nvim-lualine/lualine.nvim',
+  lazy=false,
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     options = {
       theme = 'auto',
@@ -216,11 +171,10 @@ P.lualine = {
   },
 }
 
-P.oil = {
-  plugin_id.oil,
-  dependencies = {
-    P.web_devicons,
-  },
+add {
+  'stevearc/oil.nvim',
+  lazy=false,
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     default_file_explorer = true,
     win_options = {
@@ -271,20 +225,18 @@ P.oil = {
   },
 }
 
-P.wakatime = {
-  plugin_id.wakatime,
-}
+add { 'wakatime/vim-wakatime', lazy=false }
 
-P.surround = {
-  plugin_id.surround,
+add {
+  'echasnovski/mini.surround',
   event = 'BufEnter',
   opts = {
     respect_selection_type = true,
   },
 }
 
-P.formatter = {
-  plugin_id.formatter,
+add {
+  'mhartington/formatter.nvim',
   event = 'LspAttach',
   cmd = config.formatter.lazyspec.cmd,
   opts = config.formatter.lazyspec.opts,
@@ -298,8 +250,8 @@ P.formatter = {
   end,
 }
 
-P.treesitter_autotag = {
-  plugin_id.treesitter_autotag,
+add {
+  'windwp/nvim-ts-autotag',
   opts = {
     opts = {
       enable_close_on_slash = true, -- Auto close on trailing </
@@ -321,11 +273,12 @@ P.treesitter_autotag = {
   -- end,
 }
 
-P.treeshitter = {
-  plugin_id.treesitter,
+add {
+  'nvim-treesitter/nvim-treesitter',
+  lazy=false,
   dependencies = {
-    plugin_id.treesitter_textobjects,
-    plugin_id.treesitter_autotag,
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    'windwp/nvim-ts-autotag',
   },
   build = ':TSUpdate',
   opts = {
@@ -430,8 +383,9 @@ P.treeshitter = {
   end,
 }
 
-P.toggle_bool = {
-  plugin_id.toggle_bool,
+add {
+  'gerazov/toggle-bool.nvim',
+  enabled=false,
   pin = true,
   event = 'LspAttach',
   opts = {
@@ -442,8 +396,8 @@ P.toggle_bool = {
   },
 }
 
-P.lspconfig = {
-  plugin_id.lspconfig,
+add {
+  'neovim/nvim-lspconfig',
   init = function()
     local set = vim.keymap.set
     set('n', '<leader>la', vim.lsp.buf.code_action)
@@ -500,12 +454,13 @@ P.lspconfig = {
   end,
 }
 
-P.mason = {
-  plugin_id.mason,
+add {
+  'williamboman/mason.nvim',
+  lazy=false,
   dependencies = {
-    plugin_id.mason_lspconfig,
-    plugin_id.mason_dap,
-    plugin_id.lspconfig,
+    'williamboman/mason-lspconfig.nvim',
+    'jay-babu/mason-nvim-dap.nvim',
+    'neovim/nvim-lspconfig',
   },
   config = function(lazyspec)
     local mason_opts = {
@@ -546,16 +501,12 @@ P.mason = {
   end,
 }
 
-P.masonlspconfig = {
-  plugin_id.mason_lspconfig,
-}
-
-P.dap = {
-  plugin_id.dap,
+add {
+   'mfussenegger/nvim-dap',
   dependencies = {
-    plugin_id.dapui,
-    plugin_id.nvim_nio,
-    plugin_id.json5,
+     'rcarriga/nvim-dap-ui',
+     'nvim-neotest/nvim-nio',
+     'Joakker/lua-json5',
   },
   cond = function()
     return shared.util.buf_is_normal()
@@ -565,15 +516,15 @@ P.dap = {
   config = config.dap.lazyspec.config,
 }
 
-P.json5 = {
-  plugin_id.json5,
+add {
+   'Joakker/lua-json5',
   optional = true,
   pin = true,
   build = shared.const.is_windows and 'powershell ./install.ps1' or './install.sh',
 }
 
-P.lazydev = {
-  plugin_id.lazydev,
+add {
+   'folke/lazydev.nvim',
   ft = 'lua', -- only load on lua files
   event = 'BufEnter',
   opts = {
@@ -604,12 +555,14 @@ P.lazydev = {
   },
 }
 
-P.mason_dap = {
-  plugin_id.mason_dap,
+add {
+   'jay-babu/mason-nvim-dap.nvim',
 }
 
-P.neoconf = {
-  plugin_id.neoconf,
+add {
+   'folke/neoconf.nvim',
+  lazy=false,
+   enabled=false,
   cmd = 'Neoconf',
   opts = {
     plugins = {
@@ -620,10 +573,12 @@ P.neoconf = {
   },
 }
 
-P.auto_session = {
-  plugin_id.auto_session,
+add {
+   'rmagatti/auto-session',
+  lazy=false,
+   enabled=false,
   dependencies = {
-    plugin_id.telescope,
+     'nvim-telescope/telescope.nvim',
   },
   cmd = {
     'SessionSave',
@@ -665,8 +620,9 @@ P.auto_session = {
   end,
 }
 
-P.colorizer = {
-  plugin_id.colorizer,
+add {
+   'catgoose/nvim-colorizer.lua',
+   enabled=false,
   pin = true,
   ft = { 'css', 'scss', 'sass', 'less', 'html' },
   cmd = {
@@ -688,8 +644,8 @@ P.colorizer = {
   },
 }
 
-P.autoclose = {
-  plugin_id.autoclose,
+add {
+   'm4xshen/autoclose.nvim',
   event = 'InsertEnter',
   cond = function()
     return shared.util.buf_is_normal()
@@ -701,8 +657,8 @@ P.autoclose = {
   },
 }
 
-P.git_diff = {
-  plugin_id.git_diff,
+add {
+   'echasnovski/mini.diff',
   pin = true,
   event = 'VeryLazy',
   opts = {
@@ -748,8 +704,10 @@ P.git_diff = {
   end,
 }
 
-P.capsoff = {
-  plugin_id.capsoff,
+add {
+   'zongben/capsoff.nvim',
+  lazy=false,
+   enabled=false,
   build = ':CapsLockOffBuild',
   config = function()
     require('capsoff').setup { auto = false }
@@ -761,15 +719,16 @@ P.capsoff = {
   end,
 }
 
-P.snacks = {
-  plugin_id.snacks,
+add {
+   'folke/snacks.nvim',
+  lazy=false,
   init = config.snacks.init,
   opts = config.snacks.opts,
   keys = config.snacks.keys,
 }
 
-P.numb = {
-  plugin_id.numb,
+add {
+   'nacro90/numb.nvim',
   event = 'VeryLazy',
   opts = {
     show_number = true,
@@ -780,8 +739,9 @@ P.numb = {
   },
 }
 
-P.no_neck_pain = {
-  plugin_id.no_neck_pain,
+add {
+   'shortcuts/no-neck-pain.nvim',
+  lazy=false,
   opts = {
     debug = false,
     width = 88,
@@ -840,17 +800,20 @@ P.no_neck_pain = {
   end,
 }
 
-P.treesj = {
-  plugin_id.treesj,
+add {
+   'Wansmer/treesj',
   events = 'VeryLazy',
   keys = { '<space>m', '<space>j', '<space>s' },
-  dependencies = { plugin_id.treesitter },
+  dependencies = {  'nvim-treesitter/nvim-treesitter' },
   config = true,
 }
 
-P.rainbow_delimiters = {
-  plugin_id.rainbow_delimiters,
-  dependencies = { plugin_id.treesitter },
+add {
+   'hiphish/rainbow-delimiters.nvim',
+  lazy=false,
+  dependencies = {
+ 'nvim-treesitter/nvim-treesitter'
+  },
   init = function()
     vim.g.rainbow_delimiters = {
       condition = shared.util.buf_is_normal,
@@ -859,8 +822,9 @@ P.rainbow_delimiters = {
   end,
 }
 
-P.sos = {
-  plugin_id.sos,
+add {
+   'tmillr/sos.nvim',
+  lazy=false,
   opts = {
     enabled = true,
     timeout = shared.const.second * 10,
@@ -908,24 +872,28 @@ P.sos = {
   end,
 }
 
-tool.not_lazy {
-  P.telescope,
-  P.lualine,
-  P.oil,
-  P.wakatime,
-  P.treeshitter,
-  P.neoconf,
-  P.auto_session,
-  P.mason,
-  P.capsoff,
-  P.snacks,
-  P.no_neck_pain,
-  P.rainbow_delimiters,
-  P.sos,
+add {
+   'zaldih/themery.nvim',
+  config = function()
+    local function get_std_colorscheme_names()
+      return vim
+        .iter(vim.api.nvim_get_runtime_file('colors/*.{vim,lua}', true))
+        :map(function(path)
+          return vim.fs.basename(path):sub(0, -5)
+        end)
+        :totable()
+    end
+
+    require('themery').setup {
+      themes = get_std_colorscheme_names(),
+      livePreview = true,
+    }
+  end,
 }
 
-P.dropbar = {
-  plugin_id.dropbar,
+
+add {
+   'Bekaboo/dropbar.nvim',
   event = { 'VeryLazy', 'LspAttach' },
   opts = {
     bar = {
@@ -977,8 +945,8 @@ P.dropbar = {
   },
 }
 
-P.actions_preview = {
-  plugin_id.actions_preview,
+add {
+   'aznhe21/actions-preview.nvim',
   event = { 'VeryLazy', 'LspAttach' },
   opts = {
     -- options for vim.diff(): https://neovim.io/doc/user/lua.html#vim.diff()
@@ -990,7 +958,7 @@ P.actions_preview = {
   },
   keys = {
     {
-      'ca',
+      '<leader>ca',
       function()
         require('actions-preview').code_actions()
       end,
@@ -1000,11 +968,11 @@ P.actions_preview = {
   },
 }
 
-P.conceal = {
-  plugin_id.conceal,
+add {
+   'Jxstxs/conceal.nvim',
   event = 'VeryLazy',
   dependencies = {
-    plugin_id.treesitter,
+     'nvim-treesitter/nvim-treesitter',
   },
   opts = {
     ['lua'] = {
@@ -1047,36 +1015,16 @@ P.conceal = {
   keys = { 'tc' },
 }
 
-tool.set_priority {
-  [P.snacks] = 9999,
-  [P.no_neck_pain] = 3000,
-  [P.auto_session] = 2000,
-  [P.neoconf] = 1000,
-  -- [P.lspconfig] = 999,
-  [P.mason] = 990,
-  [P.lualine] = 960,
+priority {
+ 'folke/snacks.nvim',
+ 'shortcuts/no-neck-pain.nvim',
+ 'rmagatti/auto-session',
+ 'folke/neoconf.nvim',
+ 'williamboman/mason.nvim',
+ 'nvim-lualine/lualine.nvim',
 }
 
-tool.disable {
-  P.auto_session,
-  P.toggle_bool,
-  P.colorizer,
-  P.neoconf,
-  P.capsoff,
-}
-
-local plugins = {
-  id = plugin_id,
-  as_dictionary = P,
-  as_list = vim.tbl_values(P),
-}
-
-plugins.by_id = vim.iter(plugins.as_list):fold({}, function(acc, lazyspec)
-  acc[lazyspec[1]] = lazyspec
-  return acc
-end)
-
-shared.plugins = plugins
+shared.plugins = P
 
 -- TODO print file stat on notification (Snacks.notify)
 -- TODO remove file size from lualine
@@ -1089,4 +1037,4 @@ shared.plugins = plugins
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#project (project management)
 -- TODO checkout https://github.com/rockerBOO/awesome-neovim?tab=readme-ov-file#search (search improvements)
 
-return plugins.as_list
+return P
