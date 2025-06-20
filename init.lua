@@ -1,14 +1,26 @@
-if vim.env.PROF then require 'profiler' end
+if vim.env.PROF and not vim.g.vscode then require 'profiler' end
 
-require 'globals.flags'
-require 'globals.constants'
-_G.util = require 'shared.util'
+require 'globals'
 
-require 'shared'
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
-require 'keymap'
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
+
 require 'bootstrap'
-require 'options'
-require 'plugins'
-require 'autocmd'
+
+require '_general.keymap'
+
+if vim.g.vscode then
+  require '_vscode.options'
+  require '_vscode.autocmd'
+else
+  require 'options'
+  require 'keymap'
+  require 'autocmd'
+end
+
+if vim.g.vscode then
+  local vscode = require 'vscode'
+  vim.notify = vscode.notify
+end

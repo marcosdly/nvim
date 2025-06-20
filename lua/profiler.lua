@@ -28,8 +28,6 @@ require('snacks.profiler').startup {
     'vim.api',
     'vim.keymap',
     'vim.iter',
-    -- personal globals
-    'shared',
   },
   filter_fn = {
     -- defaults

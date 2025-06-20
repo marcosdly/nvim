@@ -1,14 +1,11 @@
 local M = {}
 
 local o, g, go = vim.o, vim.g, vim.go
-local win32 = jit.os == 'Windows'
-local linux = jit.os == 'Linux'
 
 -- see statuscolumn
 -- see statusline
 -- see tab*
 -- see tag*
--- see undo*
 -- see winbar
 
 -- TODO quickfix menu
@@ -91,7 +88,7 @@ o.scrolloff = 5
 -- visually replace some blank-character sequences
 o.list = true
 -- strings to replace whose blank characters with
-o.listchars = string.format('trail:%s', shared.const.icons.misc.center_small_dot)
+o.listchars = string.format('trail:%s', const.icons.misc.center_small_dot)
 -- single character flags indicating UI messages/errors to ignore or shorten
 go.shortmess = 'laoOstIcF'
 -- scrolling works with screen lines, not implemented for gj/gk as of nvim v0.10.4
@@ -194,16 +191,10 @@ o.undolevels = 1000
 -- files will be saved if this value is negative of buffer's number of lines is smaller
 o.undoreload = 10000
 
--- region WINDOWS SPECIFIC
-if win32 then
+if IS_WINDOWS then
   go.winaltkeys = 'no' -- o.shell = 'pwsh.exe'
 end
--- endregion
 
--- region LINUX SPECIFIC
-if linux then
-end
--- endregion
 -- endregion
 
 return M

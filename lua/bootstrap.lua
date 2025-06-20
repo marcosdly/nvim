@@ -29,10 +29,11 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   defaults = {
-    lazy = true,
+    lazy = not vim.g.vscode,
   },
   spec = {
     { import = 'plugins' },
+    { import = '_vscode.plugins' },
   },
   install = {
     colorscheme = { 'ron', 'wildcharm', 'lunaperche', 'habamax' },

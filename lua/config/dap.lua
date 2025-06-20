@@ -180,33 +180,6 @@ M.lazyspec.keys = {
   -- TODO dap widgets
 }
 
-M.lazyspec.cmd = {
-  -- Session management
-  'DapContinue',
-  'DapDisconnect',
-  'DapNew',
-  'DapTerminate',
-
-  -- Stepping
-  'DapRestartFrame',
-  'DapStepInto',
-  'DapStepOut',
-  'DapStepOver',
-  'DapPause',
-
-  -- REPL
-  'DapEval',
-  'DapToggleRepl',
-
-  -- Breakpoints
-  'DapClearBreakpoints',
-  'DapToggleBreakpoint',
-
-  -- Diagnostics
-  'DapSetLogLevel',
-  'DapShowLog',
-}
-
 function M.lazyspec.config(lazyspec)
   local dap, dapui = require 'dap', require 'dapui'
   local dap_vscode = require 'dap.ext.vscode'

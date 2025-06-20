@@ -15,13 +15,13 @@ local lib = require 'lib'
 autocmd('InsertEnter', {
   desc = 'ENABLE relativenumber',
   callback = function()
-    if shared.util.buf_is_normal() then vim.wo.relativenumber = false end
+    if util.buf_is_normal() then vim.wo.relativenumber = false end
   end,
 })
 autocmd('InsertLeave', {
   desc = 'DISABLE relativenumber',
   callback = function()
-    if shared.util.buf_is_normal() then vim.wo.relativenumber = true end
+    if util.buf_is_normal() then vim.wo.relativenumber = true end
   end,
 })
 
@@ -29,7 +29,7 @@ autocmd('InsertLeave', {
 autocmd('CmdlineEnter', {
   desc = 'ENABLE hlsearch according to command line mode',
   callback = function()
-    if not shared.util.is_user_cmdline '/' then return end
+    if not util.is_user_cmdline '/' then return end
     vim.go.hlsearch = true
   end,
 })
@@ -44,8 +44,7 @@ autocmd('CmdlineLeave', {
 autocmd('CmdlineEnter', {
   desc = 'Check type of command line, then set cmdheight',
   callback = function(event)
-    if util.is_vscode_extension() then return true end
-    if not shared.util.is_user_cmdline ':' then return end
+    if not util.is_user_cmdline ':' then return end
     vim.schedule(function()
       vim.go.cmdheight = 2
       vim.api.nvim__redraw {
@@ -65,8 +64,7 @@ autocmd('CmdlineEnter', {
 autocmd('CmdlineLeave', {
   desc = 'Set default cmdheight',
   callback = function()
-    if util.is_vscode_extension() then return true end
-    if not shared.util.is_user_cmdline ':' then return end
+    if not util.is_user_cmdline ':' then return end
     vim.go.cmdheight = 1
   end,
 })
@@ -75,8 +73,7 @@ autocmd('CmdlineLeave', {
 autocmd({ 'BufEnter', 'FileType' }, {
   desc = 'Set custom foldmarker per buffer',
   callback = function(event)
-    if util.is_vscode_extension() then return true end
-    if shared.util.buf_is_normal() then lib.autocmd.set_foldmarker_per_buf(event) end
+    if util.buf_is_normal() then lib.autocmd.set_foldmarker_per_buf(event) end
   end,
 })
 
@@ -84,7 +81,6 @@ autocmd({ 'BufEnter', 'FileType' }, {
 autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
   desc = 'Set cursorcolumn according to buftype',
   callback = function()
-    if util.is_vscode_extension() then return true end
     vim.wo.cursorcolumn = vim.bo.buftype == 'terminal'
   end,
 })
@@ -93,7 +89,6 @@ autocmd({ 'BufEnter', 'TermOpen', 'TermEnter' }, {
 autocmd('BufWritePost', {
   desc = 'Format and write buffer (blocking)',
   callback = function()
-    if util.is_vscode_extension() then return true end
-    if shared.util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
+    if util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
   end,
 })

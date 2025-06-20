@@ -35,7 +35,6 @@ function M.pure_math_int_string_length(n)
 end
 
 function M.is_headless()
-  if not FLAG.CAN_TEST_UI_RELATED then return false end
   return #vim.api.nvim_list_uis() == 0
 end
 
@@ -44,7 +43,6 @@ function M.is_vscode_extension()
 end
 
 function M.is_gui_formal_nvim_wrapper()
-  if not FLAG.CAN_TEST_UI_RELATED then return false end
   return vim.fn.has 'gui_running' and #vim.api.nvim_list_uis() > 0
 end
 

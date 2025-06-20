@@ -1,67 +1,63 @@
-local state = { notifier = {} }
+---Function from snacks.nvim/docs/notifier.md
+---SEE https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
+---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+local function notify_lsp_progress(ev)
+  local client = vim.lsp.get_client_by_id(ev.data.client_id)
+  local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+  if not client or type(value) ~= 'table' then return end
+  local p = state.lsp_progress[client.id]
 
----@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
-state.notifier.progress = vim.defaulttable()
-vim.api.nvim_create_autocmd('LspProgress', {
-  ---Function from snacks.nvim/docs/notifier.md
-  ---SEE https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
-  ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-  callback = function(ev)
-    if util.is_vscode_extension() then return true end
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-    if not client or type(value) ~= 'table' then return end
-    local p = state.notifier.progress[client.id]
+  local is_done = value.kind == 'end'
+  state.lsp_done[client.name] = is_done
 
-    for i = 1, #p + 1 do
-      if i == #p + 1 or p[i].token == ev.data.params.token then
-        p[i] = {
-          token = ev.data.params.token,
-          msg = ('[%3d%%] %s%s'):format(
-            value.kind == 'end' and 100 or value.percentage or 100,
-            value.title or '',
-            value.message and (' **%s**'):format(value.message) or ''
-          ),
-          done = value.kind == 'end',
-        }
-        break
-      end
+  for i = 1, #p + 1 do
+    if i == #p + 1 or p[i].token == ev.data.params.token then
+      p[i] = {
+        token = ev.data.params.token,
+        msg = ('[%3d%%] %s%s'):format(
+          is_done and 100 or value.percentage or 100,
+          value.title or '',
+          value.message and (' **%s**'):format(value.message) or ''
+        ),
+        done = is_done,
+      }
+      break
     end
+  end
 
-    local msg = {} ---@type string[]
-    state.notifier.progress[client.id] = vim.tbl_filter(function(v)
-      return table.insert(msg, v.msg) or not v.done
-    end, p)
+  local msg = {} ---@type string[]
+  state.lsp_progress[client.id] = vim.tbl_filter(function(v)
+    return table.insert(msg, v.msg) or not v.done
+  end, p)
 
-    local spinner =
-      { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-    ---@diagnostic disable-next-line: param-type-mismatch
-    vim.notify(table.concat(msg, '\n'), 'info', {
-      id = 'lsp_progress',
-      title = client.name,
-      opts = function(notif)
-        notif.icon = #state.notifier.progress[client.id] == 0 and ' '
-          or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-      end,
-    })
-  end,
-})
+  if value.kind == 'report' and value.percentage % 5 ~= 0 then return end
+
+  local spinner =
+    { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+  ---@diagnostic disable-next-line: param-type-mismatch
+  vim.notify(table.concat(msg, '\n'), 'info', {
+    id = 'lsp_progress',
+    title = client.name,
+    opts = function(notif)
+      notif.icon = #state.lsp_progress[client.id] == 0 and ' '
+        or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+    end,
+  })
+end
 
 local M = {}
-
-local isvscode = util.is_vscode_extension()
 
 ---@type snacks.Config
 M.opts = {
   -- TODO custom styles
   bigfile = {
-    enabled = not isvscode,
+    enabled = true,
     notify = true,
     size = 2 * 1024 * 1024,
     line_lenght = 5000,
   },
   notifier = {
-    enabled = not isvscode,
+    enabled = true,
     timeout = 2000,
     width = { min = 32, max = 0.4 },
     height = { min = 1, max = 0.5 },
@@ -75,19 +71,19 @@ M.opts = {
   },
   indent = {
     indent = {
-      enabled = not isvscode,
+      enabled = true,
       priority = 1,
-      char = shared.const.icons.misc.bottom_small_dot,
+      char = const.icons.misc.bottom_small_dot,
       only_scope = true,
       only_current = false,
     },
     animate = { enabled = false },
-    scope = { enabled = not isvscode, priority = 10, only_current = false },
-    chunk = { enabled = not isvscode, priority = 100, only_current = false },
+    scope = { enabled = true, priority = 10, only_current = false },
+    chunk = { enabled = true, priority = 100, only_current = false },
   },
   lazygit = {
     -- TODO style: better hl groups
-    configure = not isvscode,
+    configure = true,
     config = {
       os = { editPreset = 'nvim-remote' },
       gui = {
@@ -96,13 +92,13 @@ M.opts = {
       },
     },
   },
-  quickfile = { enabled = not isvscode },
+  quickfile = { enabled = true },
   scratch = {
     autowrite = true,
     filekey = { cwd = true, branch = true, count = false },
   },
   statuscolumn = {
-    enabled = not isvscode,
+    enabled = true,
     left = { 'sign', 'fold' },
     right = { 'mark' },
     folds = { open = true, git_hl = true },
@@ -133,423 +129,463 @@ M.opts = {
 }
 
 M.keys = {
-  -- TODO remap keys
   {
-    '<leader>ggs',
+    '<leader>\\',
     function()
-      Snacks.lazygit()
+      Snacks.picker.resume()
     end,
+    desc = 'Picker: Resume last window',
   },
-  {
-    '<leader>ggl',
-    function()
-      Snacks.lazygit.log()
-    end,
-  },
-  {
-    '<leader>ggh',
-    function()
-      Snacks.lazygit.log_file()
-    end,
-  },
+}
+
+vim.list_extend(M.keys, {
+  -- region Search
+  -- quick actions
   {
     '<leader>s.',
     function()
-      Snacks.scratch()
+      Snacks.picker.smart()
     end,
+    desc = 'Picker: Smart find files',
   },
   {
-    '<leader>ss',
+    '<leader>s,',
     function()
-      Snacks.scratch.select()
+      Snacks.picker.buffers()
     end,
+    desc = 'Picker: Buffers',
+  },
+  {
+    '<leader>s/',
+    function()
+      Snacks.picker.grep()
+    end,
+    desc = 'Picker: Grep cwd',
+  },
+  {
+    '<leader>s;',
+    function()
+      Snacks.picker.grep_buffers()
+    end,
+    desc = 'Picker: Grep buffers',
+  },
+  -- normal actions
+  {
+    '<leader>sc',
+    function()
+      Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
+    end,
+    desc = 'Picker: Config files',
+  },
+  {
+    '<leader>sf',
+    function()
+      Snacks.picker.files()
+    end,
+    desc = 'Picker: Files',
+  },
+  {
+    '<leader>sp',
+    function()
+      Snacks.picker.projects()
+    end,
+    desc = 'Picker: Projects',
+  },
+  {
+    '<leader>sr',
+    function()
+      Snacks.picker.recent()
+    end,
+    desc = 'Picker: Recent',
   },
   {
     '<leader>sl',
     function()
-      Snacks.scratch.list()
+      Snacks.picker.lines()
     end,
+    desc = 'Picker: Buffer lines',
   },
+  {
+    '<leader>sw',
+    function()
+      Snacks.picker.grep_word()
+    end,
+    desc = 'Picker: Word or visual selection',
+    mode = { 'n', 'x' },
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Notifications
   {
     '<leader>nl',
     function()
       Snacks.notifier.show_history()
     end,
-    desc = 'Notification History',
+    desc = 'Notifier: History',
   },
   {
     '<leader>nc',
     function()
       Snacks.notifier.hide()
     end,
-    desc = 'Dismiss All Notifications',
+    desc = 'Notifier: Dismiss all',
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Scratch
+  {
+    '<leader>..',
+    function()
+      Snacks.scratch()
+    end,
+    desc = 'Scratch: Resume',
   },
   {
-    '<leader>bd',
+    '<leader>.b',
     function()
-      Snacks.bufdelete()
+      Snacks.scratch.select()
     end,
-    desc = 'Delete buffer without affecting window layout',
+    desc = 'Scratch: List opened',
   },
-  -- git
   {
-    '<leader>gb',
+    '<leader>.s',
     function()
-      Snacks.picker.git_branches()
+      Snacks.scratch.list()
     end,
-    desc = 'Git Branches',
+    desc = 'Scratch: List all',
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Git
+  {
+    '<leader>gls',
+    function()
+      Snacks.lazygit()
+    end,
+    desc = 'LazyGit: Status',
+  },
+  {
+    '<leader>gll',
+    function()
+      Snacks.lazygit.log()
+    end,
+    desc = 'LazyGit: Log',
+  },
+  {
+    '<leader>glf',
+    function()
+      Snacks.lazygit.log_file()
+    end,
+    desc = 'LazyGit: Log current file',
+  },
+  {
+    '<leader>gG',
+    function()
+      Snacks.gitbrowse()
+    end,
+    desc = 'Git: Open line in remote repository (web browser)',
+    mode = { 'n', 'v' },
   },
   {
     '<leader>gl',
     function()
       Snacks.picker.git_log()
     end,
-    desc = 'Git Log',
+    desc = 'Git: Log',
   },
   {
     '<leader>gL',
     function()
       Snacks.picker.git_log_line()
     end,
-    desc = 'Git Log Line',
+    desc = 'Git: Log current line',
   },
   {
     '<leader>gs',
     function()
       Snacks.picker.git_status()
     end,
-    desc = 'Git Status',
-  },
-  {
-    '<leader>gS',
-    function()
-      Snacks.picker.git_stash()
-    end,
-    desc = 'Git Stash',
+    desc = 'Git: Status',
   },
   {
     '<leader>gd',
     function()
       Snacks.picker.git_diff()
     end,
-    desc = 'Git Diff (Hunks)',
-  },
-  {
-    '<leader>gF',
-    function()
-      Snacks.picker.git_log_file()
-    end,
-    desc = 'Git Log File',
+    desc = 'Git: Diff (Hunks)',
   },
   {
     '<leader>gf',
     function()
-      Snacks.picker.git_files()
+      Snacks.picker.git_log_file()
     end,
-    desc = 'Find Git Files',
+    desc = 'Git: Log current file',
   },
   {
-    '<leader>gB',
+    '<leader>gb',
     function()
       Snacks.git.blame_line()
     end,
-    desc = 'List git log (blame) for current line',
-  },
-  -- Top Pickers & Explorer
-  {
-    's<space>',
-    function()
-      Snacks.picker.smart()
-    end,
-    desc = 'Smart Find Files',
-  },
-  {
-    's,',
-    function()
-      Snacks.picker.buffers()
-    end,
-    desc = 'Buffers',
-  },
-  {
-    's/',
-    function()
-      Snacks.picker.grep()
-    end,
-    desc = 'Grep',
-  },
-  -- find
-  {
-    'sc',
-    function()
-      Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-    end,
-    desc = 'Find Config File',
-  },
-  {
-    'sf',
-    function()
-      Snacks.picker.files()
-    end,
-    desc = 'Find Files',
-  },
-  {
-    'sp',
-    function()
-      Snacks.picker.projects()
-    end,
-    desc = 'Projects',
-  },
-  {
-    'sr',
-    function()
-      Snacks.picker.recent()
-    end,
-    desc = 'Recent',
-  },
-  -- Grep
-  {
-    'sl',
-    function()
-      Snacks.picker.lines()
-    end,
-    desc = 'Buffer Lines',
-  },
-  {
-    's;',
-    function()
-      Snacks.picker.grep_buffers()
-    end,
-    desc = 'Grep Open Buffers',
-  },
-  {
-    'sg',
-    function()
-      Snacks.picker.grep()
-    end,
-    desc = 'Grep',
-  },
-  {
-    'sw',
-    function()
-      Snacks.picker.grep_word()
-    end,
-    desc = 'Visual selection or word',
-    mode = { 'n', 'x' },
+    desc = 'Git: Blame current line',
   },
   -- search
   {
-    "sv'",
+    '<leader>gss',
+    function()
+      Snacks.picker.git_stash()
+    end,
+    desc = 'Git: Stash',
+  },
+  {
+    '<leader>gsf',
+    function()
+      Snacks.picker.git_files()
+    end,
+    desc = 'Git: List files',
+  },
+  {
+    '<leader>gsb',
+    function()
+      Snacks.picker.git_branches()
+    end,
+    desc = 'Git: Branches',
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Vim
+  {
+    "<leader>v'",
     function()
       Snacks.picker.registers()
     end,
-    desc = 'Registers',
+    desc = 'Vim: Registers',
   },
   {
-    'sv/',
+    '<leader>v/',
     function()
       Snacks.picker.search_history()
     end,
-    desc = 'Search History',
+    desc = 'Vim: Search history',
   },
   {
-    'sva',
+    '<leader>va',
     function()
       Snacks.picker.autocmds()
     end,
-    desc = 'Autocmds',
+    desc = 'Vim: Autocmds',
   },
   {
-    'sv:',
+    '<leader>v:',
     function()
       Snacks.picker.command_history()
     end,
-    desc = 'Command History',
+    desc = 'Vim: Command history',
   },
   {
-    'svc',
+    '<leader>vc',
     function()
       Snacks.picker.commands()
     end,
-    desc = 'Commands',
+    desc = 'Vim: Commands',
   },
   {
-    'sd',
-    function()
-      Snacks.picker.diagnostics()
-    end,
-    desc = 'Diagnostics',
-  },
-  {
-    'sD',
-    function()
-      Snacks.picker.diagnostics_buffer()
-    end,
-    desc = 'Buffer Diagnostics',
-  },
-  {
-    'svh',
-    function()
-      Snacks.picker.help()
-    end,
-    desc = 'Help Pages',
-  },
-  {
-    'svh',
-    function()
-      Snacks.picker.highlights()
-    end,
-    desc = 'Highlights',
-  },
-  {
-    'svi',
-    function()
-      Snacks.picker.icons()
-    end,
-    desc = 'Icons',
-  },
-  {
-    'sj',
-    function()
-      Snacks.picker.jumps()
-    end,
-    desc = 'Jumps',
-  },
-  {
-    'svk',
-    function()
-      Snacks.picker.keymaps()
-    end,
-    desc = 'Keymaps',
-  },
-  {
-    'svl',
-    function()
-      Snacks.picker.loclist()
-    end,
-    desc = 'Location List',
-  },
-  {
-    'sm',
-    function()
-      Snacks.picker.marks()
-    end,
-    desc = 'Marks',
-  },
-  {
-    'svm',
-    function()
-      Snacks.picker.man()
-    end,
-    desc = 'Man Pages',
-  },
-  {
-    'svl',
-    function()
-      Snacks.picker.lazy()
-    end,
-    desc = 'Search for Plugin Spec',
-  },
-  {
-    'sq',
-    function()
-      Snacks.picker.qflist()
-    end,
-    desc = 'Quickfix List',
-  },
-  {
-    'svp',
-    function()
-      Snacks.picker.resume()
-    end,
-    desc = 'Resume',
-  },
-  {
-    'svu',
-    function()
-      Snacks.picker.undo()
-    end,
-    desc = 'Undo History',
-  },
-  {
-    'svC',
+    '<leader>vC',
     function()
       Snacks.picker.colorschemes()
     end,
-    desc = 'Colorschemes',
+    desc = 'Vim: Colorschemes',
   },
-  -- LSP
   {
-    'gd',
+    '<leader>vh',
+    function()
+      Snacks.picker.help()
+    end,
+    desc = 'Vim: Help',
+  },
+  {
+    '<leader>vH',
+    function()
+      Snacks.picker.highlights()
+    end,
+    desc = 'Vim: Highlights',
+  },
+  {
+    '<leader>vi',
+    function()
+      Snacks.picker.icons()
+    end,
+    desc = 'Vim: Icons',
+  },
+  {
+    '<leader>vj',
+    function()
+      Snacks.picker.jumps()
+    end,
+    desc = 'Vim: Jumps',
+  },
+  {
+    '<leader>vk',
+    function()
+      Snacks.picker.keymaps()
+    end,
+    desc = 'Vim: Keymaps',
+  },
+  {
+    '<leader>vl',
+    function()
+      Snacks.picker.loclist()
+    end,
+    desc = 'Vim: Locations',
+  },
+  {
+    '<leader>vm',
+    function()
+      Snacks.picker.marks()
+    end,
+    desc = 'Vim: Marks',
+  },
+  {
+    '<leader>vM',
+    function()
+      Snacks.picker.man()
+    end,
+    desc = 'Vim: Man pages',
+  },
+  {
+    '<leader>vP',
+    function()
+      Snacks.picker.lazy()
+    end,
+    desc = 'Vim: Search LazySpecs',
+  },
+  {
+    '<leader>vq',
+    function()
+      Snacks.picker.qflist()
+    end,
+    desc = 'Vim: Quickfix',
+  },
+  {
+    '<leader>vu',
+    function()
+      Snacks.picker.undo()
+    end,
+    desc = 'Vim: Undo history',
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region LSP
+  -- search and goto (main features)
+  {
+    '<leader>ld',
     function()
       Snacks.picker.lsp_definitions()
     end,
-    desc = 'Goto Definition',
+    desc = 'LSP: Go to definition',
   },
   {
-    'ge',
+    '<leader>le',
     function()
       Snacks.picker.lsp_declarations()
     end,
-    desc = 'Goto Declaration',
+    desc = 'LSP: Go to declaration',
   },
   {
-    'gr',
+    '<leader>lr',
     function()
       Snacks.picker.lsp_references()
     end,
     nowait = true,
-    desc = 'References',
+    desc = 'LSP: List References',
   },
   {
-    'gi',
+    '<leader>li',
     function()
       Snacks.picker.lsp_implementations()
     end,
-    desc = 'Goto Implementation',
+    desc = 'LSP: Go to Implementation',
   },
   {
-    'gy',
+    '<leader>lt',
     function()
       Snacks.picker.lsp_type_definitions()
     end,
-    desc = 'Goto T[y]pe Definition',
+    desc = 'LSP: Go to type definition',
   },
   {
-    'gs',
+    '<leader>lo',
     function()
       Snacks.picker.lsp_symbols()
     end,
-    desc = 'LSP Symbols',
+    desc = 'LSP: List Symbols',
   },
   {
-    'gS',
+    '<leader>lm',
+    function()
+      Snacks.picker.diagnostics_buffer()
+    end,
+    desc = 'LSP: List diagnostics',
+  },
+  -- search
+  {
+    '<leader>lso',
     function()
       Snacks.picker.lsp_workspace_symbols()
     end,
-    desc = 'LSP Workspace Symbols',
+    desc = 'LSP: List workspace symbols',
+  },
+  {
+    '<leader>lsm',
+    function()
+      Snacks.picker.diagnostics()
+    end,
+    desc = 'LSP: List workspace diagnostics',
   },
   -- Other
   {
-    'cR',
+    '<leader>ar',
     function()
       Snacks.rename.rename_file()
     end,
-    desc = 'Rename File',
+    desc = 'LSP: Rename current file',
   },
   {
-    'sb',
+    ']]',
     function()
-      Snacks.gitbrowse()
+      Snacks.words.jump(vim.v.count1)
     end,
-    desc = 'Git Browse',
-    mode = { 'n', 'v' },
+    desc = 'LSP: Next highlighted word',
+    mode = { 'n', 't' },
   },
+  {
+    '[[',
+    function()
+      Snacks.words.jump(-vim.v.count1)
+    end,
+    desc = 'LSP: Previous highlighted word',
+    mode = { 'n', 't' },
+  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Terminal
   {
     '<c-/>',
     function()
       Snacks.terminal()
     end,
-    desc = 'Toggle Terminal',
+    desc = 'Terminal: toggle',
   },
   {
     '<c-_>',
@@ -558,25 +594,27 @@ M.keys = {
     end,
     desc = 'which_key_ignore',
   },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Buffer
   {
-    ']]',
+    '<leader>bd',
     function()
-      Snacks.words.jump(vim.v.count1)
+      -- deletes buffer without affecting window layout
+      Snacks.bufdelete()
     end,
-    desc = 'Next Reference',
-    mode = { 'n', 't' },
+    desc = 'Buffer: Delete',
   },
-  {
-    '[[',
-    function()
-      Snacks.words.jump(-vim.v.count1)
-    end,
-    desc = 'Prev Reference',
-    mode = { 'n', 't' },
-  },
+  -- endregion
+})
+
+vim.list_extend(M.keys, {
+  -- region Other
   {
     '<leader>N',
-    desc = 'Neovim News',
+    desc = 'Other: Neovim news',
     function()
       Snacks.win {
         file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1],
@@ -592,9 +630,13 @@ M.keys = {
       }
     end,
   },
-}
+  -- endregion
+})
 
 function M.init()
+  -- lsp progress
+  vim.api.nvim_create_autocmd('LspProgress', { callback = notify_lsp_progress })
+  -- notify lsp oil has modified a file
   vim.api.nvim_create_autocmd('User', {
     pattern = 'OilActionsPost',
     desc = 'Lets LSP clients know that a file has been renamed',
@@ -610,14 +652,13 @@ function M.init()
 end
 
 function M.config(lazyspec)
-  if util.is_vscode_extension() then return end
-  Snacks.toggle.diagnostics():map 'td'
-  Snacks.toggle.dim():map 'tD'
-  -- Snacks.toggle.indent():map 'ti'
-  Snacks.toggle.inlay_hints():map 'th'
-  Snacks.toggle.line_number():map 'tn'
-  -- Snacks.toggle.treesitter():map 'tt'
-  Snacks.toggle.words():map 'tw'
+  Snacks.toggle.diagnostics():map '<leader>tm'
+  Snacks.toggle.dim():map '<leader>td'
+  Snacks.toggle.indent():map '<leader>ti'
+  Snacks.toggle.inlay_hints():map '<leader>th'
+  Snacks.toggle.line_number():map '<leader>tn'
+  Snacks.toggle.treesitter():map '<leader>tt'
+  Snacks.toggle.words():map '<leader>tw'
 
   -- Toggle portuguese mbyte-keymap
   Snacks.toggle({
@@ -628,7 +669,7 @@ function M.config(lazyspec)
     set = function(state)
       vim.o.keymap = state and 'portuguese-accents-abnt2' or ''
     end,
-  }):map 'tkp'
+  }):map '<leader>tk'
 end
 
 return M

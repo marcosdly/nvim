@@ -14,7 +14,7 @@ end
 
 function M.buffer_count()
   local current_bufnr = vim.api.nvim_get_current_buf()
-  if not shared.util.buf_is_normal(current_bufnr) then
+  if not util.buf_is_normal(current_bufnr) then
     -- current buf is not normal
     return ''
   end
@@ -23,8 +23,8 @@ function M.buffer_count()
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if
       vim.api.nvim_buf_is_loaded(bufnr)
-      and shared.util.buf_local_option('buflisted', bufnr)
-      and shared.util.buf_is_normal(bufnr)
+      and util.buf_local_option('buflisted', bufnr)
+      and util.buf_is_normal(bufnr)
     then
       count = count + 1
       if bufnr == current_bufnr then current_buf_i = count end
@@ -33,7 +33,7 @@ function M.buffer_count()
   if count == 1 then return '' end
   return vim.fn.printf(
     '%*d/%d',
-    shared.util.pure_math_int_string_length(count),
+    util.pure_math_int_string_length(count),
     current_buf_i,
     count
   )
@@ -43,7 +43,7 @@ function M.filesize()
   local file = vim.fn.expand '%:p'
   if file == nil or #file == 0 then return '' end
   local size = vim.fn.getfsize(file)
-  local min_size = shared.const.kilobyte * 10
+  local min_size = const.storage_size.kilobyte * 10
   if size <= 0 or size < min_size then return '' end
 
   local suffixes = { 'B', 'KiB', 'MiB', 'GiB' }
@@ -98,7 +98,7 @@ function M.location()
   local cursor_tup = vim.api.nvim_win_get_cursor(0)
   local row, column = cursor_tup[1] or 0, cursor_tup[2] or 0
   local count = vim.api.nvim_buf_line_count(0) or 0
-  local row_padding = shared.util.pure_math_int_string_length(count)
+  local row_padding = util.pure_math_int_string_length(count)
 
   local percentage = 0
   if row > 0 and count > 0 then percentage = row / count * 100 end
@@ -130,10 +130,10 @@ M.diagnostics = {
   colored = false,
   update_in_insert = true,
   symbols = {
-    error = shared.const.icons.diagnostic.error .. ' ',
-    warn = shared.const.icons.diagnostic.warn .. ' ',
-    info = shared.const.icons.diagnostic.info .. ' ',
-    hint = shared.const.icons.diagnostic.hint .. ' ',
+    error = const.icons.diagnostic.error .. ' ',
+    warn = const.icons.diagnostic.warn .. ' ',
+    info = const.icons.diagnostic.info .. ' ',
+    hint = const.icons.diagnostic.hint .. ' ',
   },
 }
 
@@ -144,5 +144,13 @@ end
 function M.keymap()
   return vim.b.keymap_name ~= nil and string.format('<%s>', vim.b.keymap_name) or ''
 end
+
+M.lsp_status = {
+  'lsp_status',
+  fmt = function(text)
+    if state.lsp_is_all_progress_done() then return '' end
+    return text
+  end,
+}
 
 return M

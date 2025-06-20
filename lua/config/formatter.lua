@@ -1,25 +1,7 @@
 local M = {}
 
-M.lazyspec = {}
-
-M.lazyspec.opts = {
-  logging = false,
-  log_level = vim.log.levels.WARN,
-}
-
-M.lazyspec.cmd = { 'Format', 'FormatLock', 'FormatWrite', 'FormatWriteLock' }
-
-M.lazyspec.keys = {
-  { 'cf', '<cmd>FormatLock<cr>' },
-  { 'cF', '<cmd>FormatWriteLock<cr>' },
-}
-
-M._cached_formatter_config = nil
-
 function M.get_defined_formatters()
   local ft = require 'formatter.filetypes'
-
-  if M._cached_formatter_config ~= nil then return M._cached_formatter_config end
 
   local formatters = {
     python = {
@@ -50,6 +32,12 @@ function M.get_defined_formatters()
     json = {
       ft.json.prettierd,
     },
+    jsonc = {
+      ft.json.prettierd,
+    },
+    json5 = {
+      ft.json.prettierd,
+    },
     markdown = {
       ft.markdown.prettierd,
     },
@@ -67,10 +55,9 @@ function M.get_defined_formatters()
     },
     xml = {
       ft.xml.tidy,
-    }
+    },
   }
 
-  M._cached_formatter_config = formatters
   return formatters
 end
 

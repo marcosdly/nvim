@@ -13,9 +13,15 @@ M.icons = {
     bottom_small_dot = '.',
   },
 }
-M.second = 1000
-M.minute = 1000 * 60
-M.kilobyte = 1024
-M.megabyte = 1024 * 1024
+
+M.time_delay = {
+  second = 1000,
+  minute = 1000 * 60,
+}
+
+M.storage_size = {
+  kilobyte = 1024,
+  megabyte = 1024 * 1024,
+}
 
 return M

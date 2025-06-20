@@ -2,8 +2,6 @@
 local P = {}
 
 local function add(tab)
-  if type(tab.vscode) ~= 'boolean' then tab.vscode = not not tab.vscode end
-  if util.is_vscode_extension() and not tab.vscode then tab.cond = false end
   tab.priority = nil
   table.insert(P, tab)
 end
@@ -36,7 +34,6 @@ add {
   tag = '0.1.8',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons',
     'nvim-telescope/telescope-ui-select.nvim',
     {
       'nvim-telescope/telescope-fzf-native.nvim',
@@ -84,8 +81,12 @@ add {
   end,
   cmd = 'Telescope',
   keys = {
-    { 'svo', '<cmd>Telescope vim_options<cr>' },
-    { 'svs', '<cmd>Telescope spell_suggest<cr>' },
+    { '<leader>vo', '<cmd>Telescope vim_options<cr>', desc = 'Vim: Search options' },
+    {
+      '<leader>vs',
+      '<cmd>Telescope spell_suggest<cr>',
+      desc = 'Vim: List spelling suggestions',
+    },
   },
 }
 
@@ -114,7 +115,6 @@ add {
   'nvim-lualine/lualine.nvim',
   cond = util.is_gui,
   lazy = false,
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
     local lualine = require 'lualine'
     local config = require 'config.lualine'
@@ -148,6 +148,7 @@ add {
           config.filesize,
         },
         lualine_x = {
+          config.lsp_status,
           config.diagnostics,
           config.session_status,
           config.keymap,
@@ -167,7 +168,6 @@ add {
   'stevearc/oil.nvim',
   cond = util.is_gui,
   lazy = false,
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     default_file_explorer = true,
     win_options = {
@@ -188,7 +188,7 @@ add {
     },
   },
   config = function(lazyspec)
-    shared.state.oil = {
+    state.oil = {
       view_detail = false,
     }
 
@@ -200,9 +200,9 @@ add {
         ['gd'] = {
           desc = 'Toggle file detail view',
           callback = function()
-            shared.state.oil.view_detail = not shared.state.oil.view_detail
+            state.oil.view_detail = not state.oil.view_detail
             oil.set_columns(
-              shared.state.oil.view_detail and { 'mtime', 'size', 'permissions' } or {}
+              state.oil.view_detail and { 'mtime', 'size', 'permissions' } or {}
             )
           end,
         },
@@ -212,9 +212,13 @@ add {
     oil.setup(vim.tbl_deep_extend('force', lazyspec.opts, opts_override))
   end,
   keys = {
-    { '-', '<cmd>Oil --float<cr>' }, -- open parent
-    { '<leader>-', '<cmd>Oil --float --trash<cr>' }, -- parent's trash
-    { '<localleader>-', '<cmd>Oil --float --trash /<cr>' }, -- all trash
+    { '-', '<cmd>Oil --float<cr>', desc = 'Oil: Open parent dir' },
+    { '<leader>-', '<cmd>Oil --float --trash<cr>', desc = 'Oil: Parent dir trash' },
+    {
+      '<localleader>-',
+      '<cmd>Oil --float --trash /<cr>',
+      desc = 'Oil: System wide trash',
+    },
   },
 }
 
@@ -222,7 +226,6 @@ add { 'wakatime/vim-wakatime', lazy = false }
 
 add {
   'echasnovski/mini.surround',
-  vscode = true,
   event = { 'CmdlineEnter', 'InsertEnter', 'BufReadPost', 'VeryLazy' },
   opts = {
     respect_selection_type = true,
@@ -237,8 +240,7 @@ add {
     log_level = vim.log.levels.WARN,
   },
   keys = {
-    { 'cf', '<cmd>FormatLock<cr>' },
-    { 'cF', '<cmd>FormatWriteLock<cr>' },
+    { '<leader>af', '<cmd>FormatLock<cr>', desc = 'Action: Format buffer' },
   },
   config = function(lazyspec)
     local formatter = require 'formatter'
@@ -252,7 +254,6 @@ add {
 
 add {
   'nvim-treesitter/nvim-treesitter-textobjects',
-  vscode = true,
   keys = {
     -- Repeat movement with ; and ,
     -- vim way: ; goes to the direction you were moving.
@@ -262,6 +263,7 @@ add {
         require('nvim-treesitter.textobjects.repeatable_move').repeat_last_move()
       end,
       mode = { 'n', 'x', 'o' },
+      desc = 'Treesitter: textobjects repeat',
     },
     {
       ',',
@@ -269,6 +271,7 @@ add {
         require('nvim-treesitter.textobjects.repeatable_move').repeat_last_move_opposite()
       end,
       mode = { 'n', 'x', 'o' },
+      desc = 'Treesitter: textobjects repeat opposite direction',
     },
   },
 }
@@ -287,7 +290,6 @@ add {
 
 add {
   'nvim-treesitter/nvim-treesitter',
-  vscode = true,
   lazy = false,
   build = ':TSUpdate',
   opts = {
@@ -334,7 +336,7 @@ add {
     highlight = {
       enable = true,
       disable = function(lang, buf)
-        local max_filesize = shared.const.kilobyte * 100
+        local max_filesize = const.storage_size.kilobyte * 100
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then return true end
         return false
@@ -370,12 +372,6 @@ add {
     local treesitter = require 'nvim-treesitter.configs'
     local treesitter_install = require 'nvim-treesitter.install'
 
-    if util.is_vscode_extension() then
-      vim.tbl_deep_extend('force', lazyspec.opts, {
-        highlight = false,
-      })
-    end
-
     treesitter_install.prefer_git = true
     -- C compiler priority order
     treesitter_install.compilers =
@@ -394,7 +390,6 @@ add {
 add {
   'gerazov/toggle-bool.nvim',
   cond = false,
-  vscode = true,
   pin = true,
   opts = {
     mapping = '<leader>ab',
@@ -434,10 +429,10 @@ add {
       },
       signs = {
         text = {
-          [vim.diagnostic.severity.ERROR] = shared.const.icons.diagnostic.error,
-          [vim.diagnostic.severity.WARN] = shared.const.icons.diagnostic.warn,
-          [vim.diagnostic.severity.INFO] = shared.const.icons.diagnostic.info,
-          [vim.diagnostic.severity.HINT] = shared.const.icons.diagnostic.hint,
+          [vim.diagnostic.severity.ERROR] = const.icons.diagnostic.error,
+          [vim.diagnostic.severity.WARN] = const.icons.diagnostic.warn,
+          [vim.diagnostic.severity.INFO] = const.icons.diagnostic.info,
+          [vim.diagnostic.severity.HINT] = const.icons.diagnostic.hint,
         },
         -- numhl = {
         --   [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
@@ -549,10 +544,9 @@ add {
 
 add {
   'Joakker/lua-json5',
-  vscode = true,
   optional = true,
   pin = true,
-  build = shared.const.is_windows and 'powershell ./install.ps1' or './install.sh',
+  build = IS_WINDOWS and 'powershell ./install.ps1' or './install.sh',
 }
 
 add {
@@ -607,9 +601,6 @@ add {
   'rmagatti/auto-session',
   lazy = false,
   cond = false,
-  dependencies = {
-    'nvim-telescope/telescope.nvim',
-  },
   cmd = {
     'SessionSave',
     'SessionRestore',
@@ -622,10 +613,10 @@ add {
   },
   keys = {
     -- Will use Telescope if installed or a vim.ui.select picker otherwise
-    { '<leader>ss', '<cmd>SessionSearch<cr>', desc = 'Session search' },
-    { '<leader>sv', '<cmd>SessionSave<cr>', desc = 'Session quick save' },
-    { '<leader>sn', ':SessionSave ', desc = 'Save session as...' },
-    { '<leader>sa', ':SessionToggleAutoSave', desc = 'Toggle autosave' },
+    { '<leader>Ss', '<cmd>SessionSearch<cr>', desc = 'AutoSession: Search' },
+    { '<leader>Sw', '<cmd>SessionSave<cr>', desc = 'AutoSession: Quick save' },
+    { '<leader>Sn', ':SessionSave ', desc = 'AutoSession: Save as...' },
+    { '<leader>St', ':SessionToggleAutoSave', desc = 'AutoSession: Toggle autosave' },
   },
   opts = {
     use_git_branch = true,
@@ -750,7 +741,6 @@ add {
 local snacks_config = require 'config.snacks'
 add {
   'folke/snacks.nvim',
-  vscode = true,
   lazy = false,
   init = snacks_config.init,
   opts = snacks_config.opts,
@@ -759,7 +749,6 @@ add {
 
 add {
   'nacro90/numb.nvim',
-  vscode = true,
   event = 'CmdlineEnter',
   opts = {
     show_number = true,
@@ -772,7 +761,7 @@ add {
 
 add {
   'shortcuts/no-neck-pain.nvim',
-  cond = util.is_gui,
+  -- cond = util.is_gui,
   lazy = false,
   cond = false,
   opts = {
@@ -835,9 +824,8 @@ add {
 
 add {
   'Wansmer/treesj',
-  vscode = true,
+  cond = false,
   keys = { '<space>m', '<space>j', '<space>s' },
-  dependencies = { 'nvim-treesitter/nvim-treesitter' },
   config = true,
 }
 
@@ -845,9 +833,6 @@ add {
   'hiphish/rainbow-delimiters.nvim',
   event = { 'BufReadPost', 'VeryLazy' },
   cond = util.is_gui,
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter',
-  },
   init = function()
     vim.g.rainbow_delimiters = {
       condition = util.buf_is_normal,
@@ -868,7 +853,7 @@ add {
   -- end,
   opts = {
     enabled = true,
-    timeout = shared.const.second * 10,
+    timeout = const.time_delay.second * 10,
     create_parent_dirs = true,
     autowrite = false,
     save_on_cmd = 'some',
@@ -964,25 +949,25 @@ add {
   },
   keys = {
     {
-      'gc;',
+      '<leader>lbs',
       function()
         require('dropbar.api').pick()
       end,
-      desc = 'Pick symbols in winbar',
+      desc = 'Breadcrumbs: Pick symbols',
     },
     {
-      'gc[',
+      '<leader>lb[',
       function()
-        require('dropbar.api').goto_context_start()
+        require('dropbar.api').goto_context_start(1)
       end,
-      desc = 'Go to start of current context',
+      desc = 'Breadcrumbs: Go to previous context',
     },
     {
-      'gc]',
+      '<leader>lb]',
       function()
         require('dropbar.api').select_next_context()
       end,
-      desc = 'Select next context',
+      desc = 'Breadcrumbs: Select next context',
     },
   },
 }
@@ -1000,11 +985,11 @@ add {
   },
   keys = {
     {
-      '<leader>ca',
+      '<leader>aa',
       function()
         require('actions-preview').code_actions()
       end,
-      desc = 'Display code actions with change preview',
+      desc = 'Action: List and preview actions',
       mode = { 'n', 'v' },
     },
   },
@@ -1040,43 +1025,38 @@ add {
     conceal.setup(lazyspec.opts)
     conceal.generate_conceals()
 
-    local level = 1
     Snacks.toggle({
-      name = 'Keyword conceal',
+      name = 'Treesitter conceal',
       get = function()
-        return vim.wo.conceallevel == level
+        return vim.wo.conceallevel == 1
       end,
-      set = function(state)
-        vim.wo.conceallevel = state and level or nil
+      set = function(level)
+        vim.wo.conceallevel = level == 1 and 0 or 1
       end,
-    }):map 'tc'
+    }):map '<leader>tc'
   end,
-  keys = { 'tc' },
+  keys = { '<leader>tc' },
 }
 
 priority {
   -- essential
+  'folke/snacks.nvim', -- first for quickfile
   'nvim-treesitter/nvim-treesitter',
-  'wakatime/vim-wakatime',
-  -- main dependencies
+  'wakatime/vim-wakatime', -- ensure effort is being recorded
+
+  -- dev icons (may be important, or maybe not at all)
   'nvim-tree/nvim-web-devicons',
+
   -- main editor utility
   'nvim-lualine/lualine.nvim',
-  'nvim-telescope/telescope.nvim',
+  'nvim-telescope/telescope.nvim', -- may be started by snacks
   'stevearc/oil.nvim',
-  -- important plugins
-  'folke/snacks.nvim',
+
+  -- other
   'folke/neoconf.nvim',
   'rmagatti/auto-session',
   'williamboman/mason.nvim',
-  -- 'tmillr/sos.nvim',
-  -- would like to load as soon as possible
-  -- 'hiphish/rainbow-delimiters.nvim',
-  'shortcuts/no-neck-pain.nvim',
-  'zongben/capsoff.nvim',
 }
-
-shared.plugins = P
 
 -- TODO print file stat on notification (Snacks.notify)
 -- TODO remove file size from lualine
