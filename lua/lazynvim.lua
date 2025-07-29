@@ -32,8 +32,7 @@ require('lazy').setup {
     lazy = not vim.g.vscode,
   },
   spec = {
-    { import = 'plugins' },
-    { import = '_vscode.plugins' },
+    { import = vim.g.vscode and '_vscode.plugins' or 'plugins' },
   },
   install = {
     colorscheme = { 'ron', 'wildcharm', 'lunaperche', 'habamax' },
