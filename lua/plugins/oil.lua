@@ -1,4 +1,4 @@
-state.oil = {
+local state = {
   view_detail = false,
 }
 
@@ -30,14 +30,28 @@ local spec = {
         ['gd'] = {
           desc = 'Toggle file detail view',
           callback = function()
-            state.oil.view_detail = not state.oil.view_detail
+            state.view_detail = not state.view_detail
             oil.set_columns(
-              state.oil.view_detail and { 'mtime', 'size', 'permissions' } or {}
+              state.view_detail and { 'mtime', 'size', 'permissions' } or {}
             )
           end,
         },
       },
     }
+
+    -- notify lsp oil has modified a file
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'OilActionsPost',
+      desc = 'Lets LSP clients know that a file has been renamed',
+      callback = function(event)
+        if event.data.actions.type == 'move' then
+          Snacks.rename.on_rename_file(
+            event.data.actions.src_url,
+            event.data.actions.dest_url
+          )
+        end
+      end,
+    })
 
     local set = vim.keymap.set
 
