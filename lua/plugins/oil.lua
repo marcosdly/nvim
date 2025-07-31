@@ -1,6 +1,4 @@
-local state = {
-  view_detail = false,
-}
+local show_detailed = false
 
 local spec = {
   'stevearc/oil.nvim',
@@ -30,10 +28,8 @@ local spec = {
         ['gd'] = {
           desc = 'Toggle file detail view',
           callback = function()
-            state.view_detail = not state.view_detail
-            oil.set_columns(
-              state.view_detail and { 'mtime', 'size', 'permissions' } or {}
-            )
+            show_detailed = not show_detailed
+            oil.set_columns(show_detailed and { 'mtime', 'size', 'permissions' } or {})
           end,
         },
       },

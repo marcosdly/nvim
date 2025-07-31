@@ -2,7 +2,7 @@ local LazyNvim = require('bootstrap').LazyNvim
 
 local plugins = {
   {
-    "nacro90/numb.nvim",
+    'nacro90/numb.nvim',
     opts = {
       show_number = true,
       show_cursorline = true,
@@ -12,21 +12,21 @@ local plugins = {
     },
   },
   {
-    "zongben/capsoff.nvim",
-    cond = IS_WINDOWS,
-    build = ":CapsLockOffBuild",
+    'zongben/capsoff.nvim',
+    cond = vim.g.is_windows,
+    build = ':CapsLockOffBuild',
     config = function()
-      require("capsoff").setup({ auto = false })
-      vim.api.nvim_create_autocmd("InsertLeave", {
-        desc = "Disable CAPSLOCK when leaving insert mode (Windows, linux/X11)",
-        command = "CapsLockOff",
+      require('capsoff').setup { auto = false }
+      vim.api.nvim_create_autocmd('InsertLeave', {
+        desc = 'Disable CAPSLOCK when leaving insert mode (Windows, linux/X11)',
+        command = 'CapsLockOff',
         nested = true,
       })
     end,
   },
 
   {
-    "shortcuts/no-neck-pain.nvim",
+    'shortcuts/no-neck-pain.nvim',
     cond = false,
     opts = {
       debug = false,
@@ -42,10 +42,10 @@ local plugins = {
         setNames = false,
         scratchPad = { enabled = false },
         wo = {
-          fillchars = "eob: ",
+          fillchars = 'eob: ',
         },
         bo = {
-          buftype = "nofile",
+          buftype = 'nofile',
         },
         left = {
           enabled = false,
@@ -71,31 +71,31 @@ local plugins = {
     },
   },
   {
-    "zaldih/themery.nvim",
+    'zaldih/themery.nvim',
     cond = false,
     config = function()
       local function get_std_colorscheme_names()
         return vim
-          .iter(vim.api.nvim_get_runtime_file("colors/*.{vim,lua}", true))
+          .iter(vim.api.nvim_get_runtime_file('colors/*.{vim,lua}', true))
           :map(function(path)
             return vim.fs.basename(path):sub(0, -5)
           end)
           :totable()
       end
 
-      require("themery").setup({
+      require('themery').setup {
         themes = get_std_colorscheme_names(),
         livePreview = true,
-      })
+      }
     end,
   },
 }
 
 LazyNvim:SetPriority(plugins, {
-  "nacro90/numb.nvim",
-  "zongben/capsoff.nvim",
-  "shortcuts/no-neck-pain.nvim",
-  "zaldih/themery.nvim",
+  'nacro90/numb.nvim',
+  'zongben/capsoff.nvim',
+  'shortcuts/no-neck-pain.nvim',
+  'zaldih/themery.nvim',
 })
 
 return plugins

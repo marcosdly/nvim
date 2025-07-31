@@ -1,6 +1,9 @@
 ---@diagnostic disable: redundant-parameter
 
+local const = require 'lib.helpful_constants'
+local storage_size = const.storage_size
 local lsp_progress = require 'plugins.snacks.lsp_progress'
+local util = require 'lib.util'
 
 local M = {}
 
@@ -45,7 +48,7 @@ function M.filesize()
   local file = vim.fn.expand '%:p'
   if file == nil or #file == 0 then return '' end
   local size = vim.fn.getfsize(file)
-  local min_size = const.storage_size.kilobyte * 10
+  local min_size = storage_size.kilobyte * 10
   if size <= 0 or size < min_size then return '' end
 
   local suffixes = { 'B', 'KiB', 'MiB', 'GiB' }

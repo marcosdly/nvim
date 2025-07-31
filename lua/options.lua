@@ -1,5 +1,7 @@
 local M = {}
 
+local const = require 'lib.helpful_constants'
+
 local o, g, go = vim.o, vim.g, vim.go
 
 -- see statuscolumn
@@ -35,8 +37,8 @@ o.cdhome = false
 
 -- region INTERFACE
 -- theme (color group) to prefer given colorscheme
-o.background = "dark"
-vim.cmd.colorscheme("default")
+o.background = 'dark'
+vim.cmd.colorscheme 'default'
 -- show current mode
 o.showmode = false
 -- show line number
@@ -48,16 +50,16 @@ o.numberwidth = 3
 -- height in lines of command line
 o.cmdheight = 1
 -- always highlight columns, equivalent to rulers in vscode
-o.colorcolumn = "88"
+o.colorcolumn = '88'
 -- highlight line the cursor is at
 o.cursorline = true
 -- configuration of how the cursor's line should be highlighted
-o.cursorlineopt = "screenline,number"
+o.cursorlineopt = 'screenline,number'
 -- force every window's size to be equal
 o.equalalways = true
 -- direction in which to make window's size equal
 -- hor: width, ver: height, both: height and width
-o.eadirection = "hor"
+o.eadirection = 'hor'
 -- hightlight visible results of search
 o.hlsearch = true
 -- NOTE win*(width|height) must set soft limit before hard limit to avoid error
@@ -66,31 +68,31 @@ o.winwidth = 24 -- soft
 o.winminheight = 8 -- hard
 o.winminwidth = 16 -- hard
 -- method to use when defining visual folds
-o.foldmethod = "marker"
-go.foldmethod = "marker"
+o.foldmethod = 'marker'
+go.foldmethod = 'marker'
 -- keywords used to identify beginning and ending of visual fold
-o.foldmarker = "#region,#endregion"
-go.foldmarker = "#region,#endregion"
+o.foldmarker = '#region,#endregion'
+go.foldmarker = '#region,#endregion'
 -- TODO o.foldtext
 -- whether to show tab page labels
 -- 0: never,  1: only if there are at least two tab pages, 2: always
 o.showtabline = 1
 -- string to prepend to a screenline representing a line soft wrapped
-o.showbreak = "->  "
+o.showbreak = '->  '
 -- location to show typed commands (character combinations)
-o.showcmdloc = "statusline"
+o.showcmdloc = 'statusline'
 -- minimal number of columns to scroll horizontally
 o.sidescroll = 4
 -- change way some text is displayed
-o.display = "uhex,lastline"
+o.display = 'uhex,lastline'
 -- minimal number of screen lines to keep above and below the cursor
 o.scrolloff = 5
 -- visually replace some blank-character sequences
 o.list = true
 -- strings to replace whose blank characters with
-o.listchars = string.format("trail:%s", const.icons.misc.center_small_dot)
+o.listchars = string.format('trail:%s', const.icons.misc.center_small_dot)
 -- single character flags indicating UI messages/errors to ignore or shorten
-go.shortmess = "laoOstIcF"
+go.shortmess = 'laoOstIcF'
 -- scrolling works with screen lines, not implemented for gj/gk as of nvim v0.10.4
 o.smoothscroll = true
 -- letter space in pixels
@@ -98,26 +100,26 @@ o.linespace = 0
 -- allow nvim to set window title
 go.title = true
 -- title string (statusline syntax)
-go.titlestring = "nvim"
+go.titlestring = 'nvim'
 -- break lines at specific characters instead of whatever is the last character
 o.linebreak = true
 -- break lines at these characters
-o.breakat = o.breakat .. "_"
+o.breakat = o.breakat .. '_'
 -- preserve indent level at soft wrapped lines
 o.breakindent = false
 -- brakeindent settings: indent at column 88, show broken line indicator (text)
 -- FIX remove column option, which is a hard column value
 -- o.breakindentopt = 'column:88,sbr'
-o.breakindentopt = ""
+o.breakindentopt = ''
 -- maximum width of text being inserted; line will be broken at white space to match this width
 o.textwidth = 0
 -- endregion
 
 -- region EDITOR FUNCTIONALITY
 -- mouse button behavior
-o.mousemodel = "popup"
+o.mousemodel = 'popup'
 -- modes/situations (single character flags) in which mouse support is enabled
-o.mouse = "a"
+o.mouse = 'a'
 -- swapfile for the buffer
 -- NOTE let swapfile=false because otherwise auto-write plugins are unsafe
 -- TODO study about swap files and how it works more specifically
@@ -126,18 +128,18 @@ o.swapfile = false
 -- NOTE only affects error *with* messages, many errors *without* messages ignore this
 o.errorbells = false
 -- events at which bell will *not* be rang
-o.belloff = "all"
+o.belloff = 'all'
 -- backup file before writing buffer to disk
 -- yes: make a copy of the file and overwrite the original one
 -- no: rename the file and write a new one
 -- auto: one of the previous, what works best
-o.backupcopy = "no"
+o.backupcopy = 'no'
 -- completion behavior when pressing character specified by wildchar
-o.wildmode = "full"
+o.wildmode = 'full'
 -- how command line completion is done
-o.wildoptions = "pum,tagfile"
+o.wildoptions = 'pum,tagfile'
 -- how the cursor can be positioned where there is no actual character
-o.virtualedit = "onemore"
+o.virtualedit = 'onemore'
 -- whether case is ignored when completing file names and directories
 o.wildignorecase = true
 -- ignore case in search patterns, cmdline-completion, tag search, and expr-==
@@ -160,7 +162,7 @@ o.tabstop = 4
 -- insert tab width in spaces instead of \t
 o.expandtab = true
 -- keep clipboard inside neovim only
-o.clipboard = ""
+o.clipboard = ''
 -- wheter window and the buffer it is displaying are paired
 -- NOTE if set when only 1 window exists, another window is created
 o.winfixbuf = false
@@ -171,10 +173,10 @@ o.confirm = true
 -- key used to expand command-line completion
 -- NOTE lua value is number, use literal vim command to allow keycode value
 -- SEE documentation
-vim.cmd("set wildchar=<tab>")
+vim.cmd 'set wildchar=<tab>'
 -- same as wildchar, but works inside macros and keymap commands
 -- usually this key is only used in macros/keymaps that invoke completion mode
-vim.cmd("set wildcharm=<c-z>")
+vim.cmd 'set wildcharm=<c-z>'
 -- When a bracket is inserted, briefly jump to the matching one
 -- jump is only done if the match can be seen on the screen.
 o.showmatch = false
@@ -191,8 +193,8 @@ o.undolevels = 1000
 -- files will be saved if this value is negative of buffer's number of lines is smaller
 o.undoreload = 10000
 
-if IS_WINDOWS then
-  go.winaltkeys = "no" -- o.shell = 'pwsh.exe'
+if vim.g.is_windows then
+  go.winaltkeys = 'no' -- o.shell = 'pwsh.exe'
 end
 
 -- endregion

@@ -2,18 +2,18 @@ local LazyNvim = require('bootstrap').LazyNvim
 
 local plugins = {
   {
-    "Joakker/lua-json5",
+    'Joakker/lua-json5',
     optional = true,
     pin = true,
-    build = IS_WINDOWS and "powershell ./install.ps1" or "./install.sh",
+    build = vim.g.is_windows and 'powershell ./install.ps1' or './install.sh',
   },
   {
-    "nvim-tree/nvim-web-devicons",
+    'nvim-tree/nvim-web-devicons',
     config = true,
   },
-  "wakatime/vim-wakatime",
+  'wakatime/vim-wakatime',
   {
-    "folke/neoconf.nvim",
+    'folke/neoconf.nvim',
     opts = {
       plugins = {
         dap = {
@@ -23,13 +23,13 @@ local plugins = {
     },
   },
   {
-    "rmagatti/auto-session",
+    'rmagatti/auto-session',
     keys = {
       -- Will use Telescope if installed or a vim.ui.select picker otherwise
-      { "<leader>Ss", "<cmd>SessionSearch<cr>", desc = "AutoSession: Search" },
-      { "<leader>Sw", "<cmd>SessionSave<cr>", desc = "AutoSession: Quick save" },
-      { "<leader>Sn", ":SessionSave ", desc = "AutoSession: Save as..." },
-      { "<leader>St", ":SessionToggleAutoSave", desc = "AutoSession: Toggle autosave" },
+      { '<leader>Ss', '<cmd>SessionSearch<cr>', desc = 'AutoSession: Search' },
+      { '<leader>Sw', '<cmd>SessionSave<cr>', desc = 'AutoSession: Quick save' },
+      { '<leader>Sn', ':SessionSave ', desc = 'AutoSession: Save as...' },
+      { '<leader>St', ':SessionToggleAutoSave', desc = 'AutoSession: Toggle autosave' },
     },
     opts = {
       use_git_branch = true,
@@ -43,23 +43,24 @@ local plugins = {
         previewer = true,
       },
       auto_create = function()
-        local cmd = "git rev-parse --is-inside-work-tree"
-        return vim.fn.system(cmd) == "true\n"
+        local cmd = 'git rev-parse --is-inside-work-tree'
+        return vim.fn.system(cmd) == 'true\n'
       end,
     },
     config = function(lazyspec)
-      require("auto-session").setup(lazyspec.opts)
-      vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+      require('auto-session').setup(lazyspec.opts)
+      vim.o.sessionoptions =
+        'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
     end,
   },
 }
 
 LazyNvim:SetPriority(plugins, {
-  "wakatime/vim-wakatime",
-  "Joakker/lua-json5",
-  "folke/neoconf.nvim",
-  "rmagatti/auto-session",
-  "nvim-tree/nvim-web-devicons",
+  'wakatime/vim-wakatime',
+  'Joakker/lua-json5',
+  'folke/neoconf.nvim',
+  'rmagatti/auto-session',
+  'nvim-tree/nvim-web-devicons',
 })
 
 return plugins

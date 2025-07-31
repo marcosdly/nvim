@@ -1,5 +1,7 @@
+local const = require 'lib.helpful_constants'
+
 ---@type snacks.Config
-require("snacks").setup({
+require('snacks').setup {
   -- TODO custom styles
   bigfile = {
     enabled = true,
@@ -14,9 +16,9 @@ require("snacks").setup({
     height = { min = 1, max = 0.5 },
     margin = { top = 1, right = 1 },
     padding = true,
-    sort = { "added", "level" },
+    sort = { 'added', 'level' },
     level = vim.log.levels.INFO,
-    style = "compact",
+    style = 'compact',
     top_down = true,
     refresh = 100, -- ms
   },
@@ -36,10 +38,10 @@ require("snacks").setup({
     -- TODO style: better hl groups
     configure = true,
     config = {
-      os = { editPreset = "nvim-remote" },
+      os = { editPreset = 'nvim-remote' },
       gui = {
         -- set to an empty string "" to disable icons
-        nerdFontsVersion = "3",
+        nerdFontsVersion = '3',
       },
     },
   },
@@ -50,16 +52,16 @@ require("snacks").setup({
   },
   statuscolumn = {
     enabled = true,
-    left = { "sign", "fold" },
-    right = { "mark" },
+    left = { 'sign', 'fold' },
+    right = { 'mark' },
     folds = { open = true, git_hl = true },
     git = {
       patterns = {
-        "GitSign",
-        "MiniDiffSign",
-        "MiniDiffOverAdd",
-        "MiniDiffOverDelete",
-        "MiniDiffOverAdd",
+        'GitSign',
+        'MiniDiffSign',
+        'MiniDiffOverAdd',
+        'MiniDiffOverDelete',
+        'MiniDiffOverAdd',
       },
     },
     refresh = 100,
@@ -77,4 +79,4 @@ require("snacks").setup({
   },
   -- TODO terminal
   -- TODO toggle
-})
+}

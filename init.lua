@@ -1,6 +1,7 @@
 if vim.env.PROF and not vim.g.vscode then require 'profiler' end
 
-require 'globals'
+vim.g.is_windows = jit.os == 'Windows'
+vim.g.is_linux = jit.os == 'Linux'
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.

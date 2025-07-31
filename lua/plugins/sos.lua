@@ -1,11 +1,13 @@
+local const = require 'lib.helpful_constants'
+
 local spec = {
-  "tmillr/sos.nvim",
+  'tmillr/sos.nvim',
   opts = {
     enabled = true,
     timeout = const.time_delay.second * 10,
     create_parent_dirs = true,
     autowrite = false,
-    save_on_cmd = "some",
+    save_on_cmd = 'some',
     save_on_bufleave = false,
     save_on_focuslost = true,
     should_save = {
@@ -25,6 +27,6 @@ local spec = {
   },
 }
 
-require('bootstrap').LazyNvim:SetPriority({spec})
+require('bootstrap').LazyNvim:SetPriority { spec }
 
 return spec
