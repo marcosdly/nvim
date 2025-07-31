@@ -7,7 +7,9 @@ require 'globals'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
-require 'bootstrap'
+local LazyNvim = require('bootstrap').LazyNvim
+LazyNvim:Bootstrap()
+LazyNvim:Setup()
 
 require '_general.keymap'
 

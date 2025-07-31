@@ -39,6 +39,13 @@ luac.out
 *.x86_64
 *.hex
 
+# treesitter
+after
+
+# trash
+lazy-lock.json
+
+# other
 node_modules
 neovim*/
 bin/

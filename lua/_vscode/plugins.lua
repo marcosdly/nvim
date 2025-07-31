@@ -1,4 +1,6 @@
-if not vim.g.vscode then return {} end
+if not vim.g.vscode then
+  return {}
+end
 
 local P = {}
 
@@ -6,20 +8,20 @@ local function add(tab)
   table.insert(P, tab)
 end
 
-add {
-  'gerazov/toggle-bool.nvim',
+add({
+  "gerazov/toggle-bool.nvim",
   cond = false,
   pin = true,
   opts = {
-    mapping = '<leader>ab',
+    mapping = "<leader>ab",
     additional_toggles = {
-      ['0'] = '1',
+      ["0"] = "1",
     },
   },
-}
+})
 
-add {
-  'nacro90/numb.nvim',
+add({
+  "nacro90/numb.nvim",
   opts = {
     show_number = true,
     show_cursorline = false,
@@ -27,49 +29,49 @@ add {
     number_only = true,
     centered_peeking = true,
   },
-}
+})
 
-add {
-  'Jxstxs/conceal.nvim',
+add({
+  "Jxstxs/conceal.nvim",
   cond = false,
-  dependencies = 'nvim-treesitter/nvim-treesitter',
+  dependencies = "nvim-treesitter/nvim-treesitter",
   opts = {
-    ['lua'] = {
+    ["lua"] = {
       keywords = {
-        ['local'] = {
-          conceal = 'L',
+        ["local"] = {
+          conceal = "L",
         },
-        ['return'] = {
-          conceal = 'R',
+        ["return"] = {
+          conceal = "R",
         },
-        ['for'] = {
-          conceal = 'F',
-          highlight = 'keyword',
+        ["for"] = {
+          conceal = "F",
+          highlight = "keyword",
         },
-        ['function'] = {
-          conceal = 'Fn',
+        ["function"] = {
+          conceal = "Fn",
         },
-        ['end'] = {
-          conceal = 'E',
+        ["end"] = {
+          conceal = "E",
         },
       },
     },
   },
   config = function(lazyspec)
-    local conceal = require 'conceal'
+    local conceal = require("conceal")
     conceal.setup(lazyspec.opts)
     conceal.generate_conceals()
-    vim.keymap.set('n', 'tc', function()
+    vim.keymap.set("n", "tc", function()
       vim.wo.conceallevel = vim.wo.conceallevel == 0 and 1 or 0
     end)
   end,
-}
+})
 
-add {
-  'echasnovski/mini.surround',
+add({
+  "echasnovski/mini.surround",
   opts = {
     respect_selection_type = true,
   },
-}
+})
 
 return P

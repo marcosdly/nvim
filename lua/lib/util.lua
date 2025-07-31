@@ -5,14 +5,22 @@ function M.is_user_cmdline(mode)
 end
 
 function M.is_user_sub_cmdline(mode, prefix)
-  if not M.is_user_cmdline(mode) then return false end
-  vim.print 'here'
+  if not M.is_user_cmdline(mode) then
+    return false
+  end
+  vim.print("here")
   local reg_content = vim.fn.getreg(mode)
-  if reg_content == '' then return false end
+  if reg_content == "" then
+    return false
+  end
   prefix = vim.trim(prefix)
-  if reg_content:len() < prefix:len() then return false end
-  if reg_content:len() == prefix:len() and reg_content == prefix then return true end
-  return vim.startswith(reg_content, prefix .. ' ')
+  if reg_content:len() < prefix:len() then
+    return false
+  end
+  if reg_content:len() == prefix:len() and reg_content == prefix then
+    return true
+  end
+  return vim.startswith(reg_content, prefix .. " ")
 end
 
 function M.is_mode_cmdline()
@@ -24,7 +32,7 @@ function M.buf_local_option(name, bufnr)
 end
 
 function M.buf_is_normal(bufnr)
-  return vim.api.nvim_get_option_value('buftype', { buf = bufnr or 0 }) == ''
+  return vim.api.nvim_get_option_value("buftype", { buf = bufnr or 0 }) == ""
 end
 
 function M.pure_math_int_string_length(n)
@@ -43,7 +51,7 @@ function M.is_vscode_extension()
 end
 
 function M.is_gui_formal_nvim_wrapper()
-  return vim.fn.has 'gui_running' and #vim.api.nvim_list_uis() > 0
+  return vim.fn.has("gui_running") and #vim.api.nvim_list_uis() > 0
 end
 
 function M.is_gui()

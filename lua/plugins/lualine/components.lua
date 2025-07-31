@@ -8,7 +8,9 @@ function M.mode()
   -- 2 character modes are modes with modifiers
   -- standalone modes may be denoted by <CTRL-*> mappings, which are a single hex codepoint
   local mode = vim.fn.mode()
-  if mode:len() == 1 then return vim.fn.keytrans(mode) end
+  if mode:len() == 1 then
+    return vim.fn.keytrans(mode)
+  end
   return mode:gsub(1, 2)
 end
 
@@ -16,73 +18,67 @@ function M.buffer_count()
   local current_bufnr = vim.api.nvim_get_current_buf()
   if not util.buf_is_normal(current_bufnr) then
     -- current buf is not normal
-    return ''
+    return ""
   end
   local current_buf_i = current_bufnr
   local count = 0
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if
       vim.api.nvim_buf_is_loaded(bufnr)
-      and util.buf_local_option('buflisted', bufnr)
+      and util.buf_local_option("buflisted", bufnr)
       and util.buf_is_normal(bufnr)
     then
       count = count + 1
-      if bufnr == current_bufnr then current_buf_i = count end
+      if bufnr == current_bufnr then
+        current_buf_i = count
+      end
     end
   end
-  if count == 1 then return '' end
-  return vim.fn.printf(
-    '%*d/%d',
-    util.pure_math_int_string_length(count),
-    current_buf_i,
-    count
-  )
+  if count == 1 then
+    return ""
+  end
+  return vim.fn.printf("%*d/%d", util.pure_math_int_string_length(count), current_buf_i, count)
 end
 
 function M.filesize()
-  local file = vim.fn.expand '%:p'
-  if file == nil or #file == 0 then return '' end
+  local file = vim.fn.expand("%:p")
+  if file == nil or #file == 0 then
+    return ""
+  end
   local size = vim.fn.getfsize(file)
   local min_size = const.storage_size.kilobyte * 10
-  if size <= 0 or size < min_size then return '' end
+  if size <= 0 or size < min_size then
+    return ""
+  end
 
-  local suffixes = { 'B', 'KiB', 'MiB', 'GiB' }
+  local suffixes = { "B", "KiB", "MiB", "GiB" }
   local i = 1
   while size > 1024 and i < #suffixes do
     size = size / 1024
     i = i + 1
   end
 
-  local format = i == 1 and '%d%s' or '%.2f%s'
+  local format = i == 1 and "%d%s" or "%.2f%s"
   return string.format(format, size, suffixes[i])
 end
 
 function M.selection_count()
   -- SEE https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/selectioncount.lua
   local mode = vim.fn.mode(true)
-  local line_start, line_end = vim.fn.line 'v', vim.fn.line '.'
-  local col_start, col_end = vim.fn.col 'v', vim.fn.col '.'
-  if not (mode == '' or mode:match '[vV]') then return '' end
+  local line_start, line_end = vim.fn.line("v"), vim.fn.line(".")
+  local col_start, col_end = vim.fn.col("v"), vim.fn.col(".")
+  if not (mode == "" or mode:match("[vV]")) then
+    return ""
+  end
   if line_start == line_end and col_start ~= col_end then -- character selection
-    return vim.fn.printf(
-      '%d:%d-%d (%dc)',
-      line_start,
-      col_start,
-      col_end,
-      math.abs(col_end - col_start) + 1
-    )
+    return vim.fn.printf("%d:%d-%d (%dc)", line_start, col_start, col_end, math.abs(col_end - col_start) + 1)
   end
   if line_start ~= line_end and col_start == col_end then -- line selection
-    return vim.fn.printf(
-      '%d-%d (%dL)',
-      line_start,
-      line_end,
-      math.abs(line_end - line_start) + 1
-    )
+    return vim.fn.printf("%d-%d (%dL)", line_start, line_end, math.abs(line_end - line_start) + 1)
   end
   if line_start ~= line_end and col_start ~= col_end then -- block selection
     return vim.fn.printf(
-      '%d:%dx%d:%d (%dL%dc)',
+      "%d:%dx%d:%d (%dL%dc)",
       line_start,
       col_start,
       line_end,
@@ -91,7 +87,7 @@ function M.selection_count()
       math.abs(line_end - line_start) + 1
     )
   end
-  return ''
+  return ""
 end
 
 function M.location()
@@ -101,56 +97,75 @@ function M.location()
   local row_padding = util.pure_math_int_string_length(count)
 
   local percentage = 0
-  if row > 0 and count > 0 then percentage = row / count * 100 end
+  if row > 0 and count > 0 then
+    percentage = row / count * 100
+  end
 
   local position
   if row == 1 then
-    position = 'Top'
+    position = "Top"
   elseif row == count then
-    position = 'Bot'
+    position = "Bot"
   else
     position = tostring(row)
   end
 
-  local percentage_str = vim.fn.printf(' %5.1f%%%%', percentage)
-  local line_str = vim.fn.printf('%*s/%d', row_padding, position, count)
-  local col_str = vim.fn.printf(':%2d', column)
-  if position == 'Top' or position == 'Bot' then
+  local percentage_str = vim.fn.printf(" %5.1f%%%%", percentage)
+  local line_str = vim.fn.printf("%*s/%d", row_padding, position, count)
+  local col_str = vim.fn.printf(":%2d", column)
+  if position == "Top" or position == "Bot" then
     -- fill with whitespace if it's all zeroes
     -- lualine requires double the % characters to print them literally,
     -- so subtract `count('%')/2` from length
-    percentage_str = string.rep(' ', percentage_str:len() - 1)
-    if column == 0 then col_str = string.rep(' ', col_str:len()) end
+    percentage_str = string.rep(" ", percentage_str:len() - 1)
+    if column == 0 then
+      col_str = string.rep(" ", col_str:len())
+    end
   end
   return line_str .. col_str .. percentage_str
 end
 
 M.diagnostics = {
-  'diagnostics',
+  "diagnostics",
   colored = false,
   update_in_insert = true,
   symbols = {
-    error = const.icons.diagnostic.error .. ' ',
-    warn = const.icons.diagnostic.warn .. ' ',
-    info = const.icons.diagnostic.info .. ' ',
-    hint = const.icons.diagnostic.hint .. ' ',
+    error = const.icons.diagnostic.error .. " ",
+    warn = const.icons.diagnostic.warn .. " ",
+    info = const.icons.diagnostic.info .. " ",
+    hint = const.icons.diagnostic.hint .. " ",
   },
 }
 
 M.session_status = function()
-  return require('auto-session.lib').current_session_name(true)
+  return require("auto-session.lib").current_session_name(true)
 end
 
 function M.keymap()
-  return vim.b.keymap_name ~= nil and string.format('<%s>', vim.b.keymap_name) or ''
+  return vim.b.keymap_name ~= nil and string.format("<%s>", vim.b.keymap_name) or ""
 end
 
 M.lsp_status = {
-  'lsp_status',
+  "lsp_status",
   fmt = function(text)
-    if state.lsp_is_all_progress_done() then return '' end
+    if state.lsp_is_all_progress_done() then
+      return ""
+    end
     return text
   end,
+}
+
+M.diff = {
+  "diff",
+  colored = true,
+  fmt = function(str)
+    return str:gsub("%s+", "")
+  end,
+}
+
+M.filename = {
+  "filename",
+  path = 1, -- relative path
 }
 
 return M

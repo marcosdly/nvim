@@ -1,4 +1,3 @@
-
 local M = {}
 
 function M.set_foldmarker_per_buf(event)
@@ -7,20 +6,16 @@ function M.set_foldmarker_per_buf(event)
     return
   end
   local pattern
-  if vim.o.commentstring ~= '' then
+  if vim.o.commentstring ~= "" then
     pattern = vim.o.commentstring
-  elseif vim.go.commentstring ~= '' then
+  elseif vim.go.commentstring ~= "" then
     pattern = vim.go.commentstring
   else
     -- no comment string set
     return
   end
   -- set locally only
-  vim.o.foldmarker = string.format(
-    '%s,%s',
-    string.format(pattern, 'region'),
-    string.format(pattern, 'endregion')
-  )
+  vim.o.foldmarker = string.format("%s,%s", string.format(pattern, "region"), string.format(pattern, "endregion"))
 end
 
 return M
