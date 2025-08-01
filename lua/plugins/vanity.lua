@@ -111,6 +111,43 @@ local plugins = {
       })
     end,
   },
+  {
+    'jovanlanik/fsplash.nvim',
+    config = function()
+      local fsplash = require 'fsplash'
+
+      local lines = [[
+           _  ___   _____ __  __
+          | \| \ \ / /_ _|  \/  |
+          | .` |\ V / | || |\/| |
+          |_|\_| \_/ |___|_|  |_|
+      ]]
+
+      local lines_as_list =
+        vim.iter(vim.split(lines, '\n', { trimempty = true })):map(vim.trim):totable()
+
+      fsplash.setup {
+        -- lines of text containing the splash
+        lines = lines_as_list,
+        -- autocmds that close the splash
+        autocmds = {
+          'ModeChanged',
+          'CmdlineEnter',
+        },
+        -- highlights in this table will be set using vim.api.nvim_set_hl()
+        highlights = {
+          -- this resets NormalFloat
+          ['NormalFloat'] = {},
+          -- the following line would set it to gray
+          -- ['NormalFloat'] = { ctermfg = 'darkgray' };
+        },
+        -- floting window border
+        border = 'solid',
+        -- winblend option
+        winblend = 0,
+      }
+    end,
+  },
 }
 
 LazyNvim:SetPriority(plugins, {
@@ -119,6 +156,7 @@ LazyNvim:SetPriority(plugins, {
   'zongben/capsoff.nvim',
   'shortcuts/no-neck-pain.nvim',
   'zaldih/themery.nvim',
+  'jovanlanik/fsplash.nvim',
 })
 
 return plugins
