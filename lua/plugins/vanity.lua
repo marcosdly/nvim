@@ -1,3 +1,4 @@
+local set = vim.keymap.set
 local LazyNvim = require('bootstrap').LazyNvim
 
 local plugins = {
@@ -27,7 +28,6 @@ local plugins = {
 
   {
     'shortcuts/no-neck-pain.nvim',
-    cond = false,
     opts = {
       debug = false,
       width = 88,
@@ -89,9 +89,32 @@ local plugins = {
       }
     end,
   },
+  {
+    'folke/which-key.nvim',
+    config = function()
+      local whichkey = require 'which-key'
+
+      whichkey.setup {
+        preset = 'helix',
+        filter = function(mapping)
+          return mapping.desc and mapping.desc ~= ''
+        end,
+        icons = {
+          mappings = false,
+        },
+      }
+
+      set('n', '<leader>?', function()
+        whichkey.show { global = false }
+      end, {
+        desc = 'WhichKey: Buffer Local Keymaps',
+      })
+    end,
+  },
 }
 
 LazyNvim:SetPriority(plugins, {
+  'folke/which-key.nvim',
   'nacro90/numb.nvim',
   'zongben/capsoff.nvim',
   'shortcuts/no-neck-pain.nvim',

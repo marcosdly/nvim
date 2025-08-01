@@ -7,6 +7,7 @@ local plugins = {
     pin = true,
     build = vim.g.is_windows and 'powershell ./install.ps1' or './install.sh',
   },
+  'echasnovski/mini.icons',
   {
     'nvim-tree/nvim-web-devicons',
     config = true,
@@ -60,6 +61,7 @@ LazyNvim:SetPriority(plugins, {
   'Joakker/lua-json5',
   'folke/neoconf.nvim',
   'rmagatti/auto-session',
+  'echasnovski/mini.icons',
   'nvim-tree/nvim-web-devicons',
 })
 
