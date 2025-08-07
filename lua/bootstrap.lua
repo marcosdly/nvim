@@ -34,14 +34,13 @@ function LazyNvim:Bootstrap()
   vim.opt.rtp:prepend(self.path)
 end
 
-function LazyNvim:Setup()
+function LazyNvim:Setup(spec)
+  if type(spec) ~= 'table' then error 'missing plugin spec (lua table)' end
   require('lazy').setup {
     defaults = {
       lazy = false,
     },
-    spec = {
-      { import = 'plugins' },
-    },
+    spec = spec,
     checker = {
       -- automatically check for plugin updates
       enabled = false,
@@ -97,6 +96,21 @@ function LazyNvim:SetPriority(plugins, id_list)
   end
 end
 
+function LazyNvim:SetKeys(keys)
+  if type(keys) ~= 'table' then error 'keys object must be a table' end
+  local set = vim.keymap.set
+  for _, lazykey in ipairs(keys) do
+    local buffer = lazykey.buffer or lazykey.ft ~= nil
+    local opts = vim.iter(lazykey):fold({}, function(acc, k, v)
+      if type(k) ~= 'string' or k == 'mode' then return acc end
+      acc[k] = v
+      return acc
+    end)
+    opts.buffer = opts.buffer or buffer
+    set(lazykey.mode or 'n', lazykey[1], lazykey[2], opts)
+  end
+end
+
 local Snacks = {
   path = vim.fn.stdpath 'data' .. '/lazy/snacks.nvim',
 }
@@ -145,6 +159,66 @@ function Snacks:SetupProfiler()
       ['^vim.tbl_'] = true,
     },
   }
+end
+
+function M.SetOptions(opts)
+  if type(opts) ~= 'table' then error 'opts object must be a table' end
+
+  local function apply_options(k, v)
+    local info = vim.api.nvim_get_option_info2(k, {})
+    if info.scope == 'global' then
+      vim.go[k] = v
+    elseif info.scope == 'win' then
+      vim.wo[k] = v
+    elseif info.scope == 'buf' then
+      vim.bo[k] = v
+    end
+  end
+
+  table.foreach(opts, function(k, v)
+    if k == 'colorscheme' then
+      vim.cmd.colorscheme(v)
+      return
+    end
+    if k == 'wildchar' then
+      vim.cmd(('set wildchar=%s'):format(v))
+      return
+    end
+    if k == 'wildcharm' then
+      vim.cmd(('set wildcharm=%s'):format(v))
+      return
+    end
+    apply_options(k, v)
+  end)
+end
+
+function M.SetAutocmds(cmds)
+  if type(cmds) ~= 'table' then error 'cmds object must be a table' end
+
+  local nvim_create_autocmd = vim.api.nvim_create_autocmd
+  for _, autocmd in ipairs(cmds) do
+    local opts = vim.iter(cmds):fold({}, function(acc, k, v)
+      if type(k) ~= 'string' then return acc end
+      acc[k] = v
+      return acc
+    end)
+    local events = autocmd[1]
+    local action = autocmd[2]
+    local t_action = type(action)
+    if t_action == 'string' then
+      opts.command = action
+    elseif t_action == 'function' then
+      opts.callback = action
+    else
+      error(
+        string.format(
+          'autocmd action must be either a string (command) or function (callback) but got %s',
+          t_action
+        )
+      )
+    end
+    nvim_create_autocmd(events, opts)
+  end
 end
 
 return M

@@ -8,22 +8,17 @@ vim.g.is_linux = jit.os == 'Linux'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
-local LazyNvim = require('bootstrap').LazyNvim
+_G.LazyNvim = require('bootstrap').LazyNvim
 LazyNvim:Bootstrap()
-LazyNvim:Setup()
-
-require '_general.keymap'
 
 if vim.g.vscode then
-  require '_vscode.options'
-  require '_vscode.autocmd'
-else
-  require 'options'
-  require 'keymap'
-  require 'autocmd'
+  LazyNvim:Setup(require '_vscode.plugins')
+  require '_vscode'
+  return
 end
 
-if vim.g.vscode then
-  local vscode = require 'vscode'
-  vim.notify = vscode.notify
-end
+LazyNvim:Setup(require 'plugins')
+
+require 'keymap'
+require 'options'
+require 'autocmd'
