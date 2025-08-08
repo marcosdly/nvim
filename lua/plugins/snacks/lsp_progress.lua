@@ -36,12 +36,19 @@ function M.Notify(ev)
   local is_done = value.kind == 'end'
   lsp_done[client.name] = is_done
 
+  local percentage
+  if is_done or value.percentage == nil then
+    percentage = 100
+  else
+    percentage = value.percentage
+  end
+
   for i = 1, #p + 1 do
     if i == #p + 1 or p[i].token == ev.data.params.token then
       p[i] = {
         token = ev.data.params.token,
         msg = ('[%3d%%] %s%s'):format(
-          is_done and 100 or value.percentage or 100,
+          percentage,
           value.title or '',
           value.message and (' **%s**'):format(value.message) or ''
         ),
