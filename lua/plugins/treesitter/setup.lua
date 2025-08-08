@@ -6,12 +6,6 @@ install.prefer_git = true
 -- C compiler priority order
 install.compilers = { 'zig', 'clang', 'gcc', 'cc', 'cl', vim.fn.getenv 'CC' }
 
--- Optionally, make builtin f, F, t, T also repeatable with ; and ,
--- vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
--- vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
--- vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
--- vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
-
 require('nvim-treesitter.configs').setup {
   sync_install = false,
   auto_install = true,

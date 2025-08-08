@@ -48,22 +48,6 @@ local spec = {
         end
       end,
     })
-
-    local set = vim.keymap.set
-
-    set('n', '-', '<cmd>Oil --float<cr>', { desc = 'Oil: Open parent dir' })
-    set(
-      'n',
-      '<leader>-',
-      '<cmd>Oil --float --trash<cr>',
-      { desc = 'Oil: Parent dir trash' }
-    )
-    set(
-      'n',
-      '<localleader>-',
-      '<cmd>Oil --float --trash /<cr>',
-      { desc = 'Oil: System wide trash' }
-    )
   end,
 }
 

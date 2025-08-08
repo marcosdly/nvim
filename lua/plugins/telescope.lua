@@ -1,25 +1,25 @@
 local spec = {
-  "nvim-telescope/telescope.nvim",
-  tag = "0.1.8",
+  'nvim-telescope/telescope.nvim',
+  tag = '0.1.8',
   dependencies = {
-    "nvim-lua/plenary.nvim",
-    "nvim-telescope/telescope-ui-select.nvim",
+    'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope-ui-select.nvim',
     {
-      "nvim-telescope/telescope-fzf-native.nvim",
+      'nvim-telescope/telescope-fzf-native.nvim',
       -- cmake is the starndard way of building; may be broken on windows
       -- SEE https://github.com/nvim-telescope/telescope-fzf-native.nvim/issues/122
-      build = vim.fn.join({
-        "mkdir build",
-        "&&",
-        "zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll",
-      }),
+      build = vim.fn.join {
+        'mkdir build',
+        '&&',
+        'zig cc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll',
+      },
     },
   },
   config = function()
-    local actions = require("telescope.actions")
-    local telescope = require("telescope")
+    local actions = require 'telescope.actions'
+    local telescope = require 'telescope'
 
-    telescope.setup({
+    telescope.setup {
       extensions = {
         fzf = {
           -- those are the defaults, but all too important for my use
@@ -27,33 +27,26 @@ local spec = {
           fuzzy = true,
           override_generic_sorted = true,
           override_file_sorted = true,
-          case_mode = "smart_case",
+          case_mode = 'smart_case',
         },
       },
       defaults = {
         mappings = {
           i = {
-            ["<c-c>"] = actions.close,
+            ['<c-c>'] = actions.close,
           },
           n = {
-            ["<c-c>"] = actions.close,
+            ['<c-c>'] = actions.close,
           },
         },
       },
-    })
+    }
 
-    telescope.load_extension("fzf")
-    telescope.load_extension("ui-select")
-
-    local set = vim.keymap.set
-
-    set("n", "<leader>vo", "<cmd>Telescope vim_options<cr>", { desc = "Vim: Search options" })
-    set("n", "<leader>vs", "<cmd>Telescope spell_suggest<cr>", {
-      desc = "Vim: List spelling suggestions",
-    })
+    telescope.load_extension 'fzf'
+    telescope.load_extension 'ui-select'
   end,
 }
 
-require('bootstrap').LazyNvim:SetPriority({spec})
+require('bootstrap').LazyNvim:SetPriority { spec }
 
 return spec

@@ -1,4 +1,3 @@
-local set = vim.keymap.set
 local LazyNvim = require('bootstrap').LazyNvim
 local const = require 'lib.helpful_constants'
 local util = require 'lib.util'
@@ -44,33 +43,6 @@ local plugins = {
           -- TODO numhl
         },
       }
-
-      set(
-        'n',
-        '<leader>la',
-        vim.lsp.buf.code_action,
-        { desc = 'LSP: List code actions' }
-      )
-      set('n', '<leader>lc', '<cmd>Telescope lsp_incoming_calls<cr>', {
-        desc = 'LSP: List incoming calls',
-      })
-      set('n', '<leader>lC', '<cmd>Telescope lsp_outgoing_calls<cr>', {
-        desc = 'LSP: List outgoing calls',
-      })
-      set(
-        'n',
-        '<leader>ls',
-        vim.lsp.buf.signature_help,
-        { desc = 'LSP: Signature help' }
-      )
-      set(
-        'n',
-        '<leader>ar',
-        -- NOTE renaming accross workspace is dependent on LSP (implementation), some
-        -- may support it, some may do it by default
-        vim.lsp.buf.rename,
-        { desc = 'LSP: Rename symbol' }
-      )
     end,
   },
   {
@@ -121,10 +93,6 @@ local plugins = {
           layout = { preset = 'default' },
         },
       }
-
-      set({ 'n', 'v' }, '<leader>aa', action_preview.code_actions, {
-        desc = 'Action: List and preview actions',
-      })
     end,
   },
   {
@@ -144,7 +112,6 @@ local plugins = {
   {
     'Bekaboo/dropbar.nvim',
     config = function()
-      local api = require 'dropbar.api'
       local dropbar = require 'dropbar'
 
       dropbar.setup {
@@ -172,18 +139,6 @@ local plugins = {
           markdown = { max_depth = 8 },
         },
       }
-
-      set('n', '<leader>lbs', api.pick, {
-        desc = 'Breadcrumbs: Pick symbols',
-      })
-      set('n', '<leader>lb[', function()
-        api.goto_context_start(1)
-      end, {
-        desc = 'Breadcrumbs: Go to previous context',
-      })
-      set('n', '<leader>lb]', api.select_next_context, {
-        desc = 'Breadcrumbs: Select next context',
-      })
     end,
   },
   {

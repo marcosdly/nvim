@@ -25,13 +25,6 @@ local plugins = {
   },
   {
     'rmagatti/auto-session',
-    keys = {
-      -- Will use Telescope if installed or a vim.ui.select picker otherwise
-      { '<leader>Ss', '<cmd>SessionSearch<cr>', desc = 'AutoSession: Search' },
-      { '<leader>Sw', '<cmd>SessionSave<cr>', desc = 'AutoSession: Quick save' },
-      { '<leader>Sn', ':SessionSave ', desc = 'AutoSession: Save as...' },
-      { '<leader>St', ':SessionToggleAutoSave', desc = 'AutoSession: Toggle autosave' },
-    },
     opts = {
       use_git_branch = true,
       continue_restore_on_error = false,

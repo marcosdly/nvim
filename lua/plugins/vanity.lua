@@ -1,4 +1,3 @@
-local set = vim.keymap.set
 local LazyNvim = require('bootstrap').LazyNvim
 
 local plugins = {
@@ -99,16 +98,26 @@ local plugins = {
         filter = function(mapping)
           return mapping.desc and mapping.desc ~= ''
         end,
-        icons = {
-          mappings = false,
+        -- icons = {
+        --   mappings = false,
+        -- },
+        replace = {
+          desc = {
+            -- defaults
+            { '<Plug>%(?(.*)%)?', '%1' },
+            { '^%+', '' },
+            { '<[cC]md>', '' },
+            { '<[cC][rR]>', '' },
+            { '<[sS]ilent>', '' },
+            { '^lua%s+', '' },
+            { '^call%s+', '' },
+            { '^:%s*', '' },
+
+            -- custom
+            { '^.+:%s+', '' },
+          },
         },
       }
-
-      set('n', '<leader>?', function()
-        whichkey.show { global = false }
-      end, {
-        desc = 'WhichKey: Buffer Local Keymaps',
-      })
     end,
   },
   {

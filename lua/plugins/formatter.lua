@@ -1,10 +1,10 @@
 local spec = {
-  "mhartington/formatter.nvim",
+  'mhartington/formatter.nvim',
   config = function()
-    local formatter = require("formatter")
-    local ft = require("formatter.filetypes")
+    local formatter = require 'formatter'
+    local ft = require 'formatter.filetypes'
 
-    formatter.setup({
+    formatter.setup {
       logging = false,
       log_level = vim.log.levels.WARN,
       filetype = {
@@ -61,14 +61,10 @@ local spec = {
           ft.xml.tidy,
         },
       },
-    })
-
-    local set = vim.keymap.set
-
-    set("n", "<leader>af", "<cmd>FormatLock<cr>", { desc = "Action: Format buffer" })
+    }
   end,
 }
 
-require('bootstrap').LazyNvim:SetPriority({spec})
+require('bootstrap').LazyNvim:SetPriority { spec }
 
 return spec

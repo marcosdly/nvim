@@ -1,5 +1,6 @@
 return {
   require 'plugins.lsp',
+  require 'plugins.dap',
   require 'plugins.snacks',
   require 'plugins.base',
   require 'plugins.treesitter',
