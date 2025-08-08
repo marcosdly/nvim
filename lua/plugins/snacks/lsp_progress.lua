@@ -63,7 +63,7 @@ function M.Notify(ev)
     return table.insert(msg, v.msg) or not v.done
   end, p)
 
-  if value.kind == 'report' and value.percentage % 5 ~= 0 then return end
+  if value.kind == 'report' and percentage % 5 ~= 0 then return end
 
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.notify(table.concat(msg, '\n'), 'info', {
