@@ -192,7 +192,7 @@ wk.add {
     '<cmd>Telescope lsp_outgoing_calls<cr>',
     desc = 'LSP: List outgoing calls',
   },
-  { '<leader>ls', vim.lsp.buf.signature_help, desc = 'LSP: Signature help' },
+  { '<leader>ll', vim.lsp.buf.signature_help, desc = 'LSP: Signature help' },
   { '<leader>lbs', dropbar_api.pick, desc = 'Breadcrumbs: Pick symbols' },
   {
 
@@ -239,13 +239,13 @@ wk.add {
   -- search
   {
 
-    '<leader>lso',
+    '<leader>lO',
     Snacks.picker.lsp_workspace_symbols,
     desc = 'LSP: List workspace symbols',
   },
   {
 
-    '<leader>lsm',
+    '<leader>lM',
     Snacks.picker.diagnostics,
     desc = 'LSP: List workspace diagnostics',
   },
@@ -365,25 +365,25 @@ wk.add {
 
   { '<leader>g', group = 'Git' },
   -- region Git
+  { '<leader>gl', group = 'LazyGit' },
   { '<leader>gls', Snacks.lazygit.open, desc = 'LazyGit: Status' },
   { '<leader>gll', Snacks.lazygit.log, desc = 'LazyGit: Log' },
   { '<leader>glf', Snacks.lazygit.log_file, desc = 'LazyGit: Log current file' },
   {
-    '<leader>gG',
+    '<leader>gO',
     Snacks.gitbrowse.open,
     mode = { 'n', 'v' },
     desc = 'Git: Open line in remote repository (web browser)',
   },
-  { '<leader>gl', Snacks.picker.git_log, desc = 'Git: Log' },
-  { '<leader>gL', Snacks.picker.git_log_line, desc = 'Git: Log current line' },
-  { '<leader>gs', Snacks.picker.git_status, desc = 'Git: Status' },
+  { '<leader>gh', Snacks.picker.git_log, desc = 'Git: Log' },
+  { '<leader>g.', Snacks.picker.git_log_file, desc = 'Git: Log current file' },
+  { '<leader>g,', Snacks.picker.git_log_line, desc = 'Git: Log current line' },
+  { '<leader>g/', Snacks.git.blame_line, desc = 'Git: Blame current line' },
+  { '<leader>gg', Snacks.picker.git_status, desc = 'Git: Status' },
   { '<leader>gd', Snacks.picker.git_diff, desc = 'Git: Diff (Hunks)' },
-  { '<leader>gf', Snacks.picker.git_log_file, desc = 'Git: Log current file' },
-  { '<leader>gb', Snacks.git.blame_line, desc = 'Git: Blame current line' },
-  -- search
-  { '<leader>gss', Snacks.picker.git_stash, desc = 'Git: Stash' },
-  { '<leader>gsf', Snacks.picker.git_files, desc = 'Git: List files' },
-  { '<leader>gsb', Snacks.picker.git_branches, desc = 'Git: Branches' },
+  { '<leader>gs', Snacks.picker.git_stash, desc = 'Git: Stash' },
+  { '<leader>gf', Snacks.picker.git_files, desc = 'Git: List files' },
+  { '<leader>gb', Snacks.picker.git_branches, desc = 'Git: Branches' },
   -- endregion
 
   -- region Terminal
