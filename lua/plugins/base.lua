@@ -47,12 +47,32 @@ local plugins = {
         'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
     end,
   },
+  {
+    'klen/nvim-config-local',
+    config = function()
+      require('config-local').setup {
+        -- Default options (optional)
+
+        -- Config file patterns to load (lua supported)
+        config_files = { '.nvim.lua' },
+
+        -- Where the plugin keeps files data
+        hashfile = vim.fn.stdpath 'data' .. '/config-local',
+
+        autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
+        commands_create = true, -- Create commands (ConfigLocalSource, ConfigLocalEdit, ConfigLocalTrust, ConfigLocalDeny)
+        silent = false, -- Disable plugin messages (Config loaded/denied)
+        lookup_parents = true, -- Lookup config files in parent directories
+      }
+    end,
+  },
 }
 
 LazyNvim:SetPriority(plugins, {
   'wakatime/vim-wakatime',
   'Joakker/lua-json5',
   'folke/neoconf.nvim',
+  'klen/nvim-config-local',
   'rmagatti/auto-session',
   'echasnovski/mini.icons',
   'nvim-tree/nvim-web-devicons',
