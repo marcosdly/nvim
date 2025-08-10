@@ -12,6 +12,9 @@ local spec = {
           ft.python.ruff,
           ft.python.iruff, -- fix imports
         },
+        luau = {
+          ft.lua.stylua,
+        },
         lua = {
           ft.lua.stylua,
         },

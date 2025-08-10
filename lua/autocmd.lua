@@ -97,11 +97,11 @@ bootstrap.SetAutocmds {
   },
 
   -- Format buffer
-  {
-    'BufWritePost',
-    function()
-      if util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
-    end,
-    desc = 'Format and write buffer (blocking)',
-  },
+  -- {
+  --   'BufWritePre',
+  --   function()
+  --     if util.buf_is_normal() then vim.cmd 'FormatWriteLock' end
+  --   end,
+  --   desc = 'Format and write buffer (blocking)',
+  -- },
 }
