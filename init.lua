@@ -8,7 +8,11 @@ vim.g.is_linux = jit.os == 'Linux'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
-_G.LazyNvim = require('bootstrap').LazyNvim
+local bootstrap = require('bootstrap')
+
+_G.LSP = bootstrap.LSP
+_G.LazyNvim = bootstrap.LazyNvim
+
 LazyNvim:Bootstrap()
 
 if vim.g.vscode then

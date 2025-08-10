@@ -65,21 +65,52 @@ local plugins = {
       'neovim/nvim-lspconfig',
       'williamboman/mason.nvim',
     },
-    opts = {
-      automatic_installation = false,
-      ensure_installed = { 'lua_ls', 'jsonls' },
-      handlers = {
-        -- default
-        function(server_name)
-          local lspconfig = require 'lspconfig'
-          local capabilities = vim.lsp.protocol.make_client_capabilities()
-          capabilities.textDocument.completion.completionItem.snippetSupport = true
-          lspconfig[server_name].setup {
-            capabilities = capabilities,
-          }
-        end,
-      },
-    },
+    config = function()
+      local function check_function(bufnr, _)
+        local clients = vim.lsp.get_clients { bufnr = bufnr }
+        for _, name in ipairs(clients) do
+          local conditions = LSP:GetAttachConditions(name)
+          for _, should_attach in ipairs(conditions) do
+            if not should_attach() then return false end
+          end
+        end
+        return true
+      end
+
+      vim.lsp.handlers['textDocument/publishDiagnostics'] =
+        vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+          underline = check_function,
+          signs = check_function,
+          update_in_insert = check_function,
+          virtual_text = check_function,
+        })
+
+      local opts = {
+        automatic_installation = false,
+        ensure_installed = { 'lua_ls', 'jsonls' },
+        automatic_enable = {
+          exclude = { 'luau_lsp' },
+        },
+        handlers = {
+          luau_lsp = function(_) end,
+          -- default
+          function(server_name)
+            local lspconfig = require 'lspconfig'
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+            capabilities.textDocument.completion.completionItem.snippetSupport = true
+            capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
+            lspconfig[server_name].setup {
+              capabilities = capabilities,
+              on_attach = function(bufnr) end,
+            }
+          end,
+        },
+      }
+
+      require('mason-lspconfig').setup(opts)
+    end,
   },
   {
     'aznhe21/actions-preview.nvim',
@@ -162,10 +193,37 @@ local plugins = {
       },
     },
   },
+  {
+    'lopi-py/luau-lsp.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    config = function()
+      _G.luau = {
+        is_rojo_project = function()
+          return vim.fs.root(0, function(name)
+            return name:match '.+%.project%.json$'
+          end)
+        end,
+        lsp = require 'luau-lsp',
+      }
+
+      luau.lsp.setup {
+        fflags = {
+          enable_by_default = true,
+          -- enables the fflags required for luau's new type solver
+          enable_new_solver = true,
+          -- sync currently enabled fflags with roblox's published fflags
+          sync = true,
+        },
+      }
+    end,
+  },
 }
 
 LazyNvim:SetPriority(plugins, {
   'williamboman/mason-lspconfig.nvim',
+  'lopi-py/luau-lsp.nvim',
   'Bekaboo/dropbar.nvim',
   'aznhe21/actions-preview.nvim',
   'folke/lazydev.nvim',

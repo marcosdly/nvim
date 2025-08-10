@@ -222,4 +222,36 @@ function M.SetAutocmds(cmds)
   end
 end
 
+local LSP = {
+  __should_attach = {},
+}
+M.LSP = LSP
+
+function LSP:GetAttachConditions(client_name)
+  return self.__should_attach[client_name] or {}
+end
+
+function LSP:InsertAttachCondition(client_name, func)
+  if type(func) ~= 'function' then
+    error 'condition of lsp attachment must be a function'
+  end
+  local clients = self.__should_attach[client_name]
+  if not clients then
+    clients = {}
+    self.__should_attach[client_name] = clients
+  end
+  table.insert(clients, func)
+end
+
+function LSP:RemoveAttachCondition(client_name, func)
+  local clients = self.__should_attach[client_name]
+  if not clients or vim.tbl_count(clients) == 0 then return end
+  for i, value in ipairs(clients) do
+    if func == value then
+      table.remove(clients, i)
+      return
+    end
+  end
+end
+
 return M
