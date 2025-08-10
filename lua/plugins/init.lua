@@ -1,8 +1,8 @@
 return {
+  require 'plugins.base',
   require 'plugins.lsp',
   require 'plugins.dap',
   require 'plugins.snacks',
-  require 'plugins.base',
   require 'plugins.treesitter',
   require 'plugins.lualine',
   require 'plugins.oil',

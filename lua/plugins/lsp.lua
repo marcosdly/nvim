@@ -60,6 +60,7 @@ local plugins = {
   },
   {
     'williamboman/mason-lspconfig.nvim',
+    tag = 'v1.32.0',
     dependencies = {
       'neovim/nvim-lspconfig',
       'williamboman/mason.nvim',

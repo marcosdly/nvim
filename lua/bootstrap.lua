@@ -39,6 +39,7 @@ function LazyNvim:Setup(spec)
   require('lazy').setup {
     defaults = {
       lazy = false,
+      pin = true,
     },
     spec = spec,
     checker = {
